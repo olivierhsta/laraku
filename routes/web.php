@@ -18,5 +18,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/solver', 'SudokuController@solver')->name('solver');
-Route::post('/solver', 'SudokuController@solve');
+Route::get('/solver', 'SolverController@index')->name('solver.index');
+Route::post('/solver', 'SolverController@solve')->name('solver.solve');
