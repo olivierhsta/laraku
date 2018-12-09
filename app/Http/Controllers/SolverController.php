@@ -7,7 +7,6 @@ use App\Solver;
 
 class SolverController extends Controller
 {
-
     public function index()
     {
         return view('sudoku.solver');
@@ -17,10 +16,11 @@ class SolverController extends Controller
     {
         $solver = new Solver();
         $this->validate(request(), ['grid' => 'required|min:81|max:81']);
-        $solution = $solver->solve(request('grid'));
 
-        return view('sudoku.solver')->with(
-            'solution', $solution
-        );
+        $grid = $solver->solve(request('grid'));
+        
+        return view('sudoku.solver')->with([
+                'grid' => $grid
+        ]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use App\Sudoku\Grid;
 
 class Solver
 {
@@ -11,7 +12,8 @@ class Solver
      * @return Srting       Encoding of the solved grid (if solvable).
      */
     public function solve($grid){
-        return $grid;
+        $grid = new Grid($grid);
+        return $grid->getRows();
     }
 
 }
