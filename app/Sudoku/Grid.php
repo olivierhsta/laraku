@@ -2,7 +2,6 @@
 
 namespace App\Sudoku;
 
-use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
 use App\Sudoku\Cell;
@@ -23,10 +22,10 @@ use App\Sudoku\Cell;
  * | 60  61  62  |  69  70  71  |  78  79  80 |
  *  ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  */
-class Grid extends Model
+class Grid
 {
 
-    protected $row_indexes = [
+    private static $row_indexes = [
         [0,1,2,9,10,11,18,19,20],
         [3,4,5,12,13,14,21,22,23],
         [6,7,8,15,16,17,24,25,26],
@@ -37,10 +36,10 @@ class Grid extends Model
         [57,58,59,66,67,68,75,76,77],
         [60,61,62,69,70,71,78,79,80]
     ];
-    protected $rows = array(array());
-    protected $columns = array(array());
-    protected $boxes = array(array());
-    protected $grid = array();
+    public $rows = array(array());
+    public $columns = array(array());
+    public $boxes = array(array());
+    public $grid = array();
 
     public function __construct($grid)
     {
@@ -54,11 +53,11 @@ class Grid extends Model
             }
 
             $box = intdiv($i,9);
-            $column = ($box)*3 + $i%3;
+            $column = (($box)*3)%9 + $i%3;
 
-            for ( $j=0 ; $j < sizeof($this->row_indexes) ; $j++ )
+            for ( $j=0 ; $j < sizeof(Grid::$row_indexes) ; $j++ )
             {
-                $row_index = $this->row_indexes[$j];
+                $row_index = Grid::$row_indexes[$j];
                 if (in_array($i, $row_index))
                 {
                     $row = $j;
@@ -66,12 +65,21 @@ class Grid extends Model
                 }
             }
 
-            $cell = new Cell($cell_value, $row+1, $column+1);
+            $cell = new Cell($this, $cell_value, $row+1, $column+1);
             $this->grid[$i] = $cell;
 
-            $this->boxes[$box][] = $cell;
-            $this->columns[$column][] = $cell;
-            $this->rows[$row][] = $cell;
+            $this->boxes[$box+1][] = $cell;
+            $this->columns[$column+1][] = $cell;
+            $this->rows[$row+1][] = $cell;
+        }
+        for ($i=1;$i<=9;$i++)
+        {
+            array_unshift($this->boxes[$i], "");
+            unset($this->boxes[$i][0]);
+            array_unshift($this->columns[$i], "");
+            unset($this->column[$i][0]);
+            array_unshift($this->rows[$i], "");
+            unset($this->rows[$i][0]);
         }
     }
 
@@ -113,5 +121,46 @@ class Grid extends Model
     public function getColumn($index)
     {
         return $this->columns[$index];
+    }
+
+    public static function getValues($aglo)
+    {
+        $values = array();
+        foreach ($aglo as $cell)
+        {
+            $values[] = $cell->value;
+        }
+        return $values;
+    }
+
+    public function find_buddies(Cell $cell)
+    {
+        $buddies = array();
+
+        foreach ($this->getRow($cell->row) as $row_cell)
+        {
+            if ($row_cell != $cell)
+            {
+                $buddies[] = $row_cell;
+            }
+        }
+
+        foreach ($this->getColumn($cell->column) as $col_cell)
+        {
+            if ($col_cell != $cell && !in_array($col_cell, $buddies))
+            {
+                $buddies[] = $col_cell;
+            }
+        }
+
+        foreach ($this->getBox($cell->box) as $box_cell)
+        {
+            if ($box_cell != $cell && !in_array($box_cell, $buddies))
+            {
+                $buddies[] = $box_cell;
+            }
+        }
+        $buddies = array_filter($buddies); // remove empty values
+        return $buddies;
     }
 }

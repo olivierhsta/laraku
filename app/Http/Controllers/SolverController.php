@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Solver;
+use App\Sudoku\Solver;
+use App\Sudoku\Grid;
 
 class SolverController extends Controller
 {
@@ -14,13 +15,15 @@ class SolverController extends Controller
 
     public function solve()
     {
-        $solver = new Solver();
         $this->validate(request(), ['grid' => 'required|min:81|max:81']);
 
-        $grid = $solver->solve(request('grid'));
-        
+        $grid = new Grid(request('grid'));
+        $solver = new Solver($grid);
+        $solution = $solver->solve();
+
+
         return view('sudoku.solver')->with([
-                'grid' => $grid
+                'grid' => $solution
         ]);
     }
 }
