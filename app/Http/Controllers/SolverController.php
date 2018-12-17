@@ -23,7 +23,8 @@ class SolverController extends Controller
 
 
         return view('sudoku.solver')->with([
-                'grid' => $solution
+                'grid' => $solution,
+                'found' => $solver->get_found_values()
         ]);
     }
 }

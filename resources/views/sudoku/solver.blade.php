@@ -16,7 +16,10 @@
         </form>
     </div>
 
-    @include('sudoku.grid');
+    <div class="d-flex">
+        @include('sudoku.grid')
+        @include('sudoku.found')
+    </div>
 
 </div>
 @endsection

@@ -2,6 +2,7 @@
   height: 45em;
   width: 45em;
   border: 2px solid black;
+  text-align: center;
 }
 
 .sudoku-cell {
@@ -29,5 +30,9 @@
 
 .border-bottom-2 {
   border-bottom: 2px solid black !important;
+}
+
+.btn:focus {
+  outline: none;
 }
 

@@ -65,7 +65,7 @@ class Cell
         }
     }
 
-    public function getBuddies()
+    public function get_buddies()
     {
         if (empty($this->buddies))
         {
@@ -74,7 +74,7 @@ class Cell
         return $this->buddies;
     }
 
-    public function setPencilMarks($values)
+    public function set_pencil_marks($values)
     {
         $one_nine = [1,2,3,4,5,6,7,8,9];
         if (!empty(array_diff($values, $one_nine)))
@@ -93,9 +93,31 @@ class Cell
         $this->pencil_marks = [0,0,0,0,0,0,0,0,0];
     }
 
-    public function getPencilMarks()
+    public function get_pencil_marks()
     {
-        return $this->pencil_marks;
+        $marks = array();
+        foreach ($this->pencil_marks as $value => $mark)
+        {
+            if ($mark == 1)
+            {
+                $marks[] = $value;
+            }
+        }
+        return $marks;
+    }
+
+    public function set_value($value)
+    {
+        if ($this->value == 0)
+        {
+            $this->value = $value;
+        }
+        return $this->value;
+    }
+
+    public function get_value()
+    {
+        return $this->value;
     }
 
 }

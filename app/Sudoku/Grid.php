@@ -72,63 +72,54 @@ class Grid
             $this->columns[$column+1][] = $cell;
             $this->rows[$row+1][] = $cell;
         }
-        for ($i=1;$i<=9;$i++)
-        {
-            array_unshift($this->boxes[$i], "");
-            unset($this->boxes[$i][0]);
-            array_unshift($this->columns[$i], "");
-            unset($this->column[$i][0]);
-            array_unshift($this->rows[$i], "");
-            unset($this->rows[$i][0]);
-        }
     }
 
-    public function getCell($index)
+    public function get_cell($index)
     {
         return $this->grid[$index];
     }
 
-    public function getGrid()
+    public function get_grid()
     {
         return $this->grid;
     }
 
-    public function getBoxes()
+    public function get_boxes()
     {
         return $this->boxes;
     }
 
-    public function getRows()
+    public function get_rows()
     {
         return $this->rows;
     }
 
-    public function getColumns()
+    public function get_cols()
     {
         return $this->columns;
     }
 
-    public function getBox($index)
+    public function get_box($index)
     {
         return $this->boxes[$index];
     }
 
-    public function getRow($index)
+    public function get_row($index)
     {
         return $this->rows[$index];
     }
 
-    public function getColumn($index)
+    public function get_col($index)
     {
         return $this->columns[$index];
     }
 
-    public static function getValues($aglo)
+    public static function get_values($aglo)
     {
         $values = array();
         foreach ($aglo as $cell)
         {
-            $values[] = $cell->value;
+            $values[] = $cell->get_value();
         }
         return $values;
     }
@@ -137,7 +128,7 @@ class Grid
     {
         $buddies = array();
 
-        foreach ($this->getRow($cell->row) as $row_cell)
+        foreach ($this->get_row($cell->row) as $row_cell)
         {
             if ($row_cell != $cell)
             {
@@ -145,7 +136,7 @@ class Grid
             }
         }
 
-        foreach ($this->getColumn($cell->column) as $col_cell)
+        foreach ($this->get_col($cell->column) as $col_cell)
         {
             if ($col_cell != $cell && !in_array($col_cell, $buddies))
             {
@@ -153,7 +144,7 @@ class Grid
             }
         }
 
-        foreach ($this->getBox($cell->box) as $box_cell)
+        foreach ($this->get_box($cell->box) as $box_cell)
         {
             if ($box_cell != $cell && !in_array($box_cell, $buddies))
             {
