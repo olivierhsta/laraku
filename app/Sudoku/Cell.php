@@ -5,12 +5,18 @@ namespace App\Sudoku;
 class Cell
 {
 
-    public $grid;
-    public $value;
+    private $grid;
+    private $value;
     public $row;
-    public $column;
+    public $col;
     public $box;
     private $buddies;
+
+    /**
+     * Pencil marks flags.  Each value (1 to 9) is either 0 or 1.
+     * 1 meaning that the pencil marks is set for the cell
+     * @var array[int=>int]
+     */
     public $pencil_marks = [
         1=>0,
         2=>0,
@@ -23,12 +29,12 @@ class Cell
         9=>0
     ];
 
-    public function __construct($grid, $value, $row, $column)
+    public function __construct($grid, $value, $row, $col)
     {
         $this->grid = $grid;
         $this->value = $value;
         $this->row = $row;
-        $this->column = $column;
+        $this->col = $col;
 
         for ($i = 1 ; $i <= 3; $i++)
         {
@@ -36,7 +42,7 @@ class Cell
             {
                 for ($j = 1 ; $j <= 3; $j++)
                 {
-                    if ($column <= 3*$j)
+                    if ($col <= 3*$j)
                     {
                         switch ($i . $j)
                         {
@@ -95,6 +101,10 @@ class Cell
 
     public function get_pencil_marks()
     {
+        if ($this->value != 0)
+        {
+            return array();
+        }
         $marks = array();
         foreach ($this->pencil_marks as $value => $mark)
         {
@@ -106,11 +116,47 @@ class Cell
         return $marks;
     }
 
+    public function remove_pencil_marks($marks)
+    {
+        if (is_int($marks) && $marks <= 9 && $marks >= 1)
+        {
+            $this->pencil_marks[$marks] = 0;
+        }
+        else if (is_array($marks))
+        {
+            foreach ($marks as $mark)
+            {
+                if (!is_int($mark) || $mark > 9 || $mark < 1)
+                {
+                    throw new InvalidArgumentException('Value must be an integer between 1 and 9.  Value given : ' . $mark);
+                }
+
+                $this->pencil_marks[$mark] = 0;
+            }
+        }
+        else
+        {
+            throw new InvalidArgumentException('Value must be an integer between 1 and 9.  Value given : ' . $mark);
+        }
+    }
+
+    /**
+     * Sets the value of the cell if it wasn't already set.
+     * It also removes the value number from the pencil marks
+     * of every buddies of this cell
+     * 
+     * @param int $value the given value
+     * @return int $value   new value of the cell
+     */
     public function set_value($value)
     {
         if ($this->value == 0)
         {
             $this->value = $value;
+            foreach ($this->get_buddies() as $buddy)
+            {
+                $buddy->remove_pencil_marks($this->get_value());
+            }
         }
         return $this->value;
     }
@@ -118,6 +164,11 @@ class Cell
     public function get_value()
     {
         return $this->value;
+    }
+
+    public function is_empty()
+    {
+        return $this->value == 0;
     }
 
 }

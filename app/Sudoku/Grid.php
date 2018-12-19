@@ -36,10 +36,10 @@ class Grid
         [57,58,59,66,67,68,75,76,77],
         [60,61,62,69,70,71,78,79,80]
     ];
-    public $rows = array(array());
-    public $columns = array(array());
-    public $boxes = array(array());
-    public $grid = array();
+    private $rows = array(array());
+    private $columns = array(array());
+    private $boxes = array(array());
+    private $grid = array();
 
     public function __construct($grid)
     {
@@ -114,17 +114,31 @@ class Grid
         return $this->columns[$index];
     }
 
-    public static function get_values($aglo)
+    /**
+     * Return an array of the values of the given cells
+     * @param array[cell] $agglo array of cells
+     * @return array[int]        Array containing the values of the cells
+     */
+    public static function get_values($cells)
     {
         $values = array();
-        foreach ($aglo as $cell)
+        foreach ($cells as $cell)
         {
             $values[] = $cell->get_value();
         }
         return $values;
     }
 
-    public function find_buddies(Cell $cell)
+    /**
+     * Finds the buddies of the given cell.
+     *
+     * A buddy of a cell is a cell that is either in the
+     * same row, column of box as the cell
+     *
+     * @param  Cell   $cell cell for which to find the buddies
+     * @return array[Cell]       array of buddies
+     */
+    public function find_buddies($cell)
     {
         $buddies = array();
 
@@ -136,7 +150,7 @@ class Grid
             }
         }
 
-        foreach ($this->get_col($cell->column) as $col_cell)
+        foreach ($this->get_col($cell->col) as $col_cell)
         {
             if ($col_cell != $cell && !in_array($col_cell, $buddies))
             {
@@ -153,5 +167,21 @@ class Grid
         }
         $buddies = array_filter($buddies); // remove empty values
         return $buddies;
+    }
+
+    /**
+     * Check if the grid is solved
+     * @return boolean true if the grid is solved, false otherwise
+     */
+    public function is_solved()
+    {
+        $cells_prod = 1;
+        foreach ($this->grid as $cell)
+        {
+            // if the grid is not solved, at least one cell has value 0
+            $cell_prod *= $cell->get_value();
+        }
+
+        return $cell_prod != 0;
     }
 }

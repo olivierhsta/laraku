@@ -9,13 +9,13 @@
                           {
                               $class .= "border-bottom-2";
                           }
-                          if ($cell->column%3 == 0 && $cell->column != 9)
+                          if ($cell->col%3 == 0 && $cell->col != 9)
                           {
                               $class .= " border-right-2";
                           }
                       @endphp
                   <td class="{{$class}} sudoku-cell">
-                      @if($cell->value == 0)
+                      @if($cell->is_empty())
                           <table class="table table-borderless sudoku-pencil-marks">
                               @foreach($cell->pencil_marks as $value => $mark)
                                   @if ($value !== 0)
