@@ -32,7 +32,3 @@
   border-bottom: 2px solid black !important;
 }
 
-.btn:focus {
-  outline: none;
-}
-

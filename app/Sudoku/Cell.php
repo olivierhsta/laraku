@@ -2,6 +2,9 @@
 
 namespace App\Sudoku;
 
+use InvalidArgumentException;
+use Exception;
+
 class Cell
 {
 
@@ -80,6 +83,14 @@ class Cell
         return $this->buddies;
     }
 
+    /**
+     * Set the pencil marks to the given values.
+     *
+     * Throws InvalidArgumentException if the given values aren't between 1
+     *
+     * @param array[int] $values    array of pencil marks between 1 and 9
+     *                              eg. [1,2,6]
+     */
     public function set_pencil_marks($values)
     {
         $one_nine = [1,2,3,4,5,6,7,8,9];
@@ -96,7 +107,17 @@ class Cell
 
     private function reset_pencil_marks()
     {
-        $this->pencil_marks = [0,0,0,0,0,0,0,0,0];
+        $this->pencil_marks = [
+            1=>0,
+            2=>0,
+            3=>0,
+            4=>0,
+            5=>0,
+            6=>0,
+            7=>0,
+            8=>0,
+            9=>0
+        ];
     }
 
     public function get_pencil_marks()
@@ -116,10 +137,15 @@ class Cell
         return $marks;
     }
 
-    public function remove_pencil_marks($marks)
+    public function remove_pencil_marks($marks = null)
     {
+        $removed_pm = array();
         if (is_int($marks) && $marks <= 9 && $marks >= 1)
         {
+            if ($this->pencil_marks[$marks] == 1)
+            {
+                $removed_pm[] = $marks;
+            }
             $this->pencil_marks[$marks] = 0;
         }
         else if (is_array($marks))
@@ -130,21 +156,30 @@ class Cell
                 {
                     throw new InvalidArgumentException('Value must be an integer between 1 and 9.  Value given : ' . $mark);
                 }
-
+                if ($this->pencil_marks[$mark] == 1)
+                {
+                    $removed_pm[] = $mark;
+                }
                 $this->pencil_marks[$mark] = 0;
             }
+        }
+        else if (is_null($marks))
+        {
+            $removed_pm = $this->get_pencil_marks();
+            $this->reset_pencil_marks();
         }
         else
         {
             throw new InvalidArgumentException('Value must be an integer between 1 and 9.  Value given : ' . $mark);
         }
+        return $removed_pm;
     }
 
     /**
      * Sets the value of the cell if it wasn't already set.
      * It also removes the value number from the pencil marks
      * of every buddies of this cell
-     * 
+     *
      * @param int $value the given value
      * @return int $value   new value of the cell
      */
