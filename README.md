@@ -5,8 +5,7 @@ Lara[vel for Sudo]ku is a web application for Sudoku.  The goal for it is to be 
 Right now, the solver can use these techniques (These are taken from the book "Mensa Guide to Solving Sudoku" of Peter Gordon):
 - [x] One choice
 - [x] Elimination
-- [x] Naked pair
-- [ ] Naked subsets (other than pair)
+- [x] Naked subsets
 - [ ] Subsets (not naked)
 - [ ] Interaction
 - [ ] Candidate-free solving
