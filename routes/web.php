@@ -15,10 +15,6 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/edge', function () {
-    return view('sudoku.edge');
-});
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

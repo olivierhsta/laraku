@@ -3,6 +3,7 @@
 namespace App\Sudoku;
 use App\Sudoku\Grid;
 use InvalidArgumentException;
+use Exception;
 
 class Solver
 {
@@ -26,11 +27,14 @@ class Solver
         $this->write_pencil_marks();
         $limit_counter = 0;
         do {
-            $onechoice = $this->onechoice();
-            $elimination = $this->elimination();
-            $naked_subset = $this->naked_subset();
+            $before_grid = clone $this->grid;
+            $before_found = $this->found;
+            $this->onechoice();
+            $this->elimination();
+            $this->naked_subset();
             $limit_counter++;
-        } while (($onechoice || $elimination || $naked_subset) && $limit_counter < 1000);
+        } while (sizeof($before_found, $mode=COUNT_RECURSIVE) != sizeof($this->found,$mode=COUNT_RECURSIVE)
+                 && $limit_counter < 100);
         return $this->grid->get_rows();
     }
 
@@ -43,8 +47,11 @@ class Solver
         $one_nine = [1,2,3,4,5,6,7,8,9];
         foreach ($this->grid->get_grid() as $cell)
         {
-            $buddies = Grid::get_values($cell->get_buddies());
-            $cell->set_pencil_marks(array_diff($one_nine, $buddies));
+            if ($cell->is_empty())
+            {
+                $buddies = Grid::get_values($cell->get_buddies());
+                $cell->set_pencil_marks(array_diff($one_nine, $buddies));
+            }
         }
     }
 
@@ -64,12 +71,9 @@ class Solver
      *          "action" => "Contains",
      *          "values" => 8
      *      ];
-     *
-     * @return boolean $local_found     true if we found any element by one choice, false otherwise
      */
     private function onechoice()
     {
-        $local_found = false;
         foreach ($this->grid->get_grid() as $cell)
         {
             $pencil_marks = $cell->get_pencil_marks();
@@ -80,10 +84,8 @@ class Solver
                     "action" => "Contains",
                     "values" => $cell->get_value()
                 ];
-                $local_found = true;
             }
         }
-        return $local_found;
     }
 
     /**
@@ -91,16 +93,12 @@ class Solver
      *
      * This calls the function elimination_by with the parameters 'row', 'col'
      * and 'box' in that order.
-     *
-     * @return boolean $local_found  true if we found any element by one choice, false otherwise
      */
     private function elimination()
     {
-        $local_found = $this->elimination_by('row');
-        $local_found = $this->elimination_by('col') || $local_found;
-        $local_found = $this->elimination_by('box') || $local_found;
-
-        return $local_found;
+        $this->elimination_by('row');
+        $this->elimination_by('col');
+        $this->elimination_by('box');
     }
 
     /**
@@ -118,24 +116,20 @@ class Solver
      * @param  string $agglo agglomeration on which to practice the elimnation process.
      *                      throws InvalidArgumentException if the given string is
      *                      not one of 'col', 'row' or 'box'
-     * @return boolean $local_found  true if we found any element by one choice, false otherwise
      */
-    private function elimination_by($agglo)
+    private function elimination_by($agglo_name)
     {
-        if ($agglo !== 'col' && $agglo !== 'row' && $agglo !== 'box')
-        {
-            throw new InvalidArgumentException("Agglomeration must be either named 'row', 'col' or 'box', given name was : " . $agglo);
-        }
-        $local_found = false;
+        Solver::validate_agglo_name($agglo_name);
+
         foreach ($this->grid->get_grid() as $cell)
         {
-            if ($cell->is_empty())
+            if ($cell->is_empty()  && !empty($cell->get_pencil_marks()))
             {
                 foreach ($cell->get_pencil_marks() as $pencil_mark)
                 {
                     $present = false;
-                    $getter = 'get_'.$agglo;
-                    foreach ($this->grid->$getter($cell->$agglo) as $other_cell)
+                    $getter = 'get_'.$agglo_name;
+                    foreach ($this->grid->$getter($cell->$agglo_name) as $other_cell)
                     {
                         if ($other_cell->is_empty() && $other_cell != $cell)
                         {
@@ -154,12 +148,9 @@ class Solver
                         "action" => "Contains",
                         "values" => $cell->get_value()
                     ];
-                    $local_found = true;
                 }
             }
         }
-
-        return $local_found;
     }
 
     /**
@@ -167,14 +158,12 @@ class Solver
      *
      * This calls the function naked_subset_by with the parameters 'row', 'col'
      * and 'box' in that order.
-     *
-     * @return boolean $local_found     true if we found any element by one choice, false otherwise
      */
     private function naked_subset()
     {
-        return $this->naked_subset_by('row')
-            || $this->naked_subset_by('col')
-            || $this->naked_subset_by('box');
+        $this->naked_subset_by('row');
+        $this->naked_subset_by('col');
+        $this->naked_subset_by('box');
     }
 
     /**
@@ -185,75 +174,143 @@ class Solver
      * in the agglomeration.  This is a naked pair.  This can be generalized
      * to triplet, quadruplet and quinduplet.
      *
-     * For every value found, we add an element to the $found array
+     * @param  string $agglo agglomeration on which to practice the naked subset process.
+     *                      throws InvalidArgumentException if the given string is
+     *                      not one of 'col', 'row' or 'box'
+     */
+    private function naked_subset_by($agglo_name)
+    {
+        Solver::validate_agglo_name($agglo_name);
+
+        $getter = 'get_'.$agglo_name.($agglo_name == 'box' ? 'es' : 's');
+            foreach ($this->grid->$getter() as $agglo)
+            {
+                for ($i=2; $i <= 5; $i++)
+                {
+                    $before_found = $this->found;
+                    $this->naked_subset_recursion($agglo, $i);
+                    if (sizeof($before_found, $mode=COUNT_RECURSIVE) != sizeof($this->found,$mode=COUNT_RECURSIVE)) return null;
+                }
+            }
+    }
+
+    /**
+     * Recursive function that allows to find naked subset of any size.
+     *
+     * For every cell that we removed pencil marks, we add an element to the $found array
      * ex.  $this->found["Naked Pair"]["13"] = [
      *          "action" => "Remove Pencil Marks",
      *          "values" => [1,5]
      *      ];
      *
-     * @param  string $agglo agglomeration on which to practice the naked subset process.
-     *                      throws InvalidArgumentException if the given string is
-     *                      not one of 'col', 'row' or 'box'
-     * @return boolean $local_found true    if we found any element by one choice, false otherwise
+     * @param array[Cell] $agglo   Agglomeration on which to perform the algorithm.
+     *                             Should be either a box, a row or a column
+     * @param int $depth   Size of the naked subset (2 = naked pair, 3 = naked triple, etc.)
+     * @param array  $indexes Internal parameter that should not be set at first call.
+     *                        It holds the indexes of the subset's cells that we
+     *                        are currently testing.
      */
-    private function naked_subset_by($agglo, $verbose = false)
+    private function naked_subset_recursion($agglo, $depth, $indexes = [])
     {
-        if ($agglo !== 'col' && $agglo !== 'row' && $agglo !== 'box')
+        if ($depth == 0)
         {
-            throw new InvalidArgumentException("Agglomeration must be either named 'row', 'col' or 'box', given name was : " . $agglo);
-
-        }
-
-        $local_found = false;
-        foreach ($this->grid->get_grid() as $cell)
-        {
-            if ($cell->is_empty())
+            $subset = array();
+            foreach ($indexes as $index)
             {
-                $cell_pm = $cell->get_pencil_marks();
-                $getter = 'get_'.$agglo;
-                $$agglo = $this->grid->$getter($cell->$agglo);
-                $cell_in_subset = array($cell);
-
-                foreach ($$agglo as $compare_cell)
+                if ($agglo[$index]->is_empty())
                 {
-                    $compare_cell_pm = $compare_cell->get_pencil_marks();
-                    if ($compare_cell->is_empty()
-                    && $compare_cell != $cell
-                    && sizeof($compare_cell_pm) == sizeof($cell_pm)
-                    && empty(array_diff($cell_pm, $compare_cell_pm)))
-                    {
-                        $cell_in_subset[] = $compare_cell;
-                    }
+                    $subset[] = $agglo[$index];
                 }
-
-                if (sizeof($cell_pm) > 1 && sizeof($cell_in_subset) == sizeof($cell_pm))
+            }
+            if (!empty($subset) && $pm_to_remove = $this->is_naked_subset($subset))
+            {
+                foreach ($agglo as $cell)
                 {
-                    foreach($$agglo as $remove_cell)
+                    if ($cell->is_empty() && !in_array($cell,$subset))
                     {
-                        if (!in_array($remove_cell, $cell_in_subset)
-                            && $remove_cell->is_empty()
-                            && sizeof(array_intersect($cell_pm, $remove_cell->get_pencil_marks())) > 0)
+                        $removed_pm = $cell->remove_pencil_marks($pm_to_remove);
+                        if (!empty($removed_pm))
                         {
-                            $removed_pm = $remove_cell->remove_pencil_marks($cell_pm);
-                            switch(sizeof($cell_in_subset))
+                            switch(sizeof($subset))
                             {
                                 case 2: $subset_type = "Pair"; break;
                                 case 3: $subset_type = "Triple"; break;
                                 case 4: $subset_type = "Quadruplet"; break;
                                 case 5: $subset_type = "Quintuplet"; break;
-                                default: $subset_type = "";
+                                default: $subset_type = "Subset";
                             }
-                            $this->found["Naked ". $subset_type][$remove_cell->row . $remove_cell->col] = [
+                            $this->found["Naked ". $subset_type][$cell->row . $cell->col] = [
                                 "action" => "Remove Pencil Marks",
                                 "values" => $removed_pm
                             ];
-                            $local_found = true;
                         }
                     }
                 }
             }
         }
-        return $local_found;
+        else
+        {
+            $last_index = 0;
+            foreach ($indexes as $index)
+            {
+                $last_index = $index;
+            }
+            for ($i = $last_index+1; $i <= 9-($depth-1) ; $i++)
+            {
+                $tmp_indexes = $indexes;
+                $tmp_indexes[] = $i;
+                $this->naked_subset_recursion($agglo, $depth-1, $tmp_indexes);
+            }
+        }
+    }
+
+    /**
+     * Checks if the given subset is a naked subset.  This means it contains the
+     * same number of pencil marks as its size.
+     *
+     * eg. - subset of 3 cells with pencil marks [1,2]; [1,3]; [2,3] is a naked subset
+     *       ( because sizeof([1,2,3]) == 3 )
+     *     - subset of 3 cells with pencil marks [1,4]; [1,3]; [2,3] is not a naked subset
+     *       ( because sizeof([1,2,3,4]) != 3 )
+     *
+     * @param array[Cell] $subset   Subset for which to test its nakedness.
+     *                              Only accepted subset size are between 2 and 5
+     *                              (subset bigger than 5 are not realistically possible in sudokus)
+     * @return boolean|array[int] false if the subset is not naked and the shared pencil marks if it is
+     */
+    private function is_naked_subset($subset)
+    {
+        // subset bigger than 5 are not realistically possible in sudokus
+        if (sizeof($subset) > 5 || sizeof($subset) < 2) return false;
+        $pencil_marks = array();
+        foreach ($subset as $cell)
+        {
+            $pencil_marks[] = $cell->get_pencil_marks();
+        }
+
+        // https://secure.php.net/manual/en/functions.arguments.php#functions.variable-arg-list.new
+        $shared_pm = array_unique(array_merge(...$pencil_marks), SORT_REGULAR);
+        if (sizeof($shared_pm) == sizeof($subset))
+        {
+            return $shared_pm;
+        }
+        return false;
+    }
+
+    /**
+     * Helper function to check if the agglomeration name given is valid.
+     * Throws InvalidArgumentException if not.
+     *
+     * Valid names are 'box', 'row', 'col'
+     *
+     * @param  string $agglo_name Agglomeration name to test
+     */
+    public static function validate_agglo_name($agglo_name)
+    {
+        if ($agglo_name !== 'col' && $agglo_name !== 'row' && $agglo_name !== 'box')
+        {
+            throw new InvalidArgumentException("Agglomeration must be either named 'row', 'col' or 'box', given name was : " . $agglo_name);
+        }
     }
 
 

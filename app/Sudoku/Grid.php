@@ -68,10 +68,21 @@ class Grid
             $cell = new Cell($this, $cell_value, $row+1, $column+1);
             $this->grid[$i] = $cell;
 
+            $this->boxes[$box+1][0] = 0;
+            $this->columns[$column+1][0] = 0;
+            $this->rows[$row+1][0] = 0;
+
             $this->boxes[$box+1][] = $cell;
             $this->columns[$column+1][] = $cell;
             $this->rows[$row+1][] = $cell;
+
+            unset($this->boxes[$box+1][0]);
+            unset($this->columns[$column+1][0]);
+            unset($this->rows[$row+1][0]);
         }
+        unset($this->boxes[0]);
+        unset($this->columns[0]);
+        unset($this->rows[0]);
     }
 
     public function get_cell($index)
@@ -79,13 +90,26 @@ class Grid
         return $this->grid[$index];
     }
 
-    public function get_grid()
+    public function get_grid($only_empty = false)
     {
+        if ($only_empty)
+        {
+            $empty_cells = array();
+            foreach ($this->grid as $cell)
+            {
+                if ($cell->is_empty())
+                {
+                    $empty_cells[] = $cell;
+                }
+            }
+            return $empty_cells;
+        }
         return $this->grid;
     }
 
     public function get_boxes()
     {
+
         return $this->boxes;
     }
 

@@ -122,7 +122,7 @@ class Cell
 
     public function get_pencil_marks()
     {
-        if ($this->value != 0)
+        if (!$this->is_empty())
         {
             return array();
         }
@@ -137,6 +137,12 @@ class Cell
         return $marks;
     }
 
+    /**
+     * Remove the given pencil marks from the cell
+     * @param  int|array[int] $marks can be either a single pencil mark or an
+     *                        array of pencil marks (eg. [1,4,5])
+     * @return array[int]     the removed pencil marks
+     */
     public function remove_pencil_marks($marks = null)
     {
         $removed_pm = array();
@@ -188,6 +194,7 @@ class Cell
         if ($this->value == 0)
         {
             $this->value = $value;
+            $this->reset_pencil_marks();
             foreach ($this->get_buddies() as $buddy)
             {
                 $buddy->remove_pencil_marks($this->get_value());
