@@ -11,6 +11,7 @@ class Solver
     protected $grid;
     private $found = array(array());
     public $full_agglo = [1,2,3,4,5,6,7,8,9];
+    public $setp_counter = 1;
 
     public function __construct($grid)
     {
@@ -33,7 +34,7 @@ class Solver
             $this->elimination();
             $this->naked_subset();
             $limit_counter++;
-        } while (sizeof($before_found, $mode=COUNT_RECURSIVE) != sizeof($this->found,$mode=COUNT_RECURSIVE)
+        } while (sizeof($before_found) != sizeof($this->found)
                  && $limit_counter < 100);
         return $this->grid->get_rows();
     }
@@ -80,8 +81,9 @@ class Solver
             if ($cell->is_empty() && sizeof($pencil_marks) == 1)
             {
                 $cell->set_value($pencil_marks[0]);
-                $this->found["One Choice"][$cell->row . $cell->col] = [
-                    "action" => "Contains",
+                $this->found[$this->setp_counter++][$cell->row . $cell->col] = [
+                    "method" => "One Choice",
+                    "action" => "Places",
                     "values" => $cell->get_value()
                 ];
             }
@@ -144,8 +146,9 @@ class Solver
                 if (!$present)
                 {
                     $cell->set_value($pencil_mark);
-                    $this->found["Elimination"][$cell->row . $cell->col] = [
-                        "action" => "Contains",
+                    $this->found[$this->setp_counter++][$cell->row . $cell->col] = [
+                        "method" => "Elimination",
+                        "action" => "Places",
                         "values" => $cell->get_value()
                     ];
                 }
@@ -161,8 +164,10 @@ class Solver
      */
     private function naked_subset()
     {
-        $this->naked_subset_by('row');
-        $this->naked_subset_by('col');
+        $return = $this->naked_subset_by('row');
+        if ($return) return null;
+        $return = $this->naked_subset_by('col');
+        if ($return) return null;
         $this->naked_subset_by('box');
     }
 
@@ -183,15 +188,15 @@ class Solver
         Solver::validate_agglo_name($agglo_name);
 
         $getter = 'get_'.$agglo_name.($agglo_name == 'box' ? 'es' : 's');
+        for ($i=2; $i <= 5; $i++)
+        {
             foreach ($this->grid->$getter() as $agglo)
             {
-                for ($i=2; $i <= 5; $i++)
-                {
                     $before_found = $this->found;
                     $this->naked_subset_recursion($agglo, $i);
-                    if (sizeof($before_found, $mode=COUNT_RECURSIVE) != sizeof($this->found,$mode=COUNT_RECURSIVE)) return null;
-                }
+                    if (sizeof($before_found) != sizeof($this->found)) return true;
             }
+        }
     }
 
     /**
@@ -239,7 +244,8 @@ class Solver
                                 case 5: $subset_type = "Quintuplet"; break;
                                 default: $subset_type = "Subset";
                             }
-                            $this->found["Naked ". $subset_type][$cell->row . $cell->col] = [
+                            $this->found[$this->setp_counter++][$cell->row . $cell->col] = [
+                                "method" => "Naked ". $subset_type,
                                 "action" => "Remove Pencil Marks",
                                 "values" => $removed_pm
                             ];

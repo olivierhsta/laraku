@@ -6,9 +6,8 @@ Right now, the solver can use these techniques (These are taken from the book "M
 - [x] One choice
 - [x] Elimination
 - [x] Naked subsets
-- [ ] Subsets (not naked)
+- [ ] Hidden subsets
 - [ ] Interaction
-- [ ] Candidate-free solving
 - [ ] X-Wing
 - [ ] XY-Wing
 - [ ] XYZ-Wing
