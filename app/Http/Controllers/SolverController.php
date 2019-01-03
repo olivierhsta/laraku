@@ -19,11 +19,11 @@ class SolverController extends Controller
 
         $grid = new Grid(request('grid'));
         $solver = new HumanLikeSolver($grid);
-        $found = $solver->grid_solve();
+        $found = $solver->gridSolve();
 
 
         return view('sudoku.solver')->with([
-                'grid' => $solver->getSolvedGrid()->get_rows(),
+                'grid' => $solver->getSolvedGrid()->getRows(),
                 'found' => $found
         ]);
     }

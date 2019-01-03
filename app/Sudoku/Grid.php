@@ -25,7 +25,7 @@ use App\Sudoku\Cell;
 class Grid
 {
 
-    private static $row_indexes = [
+    private static $rowIndexes = [
         [0,1,2,9,10,11,18,19,20],
         [3,4,5,12,13,14,21,22,23],
         [6,7,8,15,16,17,24,25,26],
@@ -45,9 +45,9 @@ class Grid
     {
         for( $i=0 ; $i < strlen($grid) ; $i++ )
         {
-            $cell_value = (int)$grid[$i];
+            $cellValue = (int)$grid[$i];
 
-            if ( (string)$cell_value != $grid[$i] )
+            if ( (string)$cellValue != $grid[$i] )
             {
                 throw new InvalidArgumentException("Grid must only contain integers");
             }
@@ -55,17 +55,17 @@ class Grid
             $box = intdiv($i,9);
             $column = (($box)*3)%9 + $i%3;
 
-            for ( $j=0 ; $j < sizeof(Grid::$row_indexes) ; $j++ )
+            for ( $j=0 ; $j < sizeof(Grid::$rowIndexes) ; $j++ )
             {
-                $row_index = Grid::$row_indexes[$j];
-                if (in_array($i, $row_index))
+                $rowIndex = Grid::$rowIndexes[$j];
+                if (in_array($i, $rowIndex))
                 {
                     $row = $j;
                     break;
                 }
             }
 
-            $cell = new Cell($this, $cell_value, $row+1, $column+1);
+            $cell = new Cell($this, $cellValue, $row+1, $column+1);
             $this->grid[$i] = $cell;
 
             $this->boxes[$box+1][0] = 0;
@@ -85,55 +85,55 @@ class Grid
         unset($this->rows[0]);
     }
 
-    public function get_cell($index)
+    public function getCell($index)
     {
         return $this->grid[$index];
     }
 
-    public function get_grid($only_empty = false)
+    public function getGrid($only_empty = false)
     {
         if ($only_empty)
         {
-            $empty_cells = array();
+            $emptyCells = array();
             foreach ($this->grid as $cell)
             {
-                if ($cell->is_empty())
+                if ($cell->isEmpty())
                 {
-                    $empty_cells[] = $cell;
+                    $emptyCells[] = $cell;
                 }
             }
-            return $empty_cells;
+            return $emptyCells;
         }
         return $this->grid;
     }
 
-    public function get_boxes()
+    public function getBoxes()
     {
 
         return $this->boxes;
     }
 
-    public function get_rows()
+    public function getRows()
     {
         return $this->rows;
     }
 
-    public function get_cols()
+    public function getCols()
     {
         return $this->columns;
     }
 
-    public function get_box($index)
+    public function getBox($index)
     {
         return $this->boxes[$index];
     }
 
-    public function get_row($index)
+    public function getRow($index)
     {
         return $this->rows[$index];
     }
 
-    public function get_col($index)
+    public function getCol($index)
     {
         return $this->columns[$index];
     }
@@ -143,12 +143,12 @@ class Grid
      * @param array[cell] $agglo array of cells
      * @return array[int]        Array containing the values of the cells
      */
-    public static function get_values($cells)
+    public static function getValues($cells)
     {
         $values = array();
         foreach ($cells as $cell)
         {
-            $values[] = $cell->get_value();
+            $values[] = $cell->getValue();
         }
         return $values;
     }
@@ -162,31 +162,31 @@ class Grid
      * @param  Cell   $cell cell for which to find the buddies
      * @return array[Cell]       array of buddies
      */
-    public function find_buddies($cell)
+    public function findBuddies($cell)
     {
         $buddies = array();
 
-        foreach ($this->get_row($cell->row) as $row_cell)
+        foreach ($this->getRow($cell->row) as $rowCell)
         {
-            if ($row_cell != $cell)
+            if ($rowCell != $cell)
             {
-                $buddies[] = $row_cell;
+                $buddies[] = $rowCell;
             }
         }
 
-        foreach ($this->get_col($cell->col) as $col_cell)
+        foreach ($this->getCol($cell->col) as $colCell)
         {
-            if ($col_cell != $cell && !in_array($col_cell, $buddies))
+            if ($colCell != $cell && !in_array($colCell, $buddies))
             {
-                $buddies[] = $col_cell;
+                $buddies[] = $colCell;
             }
         }
 
-        foreach ($this->get_box($cell->box) as $box_cell)
+        foreach ($this->getBox($cell->box) as $boxCell)
         {
-            if ($box_cell != $cell && !in_array($box_cell, $buddies))
+            if ($boxCell != $cell && !in_array($boxCell, $buddies))
             {
-                $buddies[] = $box_cell;
+                $buddies[] = $boxCell;
             }
         }
         $buddies = array_filter($buddies); // remove empty values
@@ -197,15 +197,15 @@ class Grid
      * Check if the grid is solved
      * @return boolean true if the grid is solved, false otherwise
      */
-    public function is_solved()
+    public function isSolved()
     {
-        $cells_prod = 1;
+        $cellsProd = 1;
         foreach ($this->grid as $cell)
         {
             // if the grid is not solved, at least one cell has value 0
-            $cell_prod *= $cell->get_value();
+            $cellsProd *= $cell->getValue();
         }
 
-        return $cell_prod != 0;
+        return $cellsProd != 0;
     }
 }

@@ -15,9 +15,9 @@
                           }
                       @endphp
                   <td class="{{$class}} sudoku-cell">
-                      @if($cell->is_empty())
+                      @if($cell->isEmpty())
                           <table class="table table-borderless sudoku-pencil-marks">
-                              @foreach($cell->pencil_marks as $value => $mark)
+                              @foreach($cell->getPencilFlags() as $value => $mark)
                                   @if ($value !== 0)
                                       @if ($value%3 == 1) <tr> @endif
                                       <td class="padding-0">
@@ -28,7 +28,7 @@
                               @endforeach
                           </table>
                       @else
-                        <span class="sudoku-cell-value">{{ $cell->get_value() }}</span>
+                        <span class="sudoku-cell-value">{{ $cell->getValue() }}</span>
                       @endif
                   </td>
               @endforeach

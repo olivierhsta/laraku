@@ -20,17 +20,17 @@ class NakedSubsetSolver extends Solver
      * This calls the function naked_subset_by with the parameters 'row', 'col'
      * and 'box' in that order.
      */
-    public function grid_solve()
+    public function gridSolve()
     {
-        $found_row = $this->naked_subset_by('row');
+        $foundRow = $this->nakedSubsetBy('row');
         // if ($return) return $this->found;
-        $found_col = $this->naked_subset_by('col');
+        $foundCol = $this->nakedSubsetBy('col');
         // if ($return) return $this->found;
-        $found_box = $this->naked_subset_by('box');
-        return array_merge($found_row, $found_col, $found_box);
+        $foundBox = $this->nakedSubsetBy('box');
+        return array_merge($foundRow, $foundCol, $foundBox);
     }
 
-    public function group_solve(array $group)
+    public function groupSolve(array $group)
     {
 
     }
@@ -47,19 +47,19 @@ class NakedSubsetSolver extends Solver
      *                      throws InvalidArgumentException if the given string is
      *                      not one of 'col', 'row' or 'box'
      */
-    private function naked_subset_by($group_name)
+    private function nakedSubsetBy($groupName)
     {
-        Solver::validate_group_name($group_name);
+        Solver::validateGroupName($groupName);
 
         $found = array();
 
-        $getter = 'get_'.$group_name.($group_name == 'box' ? 'es' : 's');
+        $getter = 'get'.ucfirst($groupName).($groupName == 'box' ? 'es' : 's');
         for ($i=2; $i <= 5; $i++)
         {
             foreach ($this->grid->$getter() as $group)
             {
-                    $before_found = $found;
-                    $found = array_merge($found, $this->naked_subset_recursion($group, $i));
+                    $beforeFound = $found;
+                    $found = array_merge($found, $this->nakedSubsetRecursion($group, $i));
                     // if (sizeof($before_found) != sizeof($found)) return $found;
             }
         }
@@ -86,7 +86,7 @@ class NakedSubsetSolver extends Solver
      *                          "values" => [1,5]
      *                      ];
      */
-    private function naked_subset_recursion($group, $depth, $indexes = [])
+    private function nakedSubsetRecursion($group, $depth, $indexes = [])
     {
         $found = array();
         if ($depth == 0)
@@ -94,33 +94,33 @@ class NakedSubsetSolver extends Solver
             $subset = array();
             foreach ($indexes as $index)
             {
-                if ($group[$index]->is_empty())
+                if ($group[$index]->isEmpty())
                 {
                     $subset[] = $group[$index];
                 }
             }
-            if (!empty($subset) && $pm_to_remove = $this->is_naked_subset($subset))
+            if (!empty($subset) && $pmToRemove = $this->isNakedSubset($subset))
             {
                 foreach ($group as $cell)
                 {
-                    if ($cell->is_empty() && !in_array($cell,$subset))
+                    if ($cell->isEmpty() && !in_array($cell,$subset))
                     {
-                        $removed_pm = $cell->remove_pencil_marks($pm_to_remove);
-                        if (!empty($removed_pm))
+                        $removedPM = $cell->removePencilMarks($pmToRemove);
+                        if (!empty($removedPM))
                         {
                             switch(sizeof($subset))
                             {
-                                case 2: $subset_type = "Pair"; break;
-                                case 3: $subset_type = "Triple"; break;
-                                case 4: $subset_type = "Quadruplet"; break;
-                                case 5: $subset_type = "Quintuplet"; break;
-                                default: $subset_type = "Subset";
+                                case 2: $subsetType = "Pair"; break;
+                                case 3: $subsetType = "Triple"; break;
+                                case 4: $subsetType = "Quadruplet"; break;
+                                case 5: $subsetType = "Quintuplet"; break;
+                                default: $subsetType = "Subset";
                             }
                             $found[] = [
                                 "cell" => $cell->row . $cell->col,
-                                "method" => "Naked ". $subset_type,
+                                "method" => "Naked ". $subsetType,
                                 "action" => "Remove Pencil Marks",
-                                "values" => $removed_pm
+                                "values" => $removedPM
                             ];
                         }
                     }
@@ -129,16 +129,16 @@ class NakedSubsetSolver extends Solver
         }
         else
         {
-            $last_index = 0;
+            $lastIndex = 0;
             foreach ($indexes as $index)
             {
-                $last_index = $index;
+                $lastIndex = $index;
             }
-            for ($i = $last_index+1; $i <= 9-($depth-1) ; $i++)
+            for ($i = $lastIndex+1; $i <= 9-($depth-1) ; $i++)
             {
-                $tmp_indexes = $indexes;
-                $tmp_indexes[] = $i;
-                $found = array_merge($found, $this->naked_subset_recursion($group, $depth-1, $tmp_indexes));
+                $tmpIndexes = $indexes;
+                $tmpIndexes[] = $i;
+                $found = array_merge($found, $this->nakedSubsetRecursion($group, $depth-1, $tmpIndexes));
             }
         }
         return $found;
@@ -158,21 +158,21 @@ class NakedSubsetSolver extends Solver
      *                              (subset bigger than 5 are not realistically possible in sudokus)
      * @return boolean|int[] false if the subset is not naked and the shared pencil marks if it is
      */
-    private function is_naked_subset($subset)
+    private function isNakedSubset($subset)
     {
         // subset bigger than 5 are not realistically possible in sudokus
         if (sizeof($subset) > 5 || sizeof($subset) < 2) return false;
-        $pencil_marks = array();
+        $pencilMarks = array();
         foreach ($subset as $cell)
         {
-            $pencil_marks[] = $cell->get_pencil_marks();
+            $pencilMarks[] = $cell->getPencilMarks();
         }
 
         // https://secure.php.net/manual/en/functions.arguments.php#functions.variable-arg-list.new
-        $shared_pm = array_unique(array_merge(...$pencil_marks), SORT_REGULAR);
-        if (sizeof($shared_pm) == sizeof($subset))
+        $sharedPM = array_unique(array_merge(...$pencilMarks), SORT_REGULAR);
+        if (sizeof($sharedPM) == sizeof($subset))
         {
-            return $shared_pm;
+            return $sharedPM;
         }
         return false;
     }

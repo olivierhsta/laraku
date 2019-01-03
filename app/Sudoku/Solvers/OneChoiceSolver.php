@@ -21,32 +21,34 @@ class OneChoiceSolver extends Solver
      * the value is set to the cell
      *
      * For every value found, we add an element to the $found array
-     * ex.  $this->found[0] = [
-     *          "cell" => "13",
-     *          "method" => "One Choice",
-     *          "action" => "Contains",
-     *          "values" => 8
-     *      ];
+     *
+     * @return array[] Value found by the algorithm
+     *                  ex.  $found[0] = [
+     *                          "cell" => "13",
+     *                          "method" => "One Choice",
+     *                          "action" => "Contains",
+     *                          "values" => 8
+     *                      ];
      */
-    public function grid_solve()
+    public function gridSolve()
     {
-        return $this->group_solve($this->grid->get_grid());
+        return $this->groupSolve($this->grid->getGrid());
     }
 
-    public function group_solve(array $group)
+    public function groupSolve(array $group)
     {
         $found = array();
         foreach ($group as $cell)
         {
-            $pencil_marks = $cell->get_pencil_marks();
-            if ($cell->is_empty() && sizeof($pencil_marks) == 1)
+            $pencilMarks = $cell->getPencilMarks();
+            if ($cell->isEmpty() && sizeof($pencilMarks) == 1)
             {
-                $cell->set_value($pencil_marks[0]);
+                $cell->setValue($pencilMarks[0]);
                 $found[] = [
                     "cell" => $cell->row . $cell->col,
                     "method" => "One Choice",
                     "action" => "Places",
-                    "values" => $cell->get_value()
+                    "values" => $cell->getValue()
                 ];
             }
         }

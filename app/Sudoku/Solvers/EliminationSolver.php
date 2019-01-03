@@ -20,15 +20,15 @@ class EliminationSolver extends Solver
      * This calls the function elimination_by with the parameters 'row', 'col'
      * and 'box' in that order.
      */
-    public function grid_solve()
+    public function gridSolve()
     {
-        $found_row = $this->eliminationBy('row');
-        $found_col = $this->eliminationBy('col');
-        $found_box = $this->eliminationBy('box');
-        return array_merge($found_row, $found_col, $found_box);
+        $foundRow = $this->eliminationBy('row');
+        $foundCol = $this->eliminationBy('col');
+        $foundBox = $this->eliminationBy('box');
+        return array_merge($foundRow, $foundCol, $foundBox);
     }
 
-    public function group_solve(array $group)
+    public function groupSolve(array $group)
     {
 
     }
@@ -51,25 +51,25 @@ class EliminationSolver extends Solver
      *                      throws InvalidArgumentException if the given string is
      *                      not one of 'col', 'row' or 'box'
      */
-    private function eliminationBy($group_name)
+    private function eliminationBy($groupName)
     {
-        Solver::validate_group_name($group_name);
+        Solver::validateGroupName($groupName);
 
         $found = array();
 
-        foreach ($this->grid->get_grid() as $cell)
+        foreach ($this->grid->getGrid() as $cell)
         {
-            if ($cell->is_empty()  && !empty($cell->get_pencil_marks()))
+            if ($cell->isEmpty()  && !empty($cell->getPencilMarks()))
             {
-                foreach ($cell->get_pencil_marks() as $pencil_mark)
+                foreach ($cell->getPencilMarks() as $pencilMark)
                 {
                     $present = false;
-                    $getter = 'get_'.$group_name;
-                    foreach ($this->grid->$getter($cell->$group_name) as $other_cell)
+                    $getter = 'get'.ucfirst($groupName);
+                    foreach ($this->grid->$getter($cell->$groupName) as $otherCell)
                     {
-                        if ($other_cell->is_empty() && $other_cell != $cell)
+                        if ($otherCell->isEmpty() && $otherCell != $cell)
                         {
-                            if (in_array($pencil_mark, $other_cell->get_pencil_marks()))
+                            if (in_array($pencilMark, $otherCell->getPencilMarks()))
                             {
                                 $present = true;
                                 break;
@@ -79,12 +79,12 @@ class EliminationSolver extends Solver
                 }
                 if (!$present)
                 {
-                    $cell->set_value($pencil_mark);
+                    $cell->setValue($pencilMark);
                     $found[] = [
                         "cell" => $cell->row . $cell->col,
                         "method" => "Elimination",
                         "action" => "Places",
-                        "values" => $cell->get_value()
+                        "values" => $cell->getValue()
                     ];
                 }
             }

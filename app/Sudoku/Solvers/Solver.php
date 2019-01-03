@@ -8,18 +8,13 @@ abstract class Solver
 {
     protected $grid;
     protected $found = array(array());
-    public $full_group = [1,2,3,4,5,6,7,8,9];
+    public $fullGroup = [1,2,3,4,5,6,7,8,9];
 
     public function __construct(Grid &$grid)
     {
         unset($this->found[0]);
         $this->grid = &$grid;
         $this->originalGrid = clone $grid;
-    }
-
-    public function get_found_values()
-    {
-        return $this->found;
     }
 
     /**
@@ -30,7 +25,7 @@ abstract class Solver
      *
      * @param  string $groupName group name to test
      */
-    public static function validate_group_name($groupName)
+    public static function validateGroupName($groupName)
     {
         if ($groupName !== 'col' && $groupName !== 'row' && $groupName !== 'box')
         {
@@ -65,7 +60,7 @@ abstract class Solver
      * Must be define by subclass.
      *
      */
-    public abstract function grid_solve();
+    public abstract function gridSolve();
 
     /**
      * Solving algorithm that goes through only one group (box, row or col).
@@ -74,5 +69,5 @@ abstract class Solver
      *
      * @param Cell[] $group Group on which to perform the algorithm.
      */
-    public abstract function group_solve(array $group);
+    public abstract function groupSolve(array $group);
 }

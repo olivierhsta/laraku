@@ -20,7 +20,7 @@ class Cell
      * 1 meaning that the pencil marks is set for the cell
      * @var array[int=>int]
      */
-    public $pencil_marks = [
+    private $pencilMarks = [
         1=>0,
         2=>0,
         3=>0,
@@ -74,11 +74,11 @@ class Cell
         }
     }
 
-    public function get_buddies()
+    public function getBuddies()
     {
         if (empty($this->buddies))
         {
-            $this->buddies = $this->grid->find_buddies($this);
+            $this->buddies = $this->grid->findBuddies($this);
         }
         return $this->buddies;
     }
@@ -91,23 +91,23 @@ class Cell
      * @param array[int] $values    array of pencil marks between 1 and 9
      *                              eg. [1,2,6]
      */
-    public function set_pencil_marks($values)
+    public function setPencilMarks($values)
     {
-        $one_nine = [1,2,3,4,5,6,7,8,9];
-        if (!empty(array_diff($values, $one_nine)))
+        $oneToNine = [1,2,3,4,5,6,7,8,9];
+        if (!empty(array_diff($values, $oneToNine)))
         {
             throw new InvalidArgumentException("Pencil marks must be of value 1 to 9");
         }
-        $this->reset_pencil_marks();
+        $this->resetPencilMarks();
         foreach ($values as $index)
         {
-            $this->pencil_marks[$index] = 1;
+            $this->pencilMarks[$index] = 1;
         }
     }
 
-    private function reset_pencil_marks()
+    private function resetPencilMarks()
     {
-        $this->pencil_marks = [
+        $this->pencilMarks = [
             1=>0,
             2=>0,
             3=>0,
@@ -120,14 +120,14 @@ class Cell
         ];
     }
 
-    public function get_pencil_marks()
+    public function getPencilMarks()
     {
-        if (!$this->is_empty())
+        if (!$this->isEmpty())
         {
             return array();
         }
         $marks = array();
-        foreach ($this->pencil_marks as $value => $mark)
+        foreach ($this->pencilMarks as $value => $mark)
         {
             if ($mark == 1)
             {
@@ -137,22 +137,27 @@ class Cell
         return $marks;
     }
 
+    public function getPencilFlags()
+    {
+        return $this->pencilMarks;
+    }
+
     /**
      * Remove the given pencil marks from the cell
      * @param  int|array[int] $marks can be either a single pencil mark or an
      *                        array of pencil marks (eg. [1,4,5])
      * @return array[int]     the removed pencil marks
      */
-    public function remove_pencil_marks($marks = null)
+    public function removePencilMarks($marks = null)
     {
-        $removed_pm = array();
+        $removedPM = array();
         if (is_int($marks) && $marks <= 9 && $marks >= 1)
         {
-            if ($this->pencil_marks[$marks] == 1)
+            if ($this->pencilMarks[$marks] == 1)
             {
-                $removed_pm[] = $marks;
+                $removedPM[] = $marks;
             }
-            $this->pencil_marks[$marks] = 0;
+            $this->pencilMarks[$marks] = 0;
         }
         else if (is_array($marks))
         {
@@ -162,23 +167,23 @@ class Cell
                 {
                     throw new InvalidArgumentException('Value must be an integer between 1 and 9.  Value given : ' . $mark);
                 }
-                if ($this->pencil_marks[$mark] == 1)
+                if ($this->pencilMarks[$mark] == 1)
                 {
-                    $removed_pm[] = $mark;
+                    $removedPM[] = $mark;
                 }
-                $this->pencil_marks[$mark] = 0;
+                $this->pencilMarks[$mark] = 0;
             }
         }
         else if (is_null($marks))
         {
-            $removed_pm = $this->get_pencil_marks();
-            $this->reset_pencil_marks();
+            $removedPM = $this->getPencilMarks();
+            $this->resetPencilMarks();
         }
         else
         {
             throw new InvalidArgumentException('Value must be an integer between 1 and 9.  Value given : ' . $mark);
         }
-        return $removed_pm;
+        return $removedPM;
     }
 
     /**
@@ -189,26 +194,26 @@ class Cell
      * @param int $value the given value
      * @return int $value   new value of the cell
      */
-    public function set_value($value)
+    public function setValue($value)
     {
         if ($this->value == 0)
         {
             $this->value = $value;
-            $this->reset_pencil_marks();
-            foreach ($this->get_buddies() as $buddy)
+            $this->resetPencilMarks();
+            foreach ($this->getBuddies() as $buddy)
             {
-                $buddy->remove_pencil_marks($this->get_value());
+                $buddy->removePencilMarks($this->getValue());
             }
         }
         return $this->value;
     }
 
-    public function get_value()
+    public function getValue()
     {
         return $this->value;
     }
 
-    public function is_empty()
+    public function isEmpty()
     {
         return $this->value == 0;
     }

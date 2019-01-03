@@ -30,28 +30,28 @@ class HumanLikeSolver extends Solver
      * Entry point for the solving algorithm
      * @return Grid       Instante of Sudoku\Grid reprensenting the solved form of the sudoku (if solvable).
      */
-    public function grid_solve()
+    public function gridSolve()
     {
-        $this->write_pencil_marks();
+        $this->writePencilMarks();
         $found = array();
-        $limit_counter = 0;
+        $limitCounter = 0;
         do {
-            $before_found = $found;
+            $beforeFound = $found;
             foreach($this->subSolvers as $subSolver)
             {
-                $localFound = $subSolver->grid_solve();
+                $localFound = $subSolver->gridSolve();
                 if (is_array($localFound) && !empty($localFound))
                 {
                     $found = array_merge($found, $localFound);
                 }
             }
-            $limit_counter++;
-        } while (sizeof($before_found) != sizeof($found)
-                 && $limit_counter < 100);
+            $limitCounter++;
+        } while (sizeof($beforeFound) != sizeof($found)
+                 && $limitCounter < 100);
         return $found;
     }
 
-    public function group_solve(array $group)
+    public function groupSolve(array $group)
     {
 
     }
@@ -60,15 +60,15 @@ class HumanLikeSolver extends Solver
      * Writes the pencil marks for every cell of the grid
      * @return null
      */
-    public function write_pencil_marks()
+    public function writePencilMarks()
     {
-        $one_nine = [1,2,3,4,5,6,7,8,9];
-        foreach ($this->grid->get_grid() as $cell)
+        $oneToNine = [1,2,3,4,5,6,7,8,9];
+        foreach ($this->grid->getGrid() as $cell)
         {
-            if ($cell->is_empty())
+            if ($cell->isEmpty())
             {
-                $buddies = Grid::get_values($cell->get_buddies());
-                $cell->set_pencil_marks(array_diff($one_nine, $buddies));
+                $buddies = Grid::getValues($cell->getBuddies());
+                $cell->setPencilMarks(array_diff($oneToNine, $buddies));
             }
         }
     }
