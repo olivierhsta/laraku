@@ -33,6 +33,15 @@ class NakedSubsetSolver extends Solver
      * and then the quadruplet and quintuplet.
      *
      * It then does the same for every column and box (in that order)
+     *
+     * @return array  values found by the algorithm.
+     *                       eg.    $found[] = [
+     *                                  "cell" => "13",
+     *                                  "method" => "Naked Pair",
+     *                                  "action" => "Remove Pencil Marks",
+     *                                  "values" => [1,5],
+     *                                  "grid" => "004 ... 021"
+     *                              ];
      */
     public function gridSolve()
     {
@@ -56,7 +65,8 @@ class NakedSubsetSolver extends Solver
      *                                  "cell" => "13",
      *                                  "method" => "Naked Pair",
      *                                  "action" => "Remove Pencil Marks",
-     *                                  "values" => [1,5]
+     *                                  "values" => [1,5],
+     *                                  "grid" => "004 ... 021"
      *                              ];
      */
     public function groupSolve(array $group)
@@ -110,7 +120,8 @@ class NakedSubsetSolver extends Solver
      *                          "cell" => "13",
      *                          "method" => "Naked Pair",
      *                          "action" => "Remove Pencil Marks",
-     *                          "values" => [1,5]
+     *                          "values" => [1,5],
+     *                          "grid" => "004 ... 021"
      *                      ];
      */
     private function nakedSubsetRecursion($group, $depth, $indexes = [])
@@ -150,7 +161,8 @@ class NakedSubsetSolver extends Solver
                                 "cell" => $cell->row . $cell->col,
                                 "method" => "Naked ". $subsetType,
                                 "action" => "Remove Pencil Marks",
-                                "values" => $removedPM
+                                "values" => $removedPM,
+                                "grid" => $this->grid->encoding(),
                             ];
                         }
                     }

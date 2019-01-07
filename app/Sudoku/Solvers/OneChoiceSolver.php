@@ -33,7 +33,8 @@ class OneChoiceSolver extends Solver
      *                          "cell" => "13",
      *                          "method" => "One Choice",
      *                          "action" => "Contains",
-     *                          "values" => 8
+     *                          "values" => 8,
+     *                          "grid" => "004 ... 021"
      *                      ];
      */
     public function gridSolve()
@@ -44,7 +45,7 @@ class OneChoiceSolver extends Solver
     /**
      * Executes the one choice algorithm on a given group.
      *
-     * For every cell in the group, we check if it has only one pencil mark, 
+     * For every cell in the group, we check if it has only one pencil mark,
      * if it does, we replace the value of the cell by the value of this
      * pencil mark
      *
@@ -53,7 +54,8 @@ class OneChoiceSolver extends Solver
      *                          "cell" => "13",
      *                          "method" => "One Choice",
      *                          "action" => "Contains",
-     *                          "values" => 8
+     *                          "values" => 8,
+     *                          "grid" => "004 ... 021"
      *                      ];
      */
     public function groupSolve(array $group)
@@ -69,7 +71,8 @@ class OneChoiceSolver extends Solver
                     "cell" => $cell->row . $cell->col,
                     "method" => "One Choice",
                     "action" => "Places",
-                    "values" => $cell->getValue()
+                    "values" => $cell->getValue(),
+                    "grid" => $this->grid->encoding(),
                 ];
             }
         }

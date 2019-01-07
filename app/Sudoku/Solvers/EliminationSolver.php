@@ -4,6 +4,13 @@ namespace App\Sudoku\Solvers;
 use App\Sudoku\Grid;
 use InvalidArgumentException,Exception;
 
+/**
+ * Class to solve elimination problems.
+ *
+ * If a cell has a pencil mark that none of the other cells in one of its groups
+ * has, we can assume that the value of the cell is the value of the said
+ * pencil mark.
+ */
 class EliminationSolver extends Solver
 {
 
@@ -15,16 +22,43 @@ class EliminationSolver extends Solver
     }
 
     /**
-     * Executes the elimination algorithm on the whole grid
+     * Executes the elimination algorithm on the whole grid.
      *
-     * This calls the function elimination_by with the parameters 'row', 'col'
-     * and 'box' in that order.
+     * For every cell, it checks if it has a pencil mark that no other cell in
+     * one of its groups has.  If it is the only cell of the group to have it,
+     * it must therefor be its value.
+     *
+     * @return array values found by the algorithm.
+     *                       eg.    $found[] = [
+     *                                  "cell" => "13",
+     *                                  "method" => "Elimination",
+     *                                  "action" => "Places",
+     *                                  "values" => 3,
+     *                                  "grid" => "004 ... 021"
+     *                              ];
      */
     public function gridSolve()
     {
         return $this->groupSolve($this->grid->getGrid());
     }
 
+    /**
+     * Executes the elimination algorithm on the given group.
+     *
+     * For every cell, it checks if it has a pencil mark that no other cell in
+     * one of its groups has.  If it is the only cell of the group to have it,
+     * it must therefor be its value.
+     *
+     * @param  array $group group on which to perform the algorithm
+     * @return array values found by the algorithm.
+     *                       eg.    $found[] = [
+     *                                  "cell" => "13",
+     *                                  "method" => "Elimination",
+     *                                  "action" => "Places",
+     *                                  "values" => 3,
+     *                                  "grid" => "004 ... 021"
+     *                              ];
+     */
     public function groupSolve(array $group)
     {
         $found = array();
@@ -35,11 +69,11 @@ class EliminationSolver extends Solver
             if ($cell->isEmpty()  && !empty($cell->getPencilMarks()))
             {
                 $pencilMark = $this->eliminationBy($cell, 'row');
-                if (!$pencilMark)
+                if (!$pencilMark) // if we didn't find a value
                 {
                     $pencilMark = $this->eliminationBy($cell, 'col');
                 }
-                if (!$pencilMark)
+                if (!$pencilMark) // if we didn't find a value
                 {
                     $pencilMark = $this->eliminationBy($cell, 'box');
                 }
@@ -51,7 +85,8 @@ class EliminationSolver extends Solver
                         "cell" => $cell->row . $cell->col,
                         "method" => "Elimination",
                         "action" => "Places",
-                        "values" => $cell->getValue()
+                        "values" => $cell->getValue(),
+                        "grid" => $this->grid->encoding(),
                     ];
                 }
             }
@@ -60,28 +95,21 @@ class EliminationSolver extends Solver
     }
 
     /**
-     * Executes the elimination algorithm only on the given group
+     * Executes the elimination algorithm only on the given groups.
      *
      * If the cell is the only one that can contain a given number in its
      * group, we affect it this number.
-     *
-     * For every value found, we add an element to the $found array
-     * ex.  $this->found[] = [
-     *          "cell" => "13",
-     *          "method" => "Elimination",
-     *          "action" => "Contains",
-     *          "values" => 8
-     *      ];
      *
      * @param  string $groupName group on which to practice the elimnation process.
      *                           throws InvalidArgumentException if the given string is
      *                           not one of 'col', 'row' or 'box'
      *
-     * @return boolean|int new cell value if one of the cell's pencil mark was found in the group, false otherwise
+     * @return boolean|int new cell value if one of the cell's pencil mark was not found in the group, false otherwise
      */
     private function eliminationBy($cell, $groupName)
     {
         Solver::validateGroupName($groupName);
+
         foreach ($cell->getPencilMarks() as $pencilMark)
         {
             $present = false;
