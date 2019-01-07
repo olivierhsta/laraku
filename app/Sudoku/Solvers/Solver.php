@@ -2,13 +2,13 @@
 
 namespace App\Sudoku\Solvers;
 use App\Sudoku\Grid;
+use App\Sudoku\Sudoku;
 use InvalidArgumentException, Exception;
 
 abstract class Solver
 {
     protected $grid;
     protected $found = array(array());
-    public $fullGroup = [1,2,3,4,5,6,7,8,9];
 
     public function __construct(Grid &$grid)
     {
@@ -59,6 +59,7 @@ abstract class Solver
      *
      * Must be define by subclass.
      *
+     * @abstract
      */
     public abstract function gridSolve();
 
@@ -67,6 +68,7 @@ abstract class Solver
      *
      * Must be define by subclass.
      *
+     * @abstract
      * @param Cell[] $group Group on which to perform the algorithm.
      */
     public abstract function groupSolve(array $group);

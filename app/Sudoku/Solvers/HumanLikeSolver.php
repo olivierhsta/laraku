@@ -2,12 +2,14 @@
 
 namespace App\Sudoku\Solvers;
 use App\Sudoku\Grid;
+use App\Sudoku\Sudoku;
 use InvalidArgumentException, Exception;
 
 class HumanLikeSolver extends Solver
 {
     /**
      * list of subsolver classes to perform in the complete algorithm.
+     * Absolute path must be given.
      * @var string[]
      */
     private $subSolversName = [
@@ -20,15 +22,18 @@ class HumanLikeSolver extends Solver
     public function __construct(Grid &$grid)
     {
         Solver::__construct($grid);
-        $test = new OneChoiceSolver($grid);
         foreach ($this->subSolversName as $SubSolver) {
             $this->subSolvers[] = new $SubSolver($grid);
         }
     }
 
     /**
-     * Entry point for the solving algorithm
-     * @return Grid       Instante of Sudoku\Grid reprensenting the solved form of the sudoku (if solvable).
+     * Goes through all of the human-like strategy and executes them in the
+     * given order.  If there was no progress during the process (aka. no value
+     * found and no pencil mark removed), we stop.  Otherwise we continue until
+     * we find nothing or we reach the iteration limit $HUMAN_LIKE_ITERATION_LIMIT
+     *
+     * @return array step-by-step resolution of the grid.
      */
     public function gridSolve()
     {
@@ -47,7 +52,7 @@ class HumanLikeSolver extends Solver
             }
             $limitCounter++;
         } while (sizeof($beforeFound) != sizeof($found)
-                 && $limitCounter < 100);
+                 && $limitCounter < config()->get('sudoku.humanLikeIterationLimit'));
         return $found;
     }
 
@@ -62,13 +67,12 @@ class HumanLikeSolver extends Solver
      */
     public function writePencilMarks()
     {
-        $oneToNine = [1,2,3,4,5,6,7,8,9];
         foreach ($this->grid->getGrid() as $cell)
         {
             if ($cell->isEmpty())
             {
                 $buddies = Grid::getValues($cell->getBuddies());
-                $cell->setPencilMarks(array_diff($oneToNine, $buddies));
+                $cell->setPencilMarks(array_diff(config()->get('sudoku.fullGroup'), $buddies));
             }
         }
     }

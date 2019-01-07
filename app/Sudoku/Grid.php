@@ -76,10 +76,12 @@ class Grid
             $this->columns[$column+1][] = $cell;
             $this->rows[$row+1][] = $cell;
 
+            // to start at natural sudoku index 1
             unset($this->boxes[$box+1][0]);
             unset($this->columns[$column+1][0]);
             unset($this->rows[$row+1][0]);
         }
+        // to start at natural sudoku index 1
         unset($this->boxes[0]);
         unset($this->columns[0]);
         unset($this->rows[0]);

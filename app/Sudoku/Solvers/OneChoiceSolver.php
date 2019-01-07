@@ -4,6 +4,13 @@ namespace App\Sudoku\Solvers;
 use App\Sudoku\Grid;
 use InvalidArgumentException, Exception;
 
+/**
+ * Class to solve one choice problems.
+ *
+ * If a cell only as one pencil mark (aka one possible number can fill it),
+ * the value is set to the cell
+ *
+ */
 class OneChoiceSolver extends Solver
 {
 
@@ -15,12 +22,11 @@ class OneChoiceSolver extends Solver
     }
 
     /**
-     * Executes the one choice algorithm on the whole grid
+     * Executes the one choice algorithm on the whole grid.
      *
-     * If a cell only as one pencil mark (aka one possible number can fill it),
-     * the value is set to the cell
-     *
-     * For every value found, we add an element to the $found array
+     * For every cell in the grid, we check if it has only one pencil mark,
+     * if it does, we replace the value of the cell by the value of this
+     * pencil mark
      *
      * @return array[] Value found by the algorithm
      *                  ex.  $found[0] = [
@@ -35,6 +41,21 @@ class OneChoiceSolver extends Solver
         return $this->groupSolve($this->grid->getGrid());
     }
 
+    /**
+     * Executes the one choice algorithm on a given group.
+     *
+     * For every cell in the group, we check if it has only one pencil mark, 
+     * if it does, we replace the value of the cell by the value of this
+     * pencil mark
+     *
+     * @return array[] Value found by the algorithm
+     *                  ex.  $found[0] = [
+     *                          "cell" => "13",
+     *                          "method" => "One Choice",
+     *                          "action" => "Contains",
+     *                          "values" => 8
+     *                      ];
+     */
     public function groupSolve(array $group)
     {
         $found = array();

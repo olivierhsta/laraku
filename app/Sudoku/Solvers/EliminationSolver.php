@@ -22,15 +22,41 @@ class EliminationSolver extends Solver
      */
     public function gridSolve()
     {
-        $foundRow = $this->eliminationBy('row');
-        $foundCol = $this->eliminationBy('col');
-        $foundBox = $this->eliminationBy('box');
-        return array_merge($foundRow, $foundCol, $foundBox);
+        return $this->groupSolve($this->grid->getGrid());
     }
 
     public function groupSolve(array $group)
     {
+        $found = array();
 
+        foreach ($group as $cell)
+        {
+            $present = false;
+            if ($cell->isEmpty()  && !empty($cell->getPencilMarks()))
+            {
+                $pencilMark = $this->eliminationBy($cell, 'row');
+                if (!$pencilMark)
+                {
+                    $pencilMark = $this->eliminationBy($cell, 'col');
+                }
+                if (!$pencilMark)
+                {
+                    $pencilMark = $this->eliminationBy($cell, 'box');
+                }
+
+                if ($pencilMark)
+                {
+                    $cell->setValue($pencilMark);
+                    $found[] = [
+                        "cell" => $cell->row . $cell->col,
+                        "method" => "Elimination",
+                        "action" => "Places",
+                        "values" => $cell->getValue()
+                    ];
+                }
+            }
+        }
+        return $found;
     }
 
     /**
@@ -47,48 +73,34 @@ class EliminationSolver extends Solver
      *          "values" => 8
      *      ];
      *
-     * @param  string $group group on which to practice the elimnation process.
-     *                      throws InvalidArgumentException if the given string is
-     *                      not one of 'col', 'row' or 'box'
+     * @param  string $groupName group on which to practice the elimnation process.
+     *                           throws InvalidArgumentException if the given string is
+     *                           not one of 'col', 'row' or 'box'
+     *
+     * @return boolean|int new cell value if one of the cell's pencil mark was found in the group, false otherwise
      */
-    private function eliminationBy($groupName)
+    private function eliminationBy($cell, $groupName)
     {
         Solver::validateGroupName($groupName);
-
-        $found = array();
-
-        foreach ($this->grid->getGrid() as $cell)
+        foreach ($cell->getPencilMarks() as $pencilMark)
         {
-            if ($cell->isEmpty()  && !empty($cell->getPencilMarks()))
+            $present = false;
+            $getter = 'get'.ucfirst($groupName);
+            foreach ($this->grid->$getter($cell->$groupName) as $otherCell)
             {
-                foreach ($cell->getPencilMarks() as $pencilMark)
+                if ($otherCell->isEmpty() && $otherCell != $cell)
                 {
-                    $present = false;
-                    $getter = 'get'.ucfirst($groupName);
-                    foreach ($this->grid->$getter($cell->$groupName) as $otherCell)
+                    if (in_array($pencilMark, $otherCell->getPencilMarks()))
                     {
-                        if ($otherCell->isEmpty() && $otherCell != $cell)
-                        {
-                            if (in_array($pencilMark, $otherCell->getPencilMarks()))
-                            {
-                                $present = true;
-                                break;
-                            }
-                        }
+                        $present = true;
                     }
                 }
-                if (!$present)
-                {
-                    $cell->setValue($pencilMark);
-                    $found[] = [
-                        "cell" => $cell->row . $cell->col,
-                        "method" => "Elimination",
-                        "action" => "Places",
-                        "values" => $cell->getValue()
-                    ];
-                }
+            }
+            if (!$present)
+            {
+                return $pencilMark;
             }
         }
-        return $found;
+        return false;
     }
 }

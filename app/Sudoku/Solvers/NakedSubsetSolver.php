@@ -2,8 +2,18 @@
 
 namespace App\Sudoku\Solvers;
 use App\Sudoku\Grid;
+use App\Sudoku\Sudoku;
 use InvalidArgumentException, Exception;
 
+/**
+ * Class to solve naked subsets.
+ *
+ * If a cell has only two pencil marks and another cell also only has those
+ * two same pencil marks, these marks can be removed from every other cell
+ * in the group.  This is a naked pair.  This can be generalized
+ * to triplet, quadruplet and quinduplet.
+ *
+ */
 class NakedSubsetSolver extends Solver
 {
 
@@ -17,8 +27,12 @@ class NakedSubsetSolver extends Solver
     /**
      * Executes the naked subset algorithm on the whole grid
      *
-     * This calls the function naked_subset_by with the parameters 'row', 'col'
-     * and 'box' in that order.
+     * It goes first over all the rows and, for each row, checks if the
+     * pair of cells [(1,2), ..., (4,5), ..., (8,9)] form a naked pair.
+     * It then does the same for every triplets to see if it form a naked triple
+     * and then the quadruplet and quintuplet.
+     *
+     * It then does the same for every column and box (in that order)
      */
     public function gridSolve()
     {
@@ -30,18 +44,36 @@ class NakedSubsetSolver extends Solver
         return array_merge($foundRow, $foundCol, $foundBox);
     }
 
+    /**
+     * Executes the naked subset algorithm on the given group.
+     *
+     * It checks if any of the subset of the group is
+     * a naked subset (from pair to quinduplets).
+     *
+     * @param  array  $group group on which to perform the algorithm
+     * @return array         values found by the algorithm.
+     *                       eg.    $found[] = [
+     *                                  "cell" => "13",
+     *                                  "method" => "Naked Pair",
+     *                                  "action" => "Remove Pencil Marks",
+     *                                  "values" => [1,5]
+     *                              ];
+     */
     public function groupSolve(array $group)
     {
-
+        $found = array();
+        for ($i=2; $i <= 5; $i++)
+        {
+            $beforeFound = $found;
+            $found = array_merge($found, $this->nakedSubsetRecursion($group, $i));
+            // if (sizeof($before_found) != sizeof($found)) return $found;
+        }
+        return $found;
     }
 
     /**
-     * Executes the naked subset algorithm only on the given group
-     *
-     * If a cell has only two pencil marks and another cell also only has those
-     * two same pencil marks, these marks can be removed from every other cell
-     * in the group.  This is a naked pair.  This can be generalized
-     * to triplet, quadruplet and quinduplet.
+     * Executes the naked subset algorithm only on
+     * one set of group (rows, boxes or columns)
      *
      * @param  string $group group on which to practice the naked subset process.
      *                      throws InvalidArgumentException if the given string is
@@ -54,14 +86,11 @@ class NakedSubsetSolver extends Solver
         $found = array();
 
         $getter = 'get'.ucfirst($groupName).($groupName == 'box' ? 'es' : 's');
-        for ($i=2; $i <= 5; $i++)
+        // uses of variable-variable. becomes either
+        // $this->grid->getCols(), getRows() or getBoxes()
+        foreach ($this->grid->$getter() as $group)
         {
-            foreach ($this->grid->$getter() as $group)
-            {
-                    $beforeFound = $found;
-                    $found = array_merge($found, $this->nakedSubsetRecursion($group, $i));
-                    // if (sizeof($before_found) != sizeof($found)) return $found;
-            }
+            $found = $this->groupSolve($group);
         }
         return $found;
     }
@@ -69,16 +98,14 @@ class NakedSubsetSolver extends Solver
     /**
      * Recursive function that allows to find naked subset of any size.
      *
-     * For every cell that we removed pencil marks, we add an element to the $found array
-     *
      * @param Cell[] $group   group on which to perform the algorithm.
-     *                             Should be either a box, a row or a column
-     * @param int $depth   Size of the naked subset (2 = naked pair, 3 = naked triple, etc.)
+     *                        Should be either a box, a row or a column.
+     * @param int    $depth   Size of the naked subset (2 = naked pair, 3 = naked triple, etc.)
      * @param int[]  $indexes Internal parameter that should not be set at first call.
      *                        It holds the indexes of the subset's cells that we
      *                        are currently testing.
      *
-     * @return array[array[]] $found Found values.
+     * @return array Found values.
      *              ex.    $found[] = [
      *                          "cell" => "13",
      *                          "method" => "Naked Pair",
@@ -91,6 +118,9 @@ class NakedSubsetSolver extends Solver
         $found = array();
         if ($depth == 0)
         {
+            /*
+             recursion tree leaf
+             */
             $subset = array();
             foreach ($indexes as $index)
             {
@@ -134,7 +164,7 @@ class NakedSubsetSolver extends Solver
             {
                 $lastIndex = $index;
             }
-            for ($i = $lastIndex+1; $i <= 9-($depth-1) ; $i++)
+            for ($i = $lastIndex+1; $i <= config()->get('sudoku.groupSize')-($depth-1) ; $i++)
             {
                 $tmpIndexes = $indexes;
                 $tmpIndexes[] = $i;
@@ -145,8 +175,8 @@ class NakedSubsetSolver extends Solver
     }
 
     /**
-     * Checks if the given subset is a naked subset.  This means it contains the
-     * same number of pencil marks as its size.
+     * Checks if the given subset is a naked subset.
+     * If it is, it contains the same number of pencil marks as its size.
      *
      * eg. - subset of 3 cells with pencil marks [1,2]; [1,3]; [2,3] is a naked subset
      *       ( because sizeof([1,2,3]) == 3 )
@@ -168,6 +198,7 @@ class NakedSubsetSolver extends Solver
             $pencilMarks[] = $cell->getPencilMarks();
         }
 
+        // source :
         // https://secure.php.net/manual/en/functions.arguments.php#functions.variable-arg-list.new
         $sharedPM = array_unique(array_merge(...$pencilMarks), SORT_REGULAR);
         if (sizeof($sharedPM) == sizeof($subset))
