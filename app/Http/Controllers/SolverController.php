@@ -8,19 +8,17 @@ use App\Sudoku\Grid;
 
 class SolverController extends Controller
 {
-    public function index()
-    {
+    public function index() {
         return view('sudoku.solver');
     }
 
-    public function solve()
-    {
+    public function solve() {
         $this->validate(request(), ['grid' => 'required|min:81|max:81']);
-
         $grid = new Grid(request('grid'));
         $solver = new HumanLikeSolver($grid);
         $found = $solver->gridSolve();
-
+        $found['solved_grid'] = $solver->getSolvedGrid()->encoding();
+        return json_encode($found);
         return view('sudoku.solver')->with([
                 'grid' => $solver->getSolvedGrid()->getRows(),
                 'found' => $found

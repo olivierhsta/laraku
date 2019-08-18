@@ -35,8 +35,7 @@ class HumanLikeSolver extends Solver
      *
      * @return array step-by-step resolution of the grid.
      */
-    public function gridSolve()
-    {
+    public function gridSolve() {
         $this->writePencilMarks();
         $found = array();
         $limitCounter = 0;
@@ -56,8 +55,7 @@ class HumanLikeSolver extends Solver
         return $found;
     }
 
-    public function groupSolve(array $group)
-    {
+    public function groupSolve(array $group) {
 
     }
 

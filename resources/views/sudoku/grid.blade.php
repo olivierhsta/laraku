@@ -1,4 +1,6 @@
-@if(@$grid)
+<sudoku-grid></sudoku-grid>
+
+{{-- @if(@$grid)
   <table class="table table-bordered sudoku-grid">
       @foreach($grid as $row)
           <tr scope="row">
@@ -35,4 +37,4 @@
           </tr>
       @endforeach
   </table>
-@endif
+@endif --}}

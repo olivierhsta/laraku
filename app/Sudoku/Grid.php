@@ -142,8 +142,8 @@ class Grid
 
     /**
      * Return an array of the values of the given cells
-     * @param array[cell] $agglo array of cells
-     * @return array[int]        Array containing the values of the cells
+     * @param Cell[] $agglo array of cells
+     * @return int[]        Array containing the values of the cells
      */
     public static function getValues($cells)
     {
@@ -233,10 +233,14 @@ class Grid
      */
     public function encoding()
     {
-        $encoding = "";
-        foreach (Grid::getValues($this->grid->getBoxes()) as $value)
+        $encoding = [];
+        // COMBAK change getRows for getBoxes 
+        foreach ($this->getRows() as $box)
         {
-            $encoding .= $value;
+            foreach ($box as $cell)
+            {
+                $encoding[] = $cell->isEmpty() ? $cell->getPencilMarks() : $cell->getValue();
+            }
         }
         return $encoding;
     }

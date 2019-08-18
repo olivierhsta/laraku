@@ -13892,7 +13892,7 @@ window.Vue = __webpack_require__(36);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', __webpack_require__(39));
+Vue.component('sudoku-grid', __webpack_require__(39));
 
 var app = new Vue({
   el: '#app'
@@ -47176,7 +47176,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\ExampleComponent.vue"
+Component.options.__file = "resources\\assets\\js\\components\\SudokuGrid.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -47185,9 +47185,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0ca92eac", Component.options)
+    hotAPI.createRecord("data-v-ac159e98", Component.options)
   } else {
-    hotAPI.reload("data-v-0ca92eac", Component.options)
+    hotAPI.reload("data-v-ac159e98", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -47312,6 +47312,18 @@ module.exports = function normalizeComponent (
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -47330,10 +47342,59 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
+    data: function data() {
+        return {
+            encoding: "",
+            grid: new Grid()
+        };
+    },
+
+    methods: {
+        onSubmit: function onSubmit() {
+            var _this = this;
+
+            axios.post('/solver', {
+                grid: this.encoding
+            }).then(function (response) {
+                return _this.grid = new Grid(response.data.solved_grid);
+            });
+        }
     }
 });
+
+var Grid = function () {
+    function Grid() {
+        var encoding = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+        _classCallCheck(this, Grid);
+
+        this.cells = new Array();
+        if (encoding) {
+            for (var i = 0; i < encoding.length; i++) {
+                this.cells[i] = new Cell(encoding[i]);
+            }
+        }
+    }
+
+    _createClass(Grid, [{
+        key: "getCells",
+        value: function getCells() {
+            var begin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+            var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 81;
+
+            return this.cells.slice(begin, end);
+        }
+    }]);
+
+    return Grid;
+}();
+
+var Cell = function Cell(value) {
+    _classCallCheck(this, Cell);
+
+    this.pencilMarks = {};
+    this.value = value;
+};
 
 /***/ }),
 /* 42 */
@@ -47343,38 +47404,95 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
+  return _c("div", [
+    _c(
+      "form",
+      {
+        attrs: { action: "", method: "" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.onSubmit($event)
+          }
+        }
+      },
+      [
+        _c("div", { staticClass: "row" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.encoding,
+                expression: "encoding"
+              }
+            ],
+            staticClass: "form-control col-10",
+            attrs: { name: "grid", type: "text", placeholder: "81-digit grid" },
+            domProps: { value: _vm.encoding },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.encoding = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary col-2 form-control",
+              attrs: { type: "submit" }
+            },
+            [_vm._v("Solve")]
+          )
         ])
-      ])
-    ])
-  }
-]
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "table",
+      { staticClass: "table table-bordered sudoku-grid" },
+      _vm._l(9, function(i) {
+        return _c(
+          "tr",
+          { attrs: { scope: "row" } },
+          _vm._l(_vm.grid.getCells(9 * (i - 1), 9 * i), function(cell) {
+            return _c("td", { staticClass: "sudoku-cell" }, [
+              Array.isArray(cell)
+                ? _c(
+                    "table",
+                    {
+                      staticClass: "table table-borderless sudoku-pencil-marks"
+                    },
+                    _vm._l(cell, function(pencil_mark) {
+                      return _c("td", { staticClass: "padding-0" }, [
+                        _vm._v('" : "" }}">' + _vm._s(pencil_mark))
+                      ])
+                    })
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("span", {
+                staticClass: "sudoku-cell-value",
+                domProps: { textContent: _vm._s(cell.value) }
+              })
+            ])
+          })
+        )
+      })
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-0ca92eac", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-ac159e98", module.exports)
   }
 }
 

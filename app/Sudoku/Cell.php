@@ -86,7 +86,7 @@ class Cell
     /**
      * Set the pencil marks to the given values.
      *
-     * Throws InvalidArgumentException if the given values aren't between 1
+     * Throws InvalidArgumentException if the given values aren't between 1 and 9
      *
      * @param array[int] $values    array of pencil marks between 1 and 9
      *                              eg. [1,2,6]

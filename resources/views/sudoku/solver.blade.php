@@ -7,13 +7,13 @@
         <p class="lead">{{__('Enter your grid')}}</p>
         <hr class="my-4">
         @include('layouts.error')
-        <form action="{{route('solver.solve')}}" method="POST">
+        {{-- <form action="{{route('solver.solve')}}" method="POST" @submit.prevent="onSubmit">
             {{ csrf_field() }}
             <div class="row">
                 <input name="grid" type="text" class="form-control col-10" placeholder="81-digit grid"/>
-                <button type="submit" class="btn btn-primary col-2 form-control">Submit</button>
+                <button type="submit" class="btn btn-primary col-2 form-control">Solve</button>
             </div>
-        </form>
+        </form> --}}
     </div>
 
     <div class="d-flex">
