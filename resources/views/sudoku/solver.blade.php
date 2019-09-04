@@ -14,10 +14,10 @@
                 <button type="submit" class="btn btn-primary col-2 form-control">Solve</button>
             </div>
         </form> --}}
+        @include('sudoku.grid')
     </div>
 
     <div class="d-flex">
-        @include('sudoku.grid')
         @include('sudoku.found')
     </div>
 

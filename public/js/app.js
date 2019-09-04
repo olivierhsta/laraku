@@ -47345,7 +47345,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     data: function data() {
         return {
             encoding: "",
-            grid: new Grid()
+            grid: new Grid(),
+            hiddenGridClass: 'd-none'
         };
     },
 
@@ -47353,10 +47354,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         onSubmit: function onSubmit() {
             var _this = this;
 
-            axios.post('/solver', {
-                grid: this.encoding
-            }).then(function (response) {
-                return _this.grid = new Grid(response.data.solved_grid);
+            axios.post('/api/solver', { grid: this.encoding }).then(function (response) {
+                _this.grid = new Grid(response.data.solved_grid);
+                _this.hiddenGridClass = '';
             });
         }
     }
@@ -47377,7 +47377,7 @@ var Grid = function () {
     }
 
     _createClass(Grid, [{
-        key: "getCells",
+        key: 'getCells',
         value: function getCells() {
             var begin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
             var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 81;
@@ -47454,7 +47454,7 @@ var render = function() {
     _vm._v(" "),
     _c(
       "table",
-      { staticClass: "table table-bordered sudoku-grid" },
+      { class: "table table-bordered sudoku-grid" + _vm.hiddenGridClass },
       _vm._l(9, function(i) {
         return _c(
           "tr",

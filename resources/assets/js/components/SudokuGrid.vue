@@ -6,7 +6,7 @@
                 <button type="submit" class="btn btn-primary col-2 form-control">Solve</button>
             </div>
         </form>
-        <table class="table table-bordered sudoku-grid">
+        <table :class="'table table-bordered sudoku-grid' + hiddenGridClass">
               <tr scope="row" v-for="i in 9">
                   <td class="sudoku-cell" v-for="cell in grid.getCells(9*(i-1), 9*i)">
                       <table v-if="Array.isArray(cell)" class="table table-borderless sudoku-pencil-marks">
@@ -27,18 +27,20 @@
         data() {
             return {
                 encoding : "",
-                grid: new Grid()
+                grid: new Grid(),
+                hiddenGridClass: 'd-none'
             }
         },
         methods: {
             onSubmit() {
                 axios.post(
-                    '/solver',
-                    {
-                        grid: this.encoding
-                      }
+                    '/api/solver',
+                    { grid: this.encoding }
                 ).then(
-                    response => this.grid = new Grid(response.data.solved_grid)
+                    response => {
+                        this.grid = new Grid(response.data.solved_grid);
+                        this.hiddenGridClass = '';
+                    }
                 );
             }
         }
