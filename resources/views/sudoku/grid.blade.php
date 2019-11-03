@@ -1,5 +1,3 @@
-<sudoku-grid></sudoku-grid>
-
 {{-- @if(@$grid)
   <table class="table table-bordered sudoku-grid">
       @foreach($grid as $row)

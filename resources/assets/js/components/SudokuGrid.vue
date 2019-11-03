@@ -35,10 +35,11 @@
             onSubmit() {
                 axios.post(
                     '/api/solver',
-                    { grid: this.encoding }
+                    { grid: this.encoding,
+                      returnFormat: 'row' }
                 ).then(
                     response => {
-                        this.grid = new Grid(response.data.solved_grid);
+                        this.grid = new Grid(response.data.data.solved_grid);
                         this.hiddenGridClass = '';
                     }
                 );

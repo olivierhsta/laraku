@@ -47354,8 +47354,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         onSubmit: function onSubmit() {
             var _this = this;
 
-            axios.post('/api/solver', { grid: this.encoding }).then(function (response) {
-                _this.grid = new Grid(response.data.solved_grid);
+            axios.post('/api/solver', { grid: this.encoding,
+                returnFormat: 'row' }).then(function (response) {
+                _this.grid = new Grid(response.data.data.solved_grid);
                 _this.hiddenGridClass = '';
             });
         }
