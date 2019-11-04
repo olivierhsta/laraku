@@ -7,8 +7,9 @@
             </div>
         </form>
         <table :class="'table table-bordered sudoku-grid' + hiddenGridClass">
-              <tr scope="row" v-for="i in 9">
-                  <td class="sudoku-cell" v-for="cell in grid.getCells(9*(i-1), 9*i)">
+              <tr scope="row" v-for="i in 9" :class="{'border-bottom-lg': isBorderedRow(i) }">
+                  <td class="sudoku-cell" :class="{'border-right-lg': isBorderedCell(j+1) }"
+                       v-for="(cell, j) in grid.getCells(9*(i-1), 9*i)">
                       <table v-if="cell.hasPencilMarks()"
                              class="table table-borderless sudoku-pencil-marks">
                           <tr v-for="i in 3">
@@ -49,6 +50,12 @@
                         this.hiddenGridClass = '';
                     }
                 );
+            },
+            isBorderedRow(i) {
+                return i%3==0;
+            },
+            isBorderedCell(i) {
+                return i%3==0;
             }
         }
     }
