@@ -6,7 +6,7 @@ Right now, the solver can use these techniques (These are taken from the book "M
 - [x] One choice
 - [x] Elimination
 - [x] Naked subsets
-- [ ] Hidden subsets
+- [x] Hidden subsets
 - [ ] Interaction
 - [ ] X-Wing
 - [ ] XY-Wing
