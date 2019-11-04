@@ -47340,6 +47340,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -47390,12 +47396,41 @@ var Grid = function () {
     return Grid;
 }();
 
-var Cell = function Cell(value) {
-    _classCallCheck(this, Cell);
+var Cell = function () {
+    function Cell(content) {
+        _classCallCheck(this, Cell);
 
-    this.pencilMarks = {};
-    this.value = value;
-};
+        if (Array.isArray(content)) {
+            this.pencilMarks = [];
+            for (var pm in content) {
+                this.pencilMarks.push(content[pm]);
+            }
+            this.value = null;
+        } else {
+            this.pencilMarks = [];
+            this.value = content;
+        }
+    }
+
+    _createClass(Cell, [{
+        key: 'hasPencilMarks',
+        value: function hasPencilMarks() {
+            return this.pencilMarks.length !== 0;
+        }
+    }, {
+        key: 'hasPencilMark',
+        value: function hasPencilMark(pm) {
+            return this.pencilMarks.indexOf(pm) != -1;
+        }
+    }, {
+        key: 'hasValue',
+        value: function hasValue() {
+            return !!this.value;
+        }
+    }]);
+
+    return Cell;
+}();
 
 /***/ }),
 /* 42 */
@@ -47462,24 +47497,41 @@ var render = function() {
           { attrs: { scope: "row" } },
           _vm._l(_vm.grid.getCells(9 * (i - 1), 9 * i), function(cell) {
             return _c("td", { staticClass: "sudoku-cell" }, [
-              Array.isArray(cell)
+              cell.hasPencilMarks()
                 ? _c(
                     "table",
                     {
                       staticClass: "table table-borderless sudoku-pencil-marks"
                     },
-                    _vm._l(cell, function(pencil_mark) {
-                      return _c("td", { staticClass: "padding-0" }, [
-                        _vm._v('" : "" }}">' + _vm._s(pencil_mark))
-                      ])
+                    _vm._l(3, function(i) {
+                      return _c(
+                        "tr",
+                        _vm._l(3, function(j) {
+                          return _c("td", { staticClass: "padding-0" }, [
+                            cell.hasPencilMark((i - 1) * 3 + j)
+                              ? _c("small", [
+                                  _vm._v(
+                                    "\n                                  " +
+                                      _vm._s((i - 1) * 3 + j) +
+                                      "\n                              "
+                                  )
+                                ])
+                              : _c("small", { staticClass: "invisible" }, [
+                                  _vm._v("0")
+                                ])
+                          ])
+                        })
+                      )
                     })
                   )
                 : _vm._e(),
               _vm._v(" "),
-              _c("span", {
-                staticClass: "sudoku-cell-value",
-                domProps: { textContent: _vm._s(cell.value) }
-              })
+              cell.hasValue()
+                ? _c("span", {
+                    staticClass: "sudoku-cell-value",
+                    domProps: { textContent: _vm._s(cell.value) }
+                  })
+                : _vm._e()
             ])
           })
         )

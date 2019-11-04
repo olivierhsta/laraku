@@ -18,7 +18,7 @@ class SolverResource extends JsonResource
      */
     public function toArray($request)
     {
-        switch ($this->returnFormat) {
+        switch ($this->format) {
             case 'row':
                 $return['format'] = 'row';
                 $return['solved_grid'] = $this->groupEncode(
