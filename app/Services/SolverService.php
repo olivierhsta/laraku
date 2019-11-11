@@ -12,8 +12,8 @@ class SolverService
     {
         $grid = new Grid($request->get('grid'));
         $solver = new HumanLikeSolver($grid);
-        $solver->gridSolve();
-        $solverResource = new SolverResource($solver);
+        $found = $solver->gridSolve();
+        $solverResource = new SolverResource($solver,$found);
         $solverResource->setReturnFormat($request->get('returnFormat'));
         return $solverResource;
     }

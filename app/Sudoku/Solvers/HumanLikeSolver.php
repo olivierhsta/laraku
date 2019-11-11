@@ -16,6 +16,7 @@ class HumanLikeSolver extends Solver
         'App\Sudoku\Solvers\OneChoiceSolver',
         'App\Sudoku\Solvers\EliminationSolver',
         'App\Sudoku\Solvers\NakedSubsetSolver',
+        'App\Sudoku\Solvers\InteractionSolver',
     ];
     private $subSolvers = [];
 

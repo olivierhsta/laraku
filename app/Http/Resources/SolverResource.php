@@ -9,6 +9,13 @@ class SolverResource extends JsonResource
 {
     private $returnFormat = 'box';
     protected $acceptedFormat = ['row', 'col', 'box'];
+    private $found;
+
+    public function __construct($resource, $found)
+    {
+        JsonResource::__construct($resource);
+        $this->found = $found;
+    }
 
     /**
      * Transform the resource into an array.
@@ -24,6 +31,7 @@ class SolverResource extends JsonResource
                 $return['solved_grid'] = $this->groupEncode(
                     $this->resource->getSolvedGrid()->getRows()
                 );
+                $return['found'] = $this->found;
                 break;
             case 'col':
                 $return['format'] = 'col';

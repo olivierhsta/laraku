@@ -11,27 +11,80 @@ class InteractionSolver extends Solver
     }
 
     public function gridSolve() {
-        $foundRow = $this->interactionBy('row');
-        $foundCol = $this->interactionBy('col');
-        $foundBox = $this->interactionBy('box');
-        return array_merge($foundRow, $foundCol, $foundBox);
+        $found = array();
+        $pencilMarksRows = array();
+        $pencilMarksCols = array();
+        $rowAffected = null;
+        $colAffected = null;
+
+        foreach ($this->grid->getBoxes() as $group)
+        {
+            $box = $group[1]->box;
+            for ($i=1; $i <= 9; $i++)
+            {
+                $pencilMark = $i;
+                foreach ($group as $cell)
+                {
+                    if($cell->isEmpty() && in_array($pencilMark, $cell->getPencilMarks()))
+                    {
+                        $pencilMarksRows[] = $cell->row;
+                        $pencilMarksCols[] = $cell->col;
+                    }
+                }
+                if (count(array_unique($pencilMarksRows)) === 1)
+                // all the pencil marks are on the same row
+                {
+                    foreach ($this->grid->getRow($pencilMarksRows[0]) as $cell)
+                    {
+                        if ($cell->isEmpty() && $cell->box != $box)
+                        {
+                            $cell->removePencilMarks($pencilMark);
+                            $found[] = [
+                                "cell" => $cell->row . $cell->col,
+                                "method" => "Interaction",
+                                "action" => "Remove Pencil Marks",
+                                "values" => array($pencilMark),
+                                "grid" => $this->grid->encoding(),
+                            ];
+                        }
+                    }
+                }
+                if (count(array_unique($pencilMarksCols)) === 1)
+                // all the pencil marks are on the same column
+                {
+                    foreach ($this->grid->getCol($pencilMarksCols[0]) as $cell)
+                    {
+                        if ($cell->isEmpty() && $cell->row != $box)
+                        {
+                            $cell->removePencilMarks($pencilMark);
+                            $found[] = [
+                                "cell" => $cell->row . $cell->col,
+                                "method" => "Interaction",
+                                "action" => "Remove Pencil Marks",
+                                "values" => array($pencilMark),
+                                "grid" => $this->grid->encoding(),
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        return $found;
     }
 
     public function groupSolve(array $group) {
         $found = array();
 
-        $cellsPerNumber = [0,0,0,0,0,0,0,0,0];
+        $rows = array();
+        $cols = array();
 
-        for ($i=1; $i <= 9; $i++) {
-            $cell = $group[i];
-            $pencilMarks = $cell->getPencilMarks();
-            foreach ($pencilMarks as $pencilMark) {
-                $cellsPerNumber[$pencilMark]++;
-            }
-            if ($i % 3 == 0) {
-                $cellsPerNumber = [0,0,0,0,0,0,0,0,0];
-            }
+        foreach ($group as $i => $cell) {
+            $rows[] = $cell->getRow();
+            $cols[] = $cell->getCol();
         }
+        $rows = array_unique($rows);
+        $cols = array_unique($cols);
+
         return $found;
     }
 
