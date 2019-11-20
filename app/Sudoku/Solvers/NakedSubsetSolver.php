@@ -33,24 +33,12 @@ class NakedSubsetSolver extends Solver
      * and then the quadruplet and quintuplet.
      *
      * It then does the same for every column and box (in that order)
-     *
-     * @return array  values found by the algorithm.
-     *                       eg.    $found[] = [
-     *                                  "cell" => "13",
-     *                                  "method" => "Naked Pair",
-     *                                  "action" => "Remove Pencil Marks",
-     *                                  "values" => [1,5],
-     *                                  "grid" => "004 ... 021"
-     *                              ];
      */
-    public function gridSolve()
+    public function solve()
     {
-        $foundRow = $this->nakedSubsetBy('row');
-        // if ($return) return $this->found;
-        $foundCol = $this->nakedSubsetBy('col');
-        // if ($return) return $this->found;
-        $foundBox = $this->nakedSubsetBy('box');
-        return array_merge($foundRow, $foundCol, $foundBox);
+        $this->nakedSubsetBy('row');
+        $this->nakedSubsetBy('col');
+        $this->nakedSubsetBy('box');
     }
 
     /**
@@ -60,25 +48,13 @@ class NakedSubsetSolver extends Solver
      * a naked subset (from pair to quinduplets).
      *
      * @param  array  $group group on which to perform the algorithm
-     * @return array         values found by the algorithm.
-     *                       eg.    $found[] = [
-     *                                  "cell" => "13",
-     *                                  "method" => "Naked Pair",
-     *                                  "action" => "Remove Pencil Marks",
-     *                                  "values" => [1,5],
-     *                                  "grid" => "004 ... 021"
-     *                              ];
      */
     public function groupSolve(array $group)
     {
-        $found = array();
         for ($i=2; $i <= 5; $i++)
         {
-            $beforeFound = $found;
-            $found = array_merge($found, $this->nakedSubsetRecursion($group, $i));
-            // if (sizeof($before_found) != sizeof($found)) return $found;
+            $this->nakedSubsetRecursion($group, $i);
         }
-        return $found;
     }
 
     /**
@@ -93,16 +69,13 @@ class NakedSubsetSolver extends Solver
     {
         Solver::validateGroupName($groupName);
 
-        $found = array();
-
         $getter = 'get'.ucfirst($groupName).($groupName == 'box' ? 'es' : 's');
         // uses of variable-variable. becomes either
         // $this->grid->getCols(), getRows() or getBoxes()
         foreach ($this->grid->$getter() as $group)
         {
-            $found = $this->groupSolve($group);
+            $this->groupSolve($group);
         }
-        return $found;
     }
 
     /**
@@ -114,19 +87,9 @@ class NakedSubsetSolver extends Solver
      * @param int[]  $indexes Internal parameter that should not be set at first call.
      *                        It holds the indexes of the subset's cells that we
      *                        are currently testing.
-     *
-     * @return array Found values.
-     *              ex.    $found[] = [
-     *                          "cell" => "13",
-     *                          "method" => "Naked Pair",
-     *                          "action" => "Remove Pencil Marks",
-     *                          "values" => [1,5],
-     *                          "grid" => "004 ... 021"
-     *                      ];
      */
     private function nakedSubsetRecursion($group, $depth, $indexes = [])
     {
-        $found = array();
         if ($depth == 0)
         {
             /*
@@ -157,7 +120,7 @@ class NakedSubsetSolver extends Solver
                                 case 5: $subsetType = "Quintuplet"; break;
                                 default: $subsetType = "Subset";
                             }
-                            $found[] = [
+                            $this->found[] = [
                                 "cell" => $cell->row . $cell->col,
                                 "method" => "Naked ". $subsetType,
                                 "action" => "Remove Pencil Marks",
@@ -180,10 +143,9 @@ class NakedSubsetSolver extends Solver
             {
                 $tmpIndexes = $indexes;
                 $tmpIndexes[] = $i;
-                $found = array_merge($found, $this->nakedSubsetRecursion($group, $depth-1, $tmpIndexes));
+                $this->nakedSubsetRecursion($group, $depth-1, $tmpIndexes);
             }
         }
-        return $found;
     }
 
     /**

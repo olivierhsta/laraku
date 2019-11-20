@@ -27,19 +27,10 @@ class OneChoiceSolver extends Solver
      * For every cell in the grid, we check if it has only one pencil mark,
      * if it does, we replace the value of the cell by the value of this
      * pencil mark
-     *
-     * @return array[] Value found by the algorithm
-     *                  ex.  $found[0] = [
-     *                          "cell" => "13",
-     *                          "method" => "One Choice",
-     *                          "action" => "Contains",
-     *                          "values" => 8,
-     *                          "grid" => "004 ... 021"
-     *                      ];
      */
-    public function gridSolve()
+    public function solve()
     {
-        return $this->groupSolve($this->grid->getGrid());
+        $this->groupSolve($this->grid->getGrid());
     }
 
     /**
@@ -48,26 +39,16 @@ class OneChoiceSolver extends Solver
      * For every cell in the group, we check if it has only one pencil mark,
      * if it does, we replace the value of the cell by the value of this
      * pencil mark
-     *
-     * @return array[] Value found by the algorithm
-     *                  ex.  $found[0] = [
-     *                          "cell" => "13",
-     *                          "method" => "One Choice",
-     *                          "action" => "Contains",
-     *                          "values" => 8,
-     *                          "grid" => "004 ... 021"
-     *                      ];
      */
     public function groupSolve(array $group)
     {
-        $found = array();
         foreach ($group as $cell)
         {
             $pencilMarks = $cell->getPencilMarks();
             if ($cell->isEmpty() && sizeof($pencilMarks) == 1)
             {
                 $cell->setValue($pencilMarks[0]);
-                $found[] = [
+                $this->found[] = [
                     "cell" => $cell->row . $cell->col,
                     "method" => "One Choice",
                     "action" => "Places",
@@ -76,7 +57,6 @@ class OneChoiceSolver extends Solver
                 ];
             }
         }
-        return $found;
     }
 
 }

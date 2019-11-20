@@ -1,9 +1,14 @@
 <?php
 
 namespace App\Sudoku\Solvers;
+
+use InvalidArgumentException, Exception;
 use App\Sudoku\Grid;
 use App\Sudoku\Sudoku;
-use InvalidArgumentException, Exception;
+use App\Sudoku\Solvers\OneChoiceSolver;
+use App\Sudoku\Solvers\EliminationSolver;
+use App\Sudoku\Solvers\NakedSubsetSolver;
+use App\Sudoku\Solvers\InteractionSolver;
 
 class HumanLikeSolver extends Solver
 {
@@ -13,10 +18,10 @@ class HumanLikeSolver extends Solver
      * @var string[]
      */
     private $subSolversName = [
-        'App\Sudoku\Solvers\OneChoiceSolver',
-        'App\Sudoku\Solvers\EliminationSolver',
-        'App\Sudoku\Solvers\NakedSubsetSolver',
-        'App\Sudoku\Solvers\InteractionSolver',
+        OneChoiceSolver::class,
+        EliminationSolver::class,
+        NakedSubsetSolver::class,
+        InteractionSolver::class,
     ];
     private $subSolvers = [];
 
@@ -36,7 +41,7 @@ class HumanLikeSolver extends Solver
      *
      * @return array step-by-step resolution of the grid.
      */
-    public function gridSolve() {
+    public function solve() {
         $this->writePencilMarks();
         $found = array();
         $limitCounter = 0;

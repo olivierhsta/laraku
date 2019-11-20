@@ -3,5 +3,5 @@
 return [
     'fullGroup' => [1,2,3,4,5,6,7,8,9],
     'groupSize' => 9,
-    'humanLikeIterationLimit' => 100,
+    'iterationLimit' => 100,
 ];

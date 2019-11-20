@@ -27,19 +27,10 @@ class EliminationSolver extends Solver
      * For every cell, it checks if it has a pencil mark that no other cell in
      * one of its groups has.  If it is the only cell of the group to have it,
      * it must therefor be its value.
-     *
-     * @return array values found by the algorithm.
-     *                       eg.    $found[] = [
-     *                                  "cell" => "13",
-     *                                  "method" => "Elimination",
-     *                                  "action" => "Places",
-     *                                  "values" => 3,
-     *                                  "grid" => "004 ... 021"
-     *                              ];
      */
-    public function gridSolve()
+    public function solve()
     {
-        return $this->groupSolve($this->grid->getGrid());
+        $this->groupSolve($this->grid->getGrid());
     }
 
     /**
@@ -50,19 +41,9 @@ class EliminationSolver extends Solver
      * it must therefor be its value.
      *
      * @param  array $group group on which to perform the algorithm
-     * @return array values found by the algorithm.
-     *                       eg.    $found[] = [
-     *                                  "cell" => "13",
-     *                                  "method" => "Elimination",
-     *                                  "action" => "Places",
-     *                                  "values" => 3,
-     *                                  "grid" => "004 ... 021"
-     *                              ];
      */
     public function groupSolve(array $group)
     {
-        $found = array();
-
         foreach ($group as $cell)
         {
             $present = false;
@@ -81,7 +62,7 @@ class EliminationSolver extends Solver
                 if ($pencilMark)
                 {
                     $cell->setValue($pencilMark);
-                    $found[] = [
+                    $this->found[] = [
                         "cell" => $cell->row . $cell->col,
                         "method" => "Elimination",
                         "action" => "Places",
@@ -91,7 +72,6 @@ class EliminationSolver extends Solver
                 }
             }
         }
-        return $found;
     }
 
     /**

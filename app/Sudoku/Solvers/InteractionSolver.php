@@ -10,8 +10,7 @@ class InteractionSolver extends Solver
         Solver::__construct($grid);
     }
 
-    public function gridSolve() {
-        $found = array();
+    public function solve() {
         $pencilMarksRows = array();
         $pencilMarksCols = array();
         $rowAffected = null;
@@ -39,7 +38,7 @@ class InteractionSolver extends Solver
                         if ($cell->isEmpty() && $cell->box != $box)
                         {
                             $cell->removePencilMarks($pencilMark);
-                            $found[] = [
+                            $this->found[] = [
                                 "cell" => $cell->row . $cell->col,
                                 "method" => "Interaction",
                                 "action" => "Remove Pencil Marks",
@@ -57,7 +56,7 @@ class InteractionSolver extends Solver
                         if ($cell->isEmpty() && $cell->row != $box)
                         {
                             $cell->removePencilMarks($pencilMark);
-                            $found[] = [
+                            $this->found[] = [
                                 "cell" => $cell->row . $cell->col,
                                 "method" => "Interaction",
                                 "action" => "Remove Pencil Marks",
@@ -69,12 +68,9 @@ class InteractionSolver extends Solver
                 }
             }
         }
-        return $found;
     }
 
     public function groupSolve(array $group) {
-        $found = array();
-
         $rows = array();
         $cols = array();
 
@@ -84,22 +80,17 @@ class InteractionSolver extends Solver
         }
         $rows = array_unique($rows);
         $cols = array_unique($cols);
-
-        return $found;
     }
 
     public function interactrionBy($groupName) {
         Solver::validateGroupName($groupName);
-
-        $found = array();
 
         $getter = 'get'.ucfirst($groupName).($groupName == 'box' ? 'es' : 's');
         // uses of variable-variable. becomes either
         // $this->grid->getCols(), getRows() or getBoxes()
         foreach ($this->grid->$getter() as $group)
         {
-            $found = $this->groupSolve($group);
+            $this->groupSolve($group);
         }
-        return $found;
     }
 }
