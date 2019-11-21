@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use App\Http\Resources\SolverResource;
 use App\Sudoku\Grid;
+use App\Sudoku\Solvers\Solver;
 use App\Sudoku\Solvers\OneChoiceSolver;
 use App\Sudoku\Solvers\EliminationSolver;
 use App\Sudoku\Solvers\NakedSubsetSolver;
@@ -26,6 +27,7 @@ class SolverService
     public function solve(Request $request)
     {
         $grid = new Grid($request->get('grid'));
+        $grid = Solver::prepare($grid);
         $found = array();
         $limitCounter = 0;
         do {

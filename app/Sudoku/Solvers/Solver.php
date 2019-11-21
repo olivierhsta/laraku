@@ -19,29 +19,7 @@ abstract class Solver extends Singleton
         unset($this->found[0]);
         $this->grid = &$grid;
         $this->originalGrid = clone $grid;
-        $this->writePencilMarks();
     }
-
-    /**
-     * Writes the pencil marks for every cell of the grid
-     * @return null
-     */
-    public function writePencilMarks()
-    {
-        if (!self::$pencilMarksWritten)
-        {
-            foreach ($this->grid->getGrid() as $cell)
-            {
-                if ($cell->isEmpty())
-                {
-                    $buddies = Grid::getValues($cell->getBuddies());
-                    $cell->setPencilMarks(array_diff(config()->get('sudoku.fullGroup'), $buddies));
-                }
-            }
-            self::$pencilMarksWritten = true;
-        }
-    }
-
 
     /**
      * Get the solved grid.
@@ -94,6 +72,38 @@ abstract class Solver extends Singleton
         {
             throw new InvalidArgumentException("group must be either named 'row', 'col' or 'box', given name was : " . $groupName);
         }
+    }
+
+    /**
+     * Prepares the given grid to be solve by the solvers.
+     *
+     * This function NEEDS to be called before solving, otherwise
+     * most of the solver won't be able to perform their
+     * respective algorithm.
+     *
+     * @param  Grid   $grid grid to be prepared
+     * @return Grid         prepared grid
+     */
+    public static function prepare(Grid $grid)
+    {
+        return self::writePencilMarks($grid);
+    }
+
+    /**
+     * Writes the pencil marks for every cell of the grid
+     * @return Grid grid with pencil marks in it
+     */
+    private static function writePencilMarks(Grid $grid)
+    {
+        foreach ($grid->getGrid() as $cell)
+        {
+            if ($cell->isEmpty())
+            {
+                $buddies = Grid::getValues($cell->getBuddies());
+                $cell->setPencilMarks(array_diff(config()->get('sudoku.fullGroup'), $buddies));
+            }
+        }
+        return $grid;
     }
 
 }
