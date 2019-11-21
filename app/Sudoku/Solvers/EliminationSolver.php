@@ -63,7 +63,7 @@ class EliminationSolver extends Solver
                 {
                     $cell->setValue($pencilMark);
                     $this->found[] = [
-                        "cell" => $cell->row . $cell->col,
+                        "cell" => $cell->row() . $cell->col(),
                         "method" => "Elimination",
                         "action" => "Places",
                         "values" => $cell->getValue(),
@@ -94,7 +94,7 @@ class EliminationSolver extends Solver
         {
             $present = false;
             $getter = 'get'.ucfirst($groupName);
-            foreach ($this->grid->$getter($cell->$groupName) as $otherCell)
+            foreach ($this->grid->$getter($cell->$groupName()) as $otherCell)
             {
                 if ($otherCell->isEmpty() && $otherCell != $cell)
                 {

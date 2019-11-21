@@ -121,7 +121,7 @@ class NakedSubsetSolver extends Solver
                                 default: $subsetType = "Subset";
                             }
                             $this->found[] = [
-                                "cell" => $cell->row . $cell->col,
+                                "cell" => $cell->row() . $cell->col(),
                                 "method" => "Naked ". $subsetType,
                                 "action" => "Remove Pencil Marks",
                                 "values" => $removedPM,

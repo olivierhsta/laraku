@@ -218,4 +218,19 @@ class Cell
         return $this->value == 0;
     }
 
+    public function row()
+    {
+        return $this->row;
+    }
+
+    public function col()
+    {
+        return $this->col;
+    }
+
+    public function box()
+    {
+        return $this->box;
+    }
+
 }

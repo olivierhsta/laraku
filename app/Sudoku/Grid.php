@@ -168,7 +168,7 @@ class Grid
     {
         $buddies = array();
 
-        foreach ($this->getRow($cell->row) as $rowCell)
+        foreach ($this->getRow($cell->row()) as $rowCell)
         {
             if ($rowCell != $cell)
             {
@@ -176,7 +176,7 @@ class Grid
             }
         }
 
-        foreach ($this->getCol($cell->col) as $colCell)
+        foreach ($this->getCol($cell->col()) as $colCell)
         {
             if ($colCell != $cell && !in_array($colCell, $buddies))
             {
@@ -184,7 +184,7 @@ class Grid
             }
         }
 
-        foreach ($this->getBox($cell->box) as $boxCell)
+        foreach ($this->getBox($cell->box()) as $boxCell)
         {
             if ($boxCell != $cell && !in_array($boxCell, $buddies))
             {

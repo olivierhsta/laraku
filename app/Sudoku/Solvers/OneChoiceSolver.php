@@ -49,7 +49,7 @@ class OneChoiceSolver extends Solver
             {
                 $cell->setValue($pencilMarks[0]);
                 $this->found[] = [
-                    "cell" => $cell->row . $cell->col,
+                    "cell" => $cell->row() . $cell->col(),
                     "method" => "One Choice",
                     "action" => "Places",
                     "values" => $cell->getValue(),

@@ -18,7 +18,7 @@ class InteractionSolver extends Solver
 
         foreach ($this->grid->getBoxes() as $group)
         {
-            $box = $group[1]->box;
+            $box = $group[1]->box();
             for ($i=1; $i <= 9; $i++)
             {
                 $pencilMark = $i;
@@ -26,8 +26,8 @@ class InteractionSolver extends Solver
                 {
                     if($cell->isEmpty() && in_array($pencilMark, $cell->getPencilMarks()))
                     {
-                        $pencilMarksRows[] = $cell->row;
-                        $pencilMarksCols[] = $cell->col;
+                        $pencilMarksRows[] = $cell->row();
+                        $pencilMarksCols[] = $cell->col();
                     }
                 }
                 if (count(array_unique($pencilMarksRows)) === 1)
@@ -35,11 +35,11 @@ class InteractionSolver extends Solver
                 {
                     foreach ($this->grid->getRow($pencilMarksRows[0]) as $cell)
                     {
-                        if ($cell->isEmpty() && $cell->box != $box)
+                        if ($cell->isEmpty() && $cell->box() != $box)
                         {
                             $cell->removePencilMarks($pencilMark);
                             $this->found[] = [
-                                "cell" => $cell->row . $cell->col,
+                                "cell" => $cell->row() . $cell->col(),
                                 "method" => "Interaction",
                                 "action" => "Remove Pencil Marks",
                                 "values" => array($pencilMark),
@@ -53,11 +53,11 @@ class InteractionSolver extends Solver
                 {
                     foreach ($this->grid->getCol($pencilMarksCols[0]) as $cell)
                     {
-                        if ($cell->isEmpty() && $cell->row != $box)
+                        if ($cell->isEmpty() && $cell->row() != $box)
                         {
                             $cell->removePencilMarks($pencilMark);
                             $this->found[] = [
-                                "cell" => $cell->row . $cell->col,
+                                "cell" => $cell->row() . $cell->col(),
                                 "method" => "Interaction",
                                 "action" => "Remove Pencil Marks",
                                 "values" => array($pencilMark),
