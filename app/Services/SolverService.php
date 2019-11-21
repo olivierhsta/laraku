@@ -21,7 +21,7 @@ class SolverService
         OneChoiceSolver::class,
         EliminationSolver::class,
         NakedSubsetSolver::class,
-        // InteractionSolver::class,
+        InteractionSolver::class,
     ];
 
     public function solve(Request $request)
