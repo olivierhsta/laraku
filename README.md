@@ -7,7 +7,7 @@ Right now, the solver can use these techniques (These are taken from the book "M
 - [x] Elimination
 - [x] Naked subsets
 - [x] Hidden subsets
-- [ ] Interaction
+- [x] Interaction
 - [ ] X-Wing
 - [ ] XY-Wing
 - [ ] XYZ-Wing
