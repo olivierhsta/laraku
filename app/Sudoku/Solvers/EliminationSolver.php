@@ -48,13 +48,7 @@ class EliminationSolver extends Solver
                 if ($pencilMark)
                 {
                     $cell->setValue($pencilMark);
-                    $this->found[] = [
-                        "cell" => $cell->row() . $cell->col(),
-                        "method" => "Elimination",
-                        "action" => "Places",
-                        "values" => $cell->getValue(),
-                        "grid" => $this->grid->encoding(),
-                    ];
+                    $this->markMove($cell);
                 }
             }
         }
@@ -96,5 +90,27 @@ class EliminationSolver extends Solver
             }
         }
         return false;
+    }
+
+    /**
+     * Creates an entry in the $found array.
+     *  The structure is
+     *      "cell"   => [cell position],
+     *      "method" => "Elimination",
+     *      "action" => "Places",
+     *      "values" => [placed number],
+     *      "grid"   => [grid encoding]
+     *
+     * @param  Cell $cell        affected cell
+     * @param  int  $pencilMark  pencil mark value
+     */
+    private function markMove($cell) {
+        $this->found[] = [
+            "cell" => $cell->row() . $cell->col(),
+            "method" => "Elimination",
+            "action" => "Places",
+            "values" => $cell->getValue(),
+            "grid" => $this->grid->encoding(),
+        ];
     }
 }

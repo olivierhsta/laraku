@@ -36,14 +36,30 @@ class OneChoiceSolver extends Solver
             if ($cell->isEmpty() && sizeof($pencilMarks) == 1)
             {
                 $cell->setValue($pencilMarks[0]);
-                $this->found[] = [
-                    "cell" => $cell->row() . $cell->col(),
-                    "method" => "One Choice",
-                    "action" => "Places",
-                    "values" => $cell->getValue(),
-                    "grid" => $this->grid->encoding(),
-                ];
+                $this->markMove($cell);
             }
         }
+    }
+
+    /**
+     * Creates an entry in the $found array.
+     *  The structure is
+     *      "cell"   => [cell position],
+     *      "method" => "One Choice",
+     *      "action" => "Places",
+     *      "values" => [placed number],
+     *      "grid"   => [grid encoding]
+     *
+     * @param  Cell $cell        affected cell
+     * @param  int  $pencilMark  pencil mark value
+     */
+    private function markMove($cell) {
+        $this->found[] = [
+            "cell"   => $cell->row() . $cell->col(),
+            "method" => "One Choice",
+            "action" => "Places",
+            "values" => $cell->getValue(),
+            "grid"   => $this->grid->encoding(),
+        ];
     }
 }

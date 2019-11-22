@@ -112,21 +112,7 @@ class NakedSubsetSolver extends Solver
                         $removedPM = $cell->removePencilMarks($pmToRemove);
                         if (!empty($removedPM))
                         {
-                            switch(sizeof($subset))
-                            {
-                                case 2: $subsetType = "Pair"; break;
-                                case 3: $subsetType = "Triple"; break;
-                                case 4: $subsetType = "Quadruplet"; break;
-                                case 5: $subsetType = "Quintuplet"; break;
-                                default: $subsetType = "Subset";
-                            }
-                            $this->found[] = [
-                                "cell" => $cell->row() . $cell->col(),
-                                "method" => "Naked ". $subsetType,
-                                "action" => "Remove Pencil Marks",
-                                "values" => $removedPM,
-                                "grid" => $this->grid->encoding(),
-                            ];
+                            $this->markMove($cell, $removedPM, $subset);
                         }
                     }
                 }
@@ -180,5 +166,35 @@ class NakedSubsetSolver extends Solver
             return $sharedPM;
         }
         return false;
+    }
+
+    /**
+     * Creates an entry in the $found array.
+     *  The structure is
+     *      "cell"   => [cell position],
+     *      "method" => "Naked [Pair|Triple|Quadruplet|Quintuplet|Subset]",
+     *      "action" => "Remove Pencil Marks",
+     *      "values" => [pencil mark values removed],
+     *      "grid"   => [grid encoding]
+     *
+     * @param  Cell $cell        affected cell
+     * @param  int  $pencilMark  pencil mark value
+     */
+    private function markMove($cell, $pencilMarks, $subset) {
+        switch(count($subset))
+        {
+            case 2: $subsetType = "Pair"; break;
+            case 3: $subsetType = "Triple"; break;
+            case 4: $subsetType = "Quadruplet"; break;
+            case 5: $subsetType = "Quintuplet"; break;
+            default: $subsetType = "Subset";
+        }
+        $this->found[] = [
+            "cell" => $cell->row() . $cell->col(),
+            "method" => "Naked ". $subsetType,
+            "action" => "Remove Pencil Marks",
+            "values" => $pencilMarks,
+            "grid" => $this->grid->encoding(),
+        ];
     }
 }
