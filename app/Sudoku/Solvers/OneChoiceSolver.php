@@ -30,19 +30,7 @@ class OneChoiceSolver extends Solver
      */
     public function solve()
     {
-        $this->groupSolve($this->grid->getGrid());
-    }
-
-    /**
-     * Executes the one choice algorithm on a given group.
-     *
-     * For every cell in the group, we check if it has only one pencil mark,
-     * if it does, we replace the value of the cell by the value of this
-     * pencil mark
-     */
-    public function groupSolve(array $group)
-    {
-        foreach ($group as $cell)
+        foreach ($this->grid->getGrid() as $cell)
         {
             $pencilMarks = $cell->getPencilMarks();
             if ($cell->isEmpty() && sizeof($pencilMarks) == 1)
@@ -58,5 +46,4 @@ class OneChoiceSolver extends Solver
             }
         }
     }
-
 }
