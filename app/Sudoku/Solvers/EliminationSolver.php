@@ -30,21 +30,7 @@ class EliminationSolver extends Solver
      */
     public function solve()
     {
-        $this->groupSolve($this->grid->getGrid());
-    }
-
-    /**
-     * Executes the elimination algorithm on the given group.
-     *
-     * For every cell, it checks if it has a pencil mark that no other cell in
-     * one of its groups has.  If it is the only cell of the group to have it,
-     * it must therefor be its value.
-     *
-     * @param  array $group group on which to perform the algorithm
-     */
-    public function groupSolve(array $group)
-    {
-        foreach ($group as $cell)
+        foreach ($this->grid->getGrid() as $cell)
         {
             $present = false;
             if ($cell->isEmpty()  && !empty($cell->getPencilMarks()))
