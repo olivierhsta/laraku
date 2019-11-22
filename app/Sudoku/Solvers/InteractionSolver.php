@@ -4,6 +4,16 @@ namespace App\Sudoku\Solvers;
 
 use App\Sudoku\Grid;
 
+/**
+ * Class to solve with Interactions.
+ *
+ * Interactions occurs when one given non-unique pencil mark value in a group
+ * happens to be only in one other group.  When this happens, all the
+ * pencil marks with the same value in the second group can be erased.
+ *
+ * For example, if we have a box where all the pencil marks '1' are in the
+ * same row, then every other pencil marks '1' in that row can be erased.
+ */
 class InteractionSolver extends Solver
 {
     public function __construct(Grid &$grid) {
@@ -23,123 +33,99 @@ class InteractionSolver extends Solver
      * one other group type that needs to be check (boxes) instead of two.
      */
     public function solve() {
-        foreach ($this->grid->getBoxes() as $boxIndex => $box)
-        {
-            for ($pencilMark=1; $pencilMark <= 9; $pencilMark++)
-            {
-                $pencilMarksRows = array();
-                $pencilMarksCols = array();
-                foreach ($box as $cell)
-                {
-                    if($cell->isEmpty() && in_array($pencilMark, $cell->getPencilMarks()))
-                    {
-                        $pencilMarksRows[] = $cell->row();
-                        $pencilMarksCols[] = $cell->col();
-                    }
-                }
-                if (count(array_unique($pencilMarksRows)) === 1)
-                // all the pencil marks are on the same row
-                {
-                    foreach ($this->grid->getRow($pencilMarksRows[0]) as $cell)
-                    {
-                        if ($cell->isEmpty() && $cell->box() != $boxIndex)
-                        {
-                            $cell->removePencilMarks($pencilMark);
-                            $this->found[] = [
-                                "cell" => $cell->row() . $cell->col(),
-                                "method" => "Interaction",
-                                "action" => "Remove Pencil Marks",
-                                "values" => array($pencilMark),
-                                "grid" => $this->grid->encoding(),
-                            ];
-                        }
-                    }
-                }
-                if (count(array_unique($pencilMarksCols)) === 1)
-                // all the pencil marks are on the same column
-                {
-                    foreach ($this->grid->getCol($pencilMarksCols[0]) as $cell)
-                    {
-                        if ($cell->isEmpty() && $cell->box() != $boxIndex)
-                        {
-                            $cell->removePencilMarks($pencilMark);
-                            $this->found[] = [
-                                "cell" => $cell->row() . $cell->col(),
-                                "method" => "Interaction",
-                                "action" => "Remove Pencil Marks",
-                                "values" => array($pencilMark),
-                                "grid" => $this->grid->encoding(),
-                            ];
-                        }
-                    }
-                }
-            }
-        }
+        $this->groupSolve('box','row');
+        $this->groupSolve('box','col');
+        $this->groupSolve('row','box');
+        $this->groupSolve('col','box');
+    }
 
-        foreach ($this->grid->getRows() as $rowIndex => $row)
-        {
-            for ($pencilMark=1; $pencilMark <= 9; $pencilMark++)
-            {
-                $pencilMarksBoxes = array();
-                foreach ($row as $cell)
-                {
-                    if($cell->isEmpty() && in_array($pencilMark, $cell->getPencilMarks()))
-                    {
-                        $pencilMarksBoxes[] = $cell->box();
-                    }
-                }
-                if (count(array_unique($pencilMarksBoxes)) === 1)
-                // all the pencil marks are in the same box
-                {
-                    foreach ($this->grid->getBox($pencilMarksBoxes[0]) as $cell)
-                    {
-                        if ($cell->isEmpty() && $cell->row() != $rowIndex)
-                        {
-                            $cell->removePencilMarks($pencilMark);
-                            $this->found[] = [
-                                "cell" => $cell->row() . $cell->col(),
-                                "method" => "Interaction",
-                                "action" => "Remove Pencil Marks",
-                                "values" => array($pencilMark),
-                                "grid" => $this->grid->encoding(),
-                            ];
-                        }
-                    }
-                }
-            }
-        }
+    /**
+     * Performs the Interaction algorithm on any combinasion of group type.
+     *
+     * For references, group types combination for Interaction are
+     *      - box, row
+     *      - box, col
+     *      - row, box
+     *      - col, box
+     *
+     * @param  string $scannedGroupName  group type that will be looped through.
+     *                                   Can only be one of 'row','col','box'
+     * @param  string $comparedGroupName group type in which Interaction will be looked for.
+     *                                   Can only be one of 'row','col','box'
+     */
+    private function groupSolve($scannedGroupName, $comparedGroupName) {
+        self::validateGroupName($scannedGroupName);
+        self::validateGroupName($comparedGroupName);
 
-        foreach ($this->grid->getCols() as $colIndex => $col)
+        $scannedGetter = 'get'.ucfirst($scannedGroupName).($scannedGroupName == 'box' ? 'es' : 's');
+        $comparedGetter = 'get'.ucfirst($comparedGroupName).($comparedGroupName == 'box' ? 'es' : 's');
+
+
+        foreach ($this->grid->$scannedGetter() as $groupIndex => $group)
         {
             for ($pencilMark=1; $pencilMark <= 9; $pencilMark++)
             {
-                $pencilMarksBoxes = array();
-                foreach ($col as $cell)
+                if ($otherGroup = $this->pencilMarksInGroupAreInOnlyOneOtherGroup($pencilMark, $group, $comparedGroupName))
                 {
-                    if($cell->isEmpty() && in_array($pencilMark, $cell->getPencilMarks()))
+                    foreach ($otherGroup as $cell)
                     {
-                        $pencilMarksBoxes[] = $cell->box();
-                    }
-                }
-                if (count(array_unique($pencilMarksBoxes)) === 1)
-                // all the pencil marks are in the same box
-                {
-                    foreach ($this->grid->getBox($pencilMarksBoxes[0]) as $cell)
-                    {
-                        if ($cell->isEmpty() && $cell->col() != $colIndex)
+                        if ($cell->isEmpty() && $cell->$scannedGroupName() != $groupIndex)
                         {
                             $cell->removePencilMarks($pencilMark);
-                            $this->found[] = [
-                                "cell" => $cell->row() . $cell->col(),
-                                "method" => "Interaction",
-                                "action" => "Remove Pencil Marks",
-                                "values" => array($pencilMark),
-                                "grid" => $this->grid->encoding(),
-                            ];
+                            $this->markMove($cell, $pencilMark);
                         }
                     }
                 }
             }
         }
+    }
+
+
+    /**
+     * Checks if the given pencil mark value is in only one group
+     * other then the one that has been passed.
+     *
+     * For instance, if the parameters are
+     *      - $pencilMark = 1
+     *      - $group = [any given box],
+     *      - $otherGroupName = 'row'
+     * It will check if all the 1s in the box are placed on the same row.
+     *
+     * @param  int         $pencilMark     pencilMark value to look for
+     * @param  array[cell] $group          group in which to look
+     * @param  string      $otherGroupName group type in which to look for Interaction.
+     *                                     Must be on of 'row','box','col'
+     * @return array[cell]|boolean         false if the pencil mark of the given
+     *                                     given value are not in the same group.
+     *                                     Otherwise, the group in which they were
+     *                                     found to be.
+     */
+    private function pencilMarksInGroupAreInOnlyOneOtherGroup($pencilMark, $group, $otherGroupName) {
+        self::validateGroupName($otherGroupName);
+
+        $pencilMarksGroups = array();
+        foreach ($group as $cell)
+        {
+            if($cell->isEmpty() && in_array($pencilMark, $cell->getPencilMarks()))
+            {
+                $pencilMarksGroups[] = $cell->$otherGroupName();
+            }
+        }
+        if (count(array_unique($pencilMarksGroups)) === 1)
+        {
+            $getter = 'get'.ucfirst($otherGroupName);
+            return $this->grid->$getter($pencilMarksGroups[0]);
+        }
+        return false;
+    }
+
+    private function markMove($cell, $pencilMark) {
+        $this->found[] = [
+            "cell" => $cell->row() . $cell->col(),
+            "method" => "Interaction",
+            "action" => "Remove Pencil Marks",
+            "values" => array($pencilMark),
+            "grid" => $this->grid->encoding(),
+        ];
     }
 }
