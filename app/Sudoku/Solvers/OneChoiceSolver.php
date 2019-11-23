@@ -46,7 +46,6 @@ class OneChoiceSolver extends Solver
      *  The structure is
      *      "cell"   => [cell position],
      *      "method" => "One Choice",
-     *      "action" => "Places",
      *      "values" => [placed number],
      *      "grid"   => [grid encoding]
      *
@@ -57,7 +56,6 @@ class OneChoiceSolver extends Solver
         $this->found[] = [
             "cell"   => $cell->row() . $cell->col(),
             "method" => "One Choice",
-            "action" => "Places",
             "values" => $cell->getValue(),
             "grid"   => $this->grid->encoding(),
         ];

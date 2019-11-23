@@ -173,7 +173,6 @@ class NakedSubsetSolver extends Solver
      *  The structure is
      *      "cell"   => [cell position],
      *      "method" => "Naked [Pair|Triple|Quadruplet|Quintuplet|Subset]",
-     *      "action" => "Remove Pencil Marks",
      *      "values" => [pencil mark values removed],
      *      "grid"   => [grid encoding]
      *
@@ -192,7 +191,6 @@ class NakedSubsetSolver extends Solver
         $this->found[] = [
             "cell" => $cell->row() . $cell->col(),
             "method" => "Naked ". $subsetType,
-            "action" => "Remove Pencil Marks",
             "values" => $pencilMarks,
             "grid" => $this->grid->encoding(),
         ];

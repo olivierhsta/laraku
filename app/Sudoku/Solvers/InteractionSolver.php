@@ -124,7 +124,6 @@ class InteractionSolver extends Solver
      *  The structure is
      *      "cell"   => [cell position],
      *      "method" => "Interaction",
-     *      "action" => "Remove Pencil Marks",
      *      "values" => [pencil mark value removed],
      *      "grid"   => [grid encoding]
      *
@@ -135,7 +134,6 @@ class InteractionSolver extends Solver
         $this->found[] = [
             "cell" => $cell->row() . $cell->col(),
             "method" => "Interaction",
-            "action" => "Remove Pencil Marks",
             "values" => array($pencilMark),
             "grid" => $this->grid->encoding(),
         ];

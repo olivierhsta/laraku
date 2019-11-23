@@ -97,7 +97,6 @@ class EliminationSolver extends Solver
      *  The structure is
      *      "cell"   => [cell position],
      *      "method" => "Elimination",
-     *      "action" => "Places",
      *      "values" => [placed number],
      *      "grid"   => [grid encoding]
      *
@@ -108,7 +107,6 @@ class EliminationSolver extends Solver
         $this->found[] = [
             "cell" => $cell->row() . $cell->col(),
             "method" => "Elimination",
-            "action" => "Places",
             "values" => $cell->getValue(),
             "grid" => $this->grid->encoding(),
         ];

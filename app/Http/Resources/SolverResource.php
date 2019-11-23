@@ -28,21 +28,21 @@ class SolverResource extends JsonResource
         switch ($this->format) {
             case 'row':
                 $return['format'] = 'row';
-                $return['solved_grid'] = $this->groupEncode(
+                $return['solved_grid'] = $this->encode(
                     $this->resource->getSolvedGrid()->getRows()
                 );
                 $return['found'] = $this->found;
                 break;
             case 'col':
                 $return['format'] = 'col';
-                $return['solved_grid'] = $this->groupEncode(
+                $return['solved_grid'] = $this->encode(
                     $this->resource->getSolvedGrid()->getCols()
                 );
                 break;
             case 'box':
             default:
                 $return['format'] = 'box';
-                $return['solved_grid'] = $this->groupEncode(
+                $return['solved_grid'] = $this->encode(
                     $this->resource->getSolvedGrid()->getBoxes()
                 );
                 break;
@@ -59,7 +59,7 @@ class SolverResource extends JsonResource
         }
     }
 
-    private function groupEncode(array $grid)
+    private function encode(array $grid)
     {
         $encoding = [];
         foreach ($grid as $group)
