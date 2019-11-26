@@ -128,13 +128,13 @@ class InteractionSolver extends Solver
      *      "grid"   => [grid encoding]
      *
      * @param  Cell $cell        affected cell
-     * @param  int  $pencilMark  pencil mark value
+     * @param  int  $pencilMarks  pencil mark value
      */
-    private function markMove($cell, $pencilMark) {
+    private function markMove($cell, $pencilMarks) {
         $this->found[] = [
             "cell" => $cell->row() . $cell->col(),
             "method" => "Interaction",
-            "values" => array($pencilMark),
+            "values" => array($pencilMarks),
             "grid" => $this->grid->encoding(),
         ];
     }

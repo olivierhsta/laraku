@@ -50,7 +50,6 @@ class OneChoiceSolver extends Solver
      *      "grid"   => [grid encoding]
      *
      * @param  Cell $cell        affected cell
-     * @param  int  $pencilMark  pencil mark value
      */
     private function markMove($cell) {
         $this->found[] = [

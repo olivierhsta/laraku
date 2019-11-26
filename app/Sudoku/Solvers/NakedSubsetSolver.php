@@ -112,7 +112,7 @@ class NakedSubsetSolver extends Solver
                         $removedPM = $cell->removePencilMarks($pmToRemove);
                         if (!empty($removedPM))
                         {
-                            $this->markMove($cell, $removedPM, $subset);
+                            $this->markMove($cell, $removedPM, ['subset' => $subset]);
                         }
                     }
                 }
@@ -176,10 +176,11 @@ class NakedSubsetSolver extends Solver
      *      "values" => [pencil mark values removed],
      *      "grid"   => [grid encoding]
      *
-     * @param  Cell $cell        affected cell
-     * @param  int  $pencilMark  pencil mark value
+     * @param  Cell        $cell         affected cell
+     * @param  array[int]  $pencilMarks  pencil mark values
      */
-    private function markMove($cell, $pencilMarks, $subset) {
+    private function markMove($cell, $pencilMarks, $args) {
+        $subset = $args['subset'];
         switch(count($subset))
         {
             case 2: $subsetType = "Pair"; break;

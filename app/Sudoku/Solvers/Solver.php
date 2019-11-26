@@ -49,13 +49,24 @@ abstract class Solver extends Singleton
 
     /**
      * Solving algorithm that goes through the whole grid.
-     * It solves the class parameter $this->grid.
      *
      * Must be define by subclass.
      *
      * @abstract
      */
     public abstract function solve();
+
+    /**
+     * Adds an entry to the array of findings.
+     *
+     * Must be define by subclass.
+     *
+     * @abstract
+     * @param Cell           $cell         cell affected
+     * @param array[int]|int $pencilMarks  pencil mark value(s) that were affected
+     * @param array          $args         other arguments
+     */
+    private abstract function markMove($cell, $pencilMarks=null, $args=array());
 
 
     /**
