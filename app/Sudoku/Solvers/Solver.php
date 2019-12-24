@@ -2,13 +2,11 @@
 
 namespace App\Sudoku\Solvers;
 
-use App\Patterns\Singleton;
-
 use App\Sudoku\Grid;
 use App\Sudoku\Sudoku;
 use InvalidArgumentException, Exception;
 
-abstract class Solver extends Singleton
+abstract class Solver
 {
     static $pencilMarksWritten = false;
     protected $grid;
@@ -66,7 +64,7 @@ abstract class Solver extends Singleton
      * @param array[int]|int $pencilMarks  pencil mark value(s) that were affected
      * @param array          $args         other arguments
      */
-    private abstract function markMove($cell, $pencilMarks=null, $args=array());
+    public abstract function markMove($cell, $pencilMarks=null, $args=array());
 
 
     /**

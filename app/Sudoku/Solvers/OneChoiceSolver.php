@@ -51,7 +51,7 @@ class OneChoiceSolver extends Solver
      *
      * @param  Cell $cell        affected cell
      */
-    private function markMove($cell) {
+    public function markMove($cell, $pencilMarks=null, $args=array()) {
         $this->found[] = [
             "cell"   => $cell->row() . $cell->col(),
             "method" => "One Choice",

@@ -130,7 +130,7 @@ class InteractionSolver extends Solver
      * @param  Cell $cell        affected cell
      * @param  int  $pencilMarks  pencil mark value
      */
-    private function markMove($cell, $pencilMarks) {
+    public function markMove($cell, $pencilMarks=null, $args=array()) {
         $this->found[] = [
             "cell" => $cell->row() . $cell->col(),
             "method" => "Interaction",

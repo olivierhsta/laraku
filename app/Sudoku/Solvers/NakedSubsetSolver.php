@@ -179,7 +179,7 @@ class NakedSubsetSolver extends Solver
      * @param  Cell        $cell         affected cell
      * @param  array[int]  $pencilMarks  pencil mark values
      */
-    private function markMove($cell, $pencilMarks, $args) {
+    public function markMove($cell, $pencilMarks=null, $args=array()) {
         $subset = $args['subset'];
         switch(count($subset))
         {
