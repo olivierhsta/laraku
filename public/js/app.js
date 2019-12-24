@@ -1917,6 +1917,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         _this.hiddenGridClass = '';
       });
     },
+    cellClicked: function cellClicked(cell) {
+      return cell.isSelected;
+    },
+    click: function click(cell) {
+      for (var i = 0; i < this.grid.getCells().length; i++) {
+        var otherCell = this.grid.getCells()[i];
+        otherCell.unselect();
+      }
+
+      cell.select();
+    },
     isBorderedRow: function isBorderedRow(i) {
       return i % 3 == 0;
     },
@@ -1961,6 +1972,8 @@ function () {
   function Cell(content) {
     _classCallCheck(this, Cell);
 
+    this.isSelected = false;
+
     if (Array.isArray(content)) {
       this.pencilMarks = [];
 
@@ -1989,6 +2002,16 @@ function () {
     key: "hasValue",
     value: function hasValue() {
       return !!this.value;
+    }
+  }, {
+    key: "select",
+    value: function select() {
+      this.isSelected = true;
+    }
+  }, {
+    key: "unselect",
+    value: function unselect() {
+      this.isSelected = false;
     }
   }]);
 
@@ -37344,7 +37367,15 @@ var render = function() {
               "td",
               {
                 staticClass: "sudoku-cell",
-                class: { "border-right-lg": _vm.isBorderedCell(j + 1) }
+                class: {
+                  "border-right-lg": _vm.isBorderedCell(j + 1),
+                  " bg-info": cell.isSelected
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.click(cell)
+                  }
+                }
               },
               [
                 cell.hasPencilMarks()
@@ -49580,7 +49611,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('sudoku-grid', __webpack_require__(/*! ./components/SudokuGrid.vue */ "./resources/assets/js/components/SudokuGrid.vue"));
+Vue.component('sudoku-grid', __webpack_require__(/*! ./components/SudokuGrid.vue */ "./resources/assets/js/components/SudokuGrid.vue")["default"]);
 var app = new Vue({
   el: '#app'
 });

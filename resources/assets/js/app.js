@@ -15,7 +15,7 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('sudoku-grid', require('./components/SudokuGrid.vue'));
+Vue.component('sudoku-grid', require('./components/SudokuGrid.vue').default);
 
 const app = new Vue({
     el: '#app'

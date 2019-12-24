@@ -7,8 +7,9 @@
             </div>
         </form>
         <table :class="'table table-bordered sudoku-grid' + hiddenGridClass">
-              <tr scope="row" v-for="i in 9" :class="{'border-bottom-lg': isBorderedRow(i) }">
-                  <td class="sudoku-cell" :class="{'border-right-lg': isBorderedCell(j+1) }"
+              <tr scope="row" v-for="i in 9" :class="{'border-bottom-lg': isBorderedRow(i)}">
+                  <td class="sudoku-cell" :class="{'border-right-lg': isBorderedCell(j+1),' bg-info': cell.isSelected}"
+                      @click="click(cell)"
                        v-for="(cell, j) in grid.getCells(9*(i-1), 9*i)">
                       <table v-if="cell.hasPencilMarks()"
                              class="table table-borderless sudoku-pencil-marks">
@@ -26,7 +27,6 @@
               </tr>
         </table>
     </div>
-
 </template>
 
 <script>
@@ -50,6 +50,16 @@
                         this.hiddenGridClass = '';
                     }
                 );
+            },
+            cellClicked(cell) {
+                return cell.isSelected;
+            },
+            click(cell) {
+                for (let i = 0; i < this.grid.getCells().length; i++) {
+                    let otherCell = this.grid.getCells()[i];
+                    otherCell.unselect();
+                }
+                cell.select();
             },
             isBorderedRow(i) {
                 return i%3==0;
@@ -77,6 +87,7 @@
 
     class Cell {
         constructor(content) {
+            this.isSelected = false;
             if (Array.isArray(content)) {
                 this.pencilMarks = [];
                 for (let pm in content) {
@@ -99,6 +110,14 @@
 
         hasValue() {
             return !!this.value;
+        }
+
+        select() {
+            this.isSelected = true;
+        }
+
+        unselect() {
+            this.isSelected = false;
         }
     }
 </script>
