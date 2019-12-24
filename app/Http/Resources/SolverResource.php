@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\GridResource;
 use App\Sudoku\Cell;
 
 class SolverResource extends JsonResource
@@ -28,21 +29,21 @@ class SolverResource extends JsonResource
         switch ($this->format) {
             case 'row':
                 $return['format'] = 'row';
-                $return['solved_grid'] = $this->encode(
+                $return['solved_grid'] = new GridResource(
                     $this->resource->getSolvedGrid()->getRows()
                 );
                 $return['found'] = $this->found;
                 break;
             case 'col':
                 $return['format'] = 'col';
-                $return['solved_grid'] = $this->encode(
+                $return['solved_grid'] = new GridResource(
                     $this->resource->getSolvedGrid()->getCols()
                 );
                 break;
             case 'box':
             default:
                 $return['format'] = 'box';
-                $return['solved_grid'] = $this->encode(
+                $return['solved_grid'] = new GridResource(
                     $this->resource->getSolvedGrid()->getBoxes()
                 );
                 break;
@@ -57,18 +58,5 @@ class SolverResource extends JsonResource
         {
             $this->format = $format;
         }
-    }
-
-    private function encode(array $grid)
-    {
-        $encoding = [];
-        foreach ($grid as $group)
-        {
-            foreach ($group as $cell)
-            {
-                $encoding[] = $cell->isEmpty() ? $cell->getPencilMarks() : $cell->getValue();
-            }
-        }
-        return $encoding;
     }
 }

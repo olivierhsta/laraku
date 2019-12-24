@@ -26,8 +26,9 @@ class SolverService
 
     public function solve(Request $request)
     {
-        $grid = new Grid($request->get('grid'));
-        $grid = Solver::prepare($grid);
+        $grid = Solver::prepare(
+            new Grid($request->get('grid'))
+        );
         $found = array();
         $limitCounter = 0;
         do {
