@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\SolverResource;
 use App\Sudoku\Grid;
 use App\Sudoku\Solvers\Solver;
@@ -24,16 +23,21 @@ class SolverService
         InteractionSolver::class,
     ];
 
-    public function solve(Request $request)
+    public function solve(String $gridEncoding, $returnFormat = 'box', $solversName = [])
     {
+        if ($solversName == [] || 
+            (count(array_intersect($solversName, $this->solversName)) == count($solversName)))
+        { // if the $solver parameter passed contains invalid values or was defined : default to all solvers
+            $solversName = $this->solversName;
+        }
         $grid = Solver::prepare(
-            new Grid($request->get('grid'))
+            new Grid($gridEncoding)
         );
         $found = array();
         $limitCounter = 0;
         do {
             $beforeFound = $found;
-            foreach ($this->solversName as $solverName) {
+            foreach ($solversName as $solverName) {
                 $solver = new $solverName($grid);
                 $solver->solve();
                 $found = array_merge($found, $solver->getFindings());
@@ -42,7 +46,7 @@ class SolverService
         } while (sizeof($beforeFound) != sizeof($found)
                  && $limitCounter < config()->get('sudoku.iterationLimit'));
         $solverResource = new SolverResource($solver,$found);
-        $solverResource->setReturnFormat($request->get('returnFormat'));
+        $solverResource->setReturnFormat($returnFormat);
         return $solverResource;
     }
 }

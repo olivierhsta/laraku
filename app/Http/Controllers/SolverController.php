@@ -14,8 +14,11 @@ class SolverController extends Controller
         return view('sudoku.solver');
     }
 
-    public function solve(SolverService $solverService) {
+    public function solve(Request $request, SolverService $solverService) {
         $this->validate(request(), ['grid' => 'required|min:81|max:81']);
-        return $solverService->solve(request());
+        return $solverService->solve(
+            $request->get('grid'),
+            $request->get('returnFormat')
+        );
     }
 }
