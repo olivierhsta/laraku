@@ -43,7 +43,8 @@
                 axios.post(
                     '/api/solver',
                     { grid: this.encoding,
-                      returnFormat: 'row' }
+                      returnFormat: 'row'
+                    }
                 ).then(
                     response => {
                         this.grid = new Grid(response.data.data.solved_grid);

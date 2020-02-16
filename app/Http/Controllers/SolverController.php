@@ -18,7 +18,8 @@ class SolverController extends Controller
         $this->validate(request(), ['grid' => 'required|min:81|max:81']);
         return $solverService->solve(
             $request->get('grid'),
-            $request->get('returnFormat')
+            $request->get('returnFormat'),
+            $request->get('solvers')
         );
     }
 }
