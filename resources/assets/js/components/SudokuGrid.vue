@@ -1,24 +1,23 @@
 <template>
     <div>
         <form action="" method="" @submit.prevent="onSubmit">
-            <div class="row">
-                <input name="grid" type="text" class="form-control col-10" placeholder="81-digit grid" v-model="encoding"/>
-                <button type="submit" class="btn btn-primary col-2 form-control">Solve</button>
+            <div>
+                <input class="input input-text" name="grid" type="text" placeholder="81-digit grid" v-model="encoding"/>
+                <button class="button" type="submit">Solve</button>
             </div>
         </form>
-        <table :class="'table table-bordered sudoku-grid' + hiddenGridClass">
-              <tr scope="row" v-for="i in 9" :class="{'border-bottom-lg': isBorderedRow(i)}">
-                  <td class="sudoku-cell" :class="{'border-right-lg': isBorderedCell(j+1),' bg-info': cell.isSelected}"
+        <table :class="'sudoku-grid' + hiddenGridClass">
+              <tr v-for="i in 9" :class="{'border-bottom-lg': isBorderedRow(i)}">
+                  <td class="sudoku-cell" :class="{'border-right-lg': isBorderedCell(j+1)}"
                       @click="click(cell)"
                        v-for="(cell, j) in grid.getCells(9*(i-1), 9*i)">
                       <table v-if="cell.hasPencilMarks()"
-                             class="table table-borderless sudoku-pencil-marks">
+                             class="sudoku-pencil-marks">
                           <tr v-for="i in 3">
-                              <td v-for="j in 3" class="padding-0">
+                              <td v-for="j in 3" class="padding-none">
                                   <small v-if="cell.hasPencilMark((i-1)*3+j)">
                                       {{ (i-1)*3+j }}
                                   </small>
-                                  <small v-else class="invisible">0</small>
                               </td>
                           </tr>
                       </table>
@@ -122,3 +121,42 @@
         }
     }
 </script>
+<style media="screen">
+    .sudoku-grid {
+        height:36em;
+        width: 36em;
+        border: 2px solid black;
+        text-align: center;
+        border-collapse: collapse;
+    }
+
+    .sudoku-cell {
+        margin:0;;
+        padding:0;
+        vertical-align: middle;
+        border: 1px solid black;
+    }
+
+    .sudoku-pencil-marks {
+        width: 100%;
+        line-height: 1.2;
+        margin:0;
+        padding:0;
+    }
+
+    .sudoku-cell-value {
+        font-size: xx-large;
+    }
+
+    .padding-0 {
+        padding:0 !important;
+    }
+
+    .border-right-lg {
+        border-right: 2px solid black !important;
+    }
+
+    .border-bottom-lg {
+        border-bottom: 2px solid black !important;
+    }
+</style>

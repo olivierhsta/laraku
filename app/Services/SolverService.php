@@ -25,10 +25,17 @@ class SolverService
 
     public function solve(String $gridEncoding, $returnFormat = 'box', $solversName = [])
     {
-        $solversName = array_map(function($solver) { return 'App\\Sudoku\\Solvers\\' . $solver;} , $solversName);
-        if (count($solversName) == 0 || (count(array_intersect($solversName, $this->solversName)) != count($solversName)))
-        { // if the $solver parameter passed contains invalid values or was defined : default to all solvers
+        if (is_null($solversName) || count($solversName) == 0)
+        {
             $solversName = $this->solversName;
+        }
+        else
+        {
+            $solversName = array_map(function($solver) { return 'App\\Sudoku\\Solvers\\' . $solver;} , $solversName);
+            if (count(array_intersect($solversName, $this->solversName)) != count($solversName))
+            { // if the $solver parameter passed contains invalid values : default to all solvers
+                $solversName = $this->solversName;
+            }
         }
         $grid = Solver::prepare(
             new Grid($gridEncoding)

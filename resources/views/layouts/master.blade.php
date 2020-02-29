@@ -22,21 +22,10 @@
     <link href="{{ asset('css/sudoku.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        @include('layouts.navbar')
-        <br />
-        <div class="container">
-            <div class="row">
-                <div class="col-2">
-                    @include('layouts.sidebar')
-                </div>
-
-                <div class="col-10">
-                    @yield('content')
-                </div>
-            </div>
+    <div>
+        <div id="app">
+            @yield('content')
         </div>
-
     </div>
 </body>
 </html>

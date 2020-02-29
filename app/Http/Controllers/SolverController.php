@@ -11,7 +11,7 @@ class SolverController extends Controller
 {
 
     public function index() {
-        return view('sudoku.solver');
+        return view('solver');
     }
 
     public function solve(Request $request, SolverService $solverService) {
