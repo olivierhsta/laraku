@@ -3,7 +3,7 @@
 $body-bg: #f5f8fa;
 
 // Typography
-$font-family-sans-serif: "Raleway", sans-serif;
+$font-family: "Montserrat", sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
@@ -18,3 +18,16 @@ $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
 $light-gray:#d0d0d0;
+
+// Flex
+$nbrCols : 12;
+
+// Spacing
+$spaceamounts: (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
+$sides: (top, bottom, left, right);
+
+// Screen sizes
+$formats: (mobile, tablet, desktop);
+$mq-mobile	: 480px !default;
+$mq-tablet	: 1024px !default;
+$mq-desktop	: 1382px !default;

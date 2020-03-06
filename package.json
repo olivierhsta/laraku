@@ -18,13 +18,15 @@
         "lodash": "^4.17.15",
         "popper.js": "^1.16.0",
         "resolve-url-loader": "^3.1.0",
-        "sass": "^1.24.0",
+        "sass": "^1.26.2",
         "sass-loader": "^8.0.0",
         "vue": "^2.6.11",
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "fiber": "^1.0.4",
         "gulp": "^4.0.2",
+        "node-sass": "^4.13.1",
         "vue-loader": "^15.8.3"
     }
 }

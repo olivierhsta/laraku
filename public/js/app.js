@@ -1896,6 +1896,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6476,7 +6478,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.sudoku-grid {\n    height:36em;\n    width: 36em;\n    border: 2px solid black;\n    text-align: center;\n    border-collapse: collapse;\n}\n.sudoku-cell {\n    margin:0;;\n    padding:0;\n    vertical-align: middle;\n    border: 1px solid black;\n}\n.sudoku-pencil-marks {\n    width: 100%;\n    line-height: 1.2;\n    margin:0;\n    padding:0;\n}\n.sudoku-cell-value {\n    font-size: xx-large;\n}\n.padding-0 {\n    padding:0 !important;\n}\n.border-right-lg {\n    border-right: 2px solid black !important;\n}\n.border-bottom-lg {\n    border-bottom: 2px solid black !important;\n}\n", ""]);
+exports.push([module.i, "\n.sudoku-grid {\n    height:36em;\n    width: 36em;\n    border: 2px solid black;\n    text-align: center;\n    border-collapse: collapse;\n    font-weight: 300;\n}\n.sudoku-cell {\n    margin:0;;\n    padding:0;\n    vertical-align: middle;\n    border: 1px solid black;\n}\n.sudoku-pencil-marks {\n    width: 100%;\n    line-height: 1.2;\n    margin:0;\n    padding:0;\n}\n.sudoku-cell-value {\n    font-size: xx-large;\n}\n.padding-0 {\n    padding:0 !important;\n}\n.border-right-lg {\n    border-right: 2px solid black !important;\n}\n.border-bottom-lg {\n    border-bottom: 2px solid black !important;\n}\n", ""]);
 
 // exports
 
@@ -37948,110 +37950,121 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "form",
-      {
-        attrs: { action: "", method: "" },
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.onSubmit($event)
-          }
-        }
-      },
-      [
-        _c("div", [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.encoding,
-                expression: "encoding"
-              }
-            ],
-            staticClass: "input input-text",
-            attrs: { name: "grid", type: "text", placeholder: "81-digit grid" },
-            domProps: { value: _vm.encoding },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.encoding = $event.target.value
-              }
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col col-6" }, [
+      _c(
+        "form",
+        {
+          attrs: { action: "", method: "" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.onSubmit($event)
             }
-          }),
-          _vm._v(" "),
-          _c("button", { staticClass: "button", attrs: { type: "submit" } }, [
-            _vm._v("Solve")
-          ])
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "table",
-      { class: "sudoku-grid" + _vm.hiddenGridClass },
-      _vm._l(9, function(i) {
-        return _c(
-          "tr",
-          { class: { "border-bottom-lg": _vm.isBorderedRow(i) } },
-          _vm._l(_vm.grid.getCells(9 * (i - 1), 9 * i), function(cell, j) {
-            return _c(
-              "td",
-              {
-                staticClass: "sudoku-cell",
-                class: { "border-right-lg": _vm.isBorderedCell(j + 1) },
-                on: {
-                  click: function($event) {
-                    return _vm.click(cell)
-                  }
+          }
+        },
+        [
+          _c("div", { staticClass: "row" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.encoding,
+                  expression: "encoding"
                 }
+              ],
+              staticClass: "input input-text col col-10",
+              attrs: {
+                name: "grid",
+                type: "text",
+                placeholder: "81-digit grid"
               },
-              [
-                cell.hasPencilMarks()
-                  ? _c(
-                      "table",
-                      { staticClass: "sudoku-pencil-marks" },
-                      _vm._l(3, function(i) {
-                        return _c(
-                          "tr",
-                          _vm._l(3, function(j) {
-                            return _c("td", { staticClass: "padding-none" }, [
-                              cell.hasPencilMark((i - 1) * 3 + j)
-                                ? _c("small", [
-                                    _vm._v(
-                                      "\n                                  " +
-                                        _vm._s((i - 1) * 3 + j) +
-                                        "\n                              "
-                                    )
-                                  ])
-                                : _vm._e()
-                            ])
-                          }),
-                          0
-                        )
-                      }),
-                      0
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                cell.hasValue()
-                  ? _c("span", {
-                      staticClass: "sudoku-cell-value",
-                      domProps: { textContent: _vm._s(cell.value) }
-                    })
-                  : _vm._e()
-              ]
+              domProps: { value: _vm.encoding },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.encoding = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "button col col-2 m-l-25",
+                attrs: { type: "submit" }
+              },
+              [_vm._v("Solve")]
             )
-          }),
-          0
-        )
-      }),
-      0
-    )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "table",
+        { class: "sudoku-grid" + _vm.hiddenGridClass },
+        _vm._l(9, function(i) {
+          return _c(
+            "tr",
+            { class: { "border-bottom-lg": _vm.isBorderedRow(i) } },
+            _vm._l(_vm.grid.getCells(9 * (i - 1), 9 * i), function(cell, j) {
+              return _c(
+                "td",
+                {
+                  staticClass: "sudoku-cell",
+                  class: { "border-right-lg": _vm.isBorderedCell(j + 1) },
+                  on: {
+                    click: function($event) {
+                      return _vm.click(cell)
+                    }
+                  }
+                },
+                [
+                  cell.hasPencilMarks()
+                    ? _c(
+                        "table",
+                        { staticClass: "sudoku-pencil-marks" },
+                        _vm._l(3, function(i) {
+                          return _c(
+                            "tr",
+                            _vm._l(3, function(j) {
+                              return _c("td", { staticClass: "padding-none" }, [
+                                cell.hasPencilMark((i - 1) * 3 + j)
+                                  ? _c("small", [
+                                      _vm._v(
+                                        "\n                                      " +
+                                          _vm._s((i - 1) * 3 + j) +
+                                          "\n                                  "
+                                      )
+                                    ])
+                                  : _vm._e()
+                              ])
+                            }),
+                            0
+                          )
+                        }),
+                        0
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  cell.hasValue()
+                    ? _c("span", {
+                        staticClass: "sudoku-cell-value",
+                        domProps: { textContent: _vm._s(cell.value) }
+                      })
+                    : _vm._e()
+                ]
+              )
+            }),
+            0
+          )
+        }),
+        0
+      )
+    ])
   ])
 }
 var staticRenderFns = []

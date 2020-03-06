@@ -1,0 +1,89 @@
+@function rem($px) {
+  $rem: $px/16;
+  @return #{$rem}rem;
+}
+
+@each $space in $spaceamounts {
+    @each $side in $sides {
+        .m-#{str-slice($side, 0, 1)}-#{$space} {
+            margin-#{$side}: rem($space);
+        }
+
+        .p-#{str-slice($side, 0, 1)}-#{$space} {
+            padding-#{$side}: rem($space);
+        }
+    }
+}
+
+
+/*
+ * Media mixins
+ * Usage :
+    .module {
+        @include only(mobile) {
+            width:auto;
+            font-size:12px;
+        }
+        @include below(tablet) {
+            width:600px;
+            font-size:14px;
+            .sidebar {
+                display:none;
+            }
+        }
+        @include only(desktop) {
+            width:400px;
+            .sidebar {
+                width:200px;
+            }
+        }
+    }
+ */
+
+@mixin only($format) {
+    @if $format == mobile {
+        @media (max-width : $mq-mobile) {
+            @content;
+        }
+    } @else if  $format == tablet {
+        @media only screen and (min-width : $mq-mobile + 1) and (max-width : $mq-tablet) {
+    		@content;
+    	}
+    } @else if $format == desktop {
+        @media only screen and (min-width : $mq-tablet + 1) and (max-width : $mq-desktop) {
+    		@content;
+    	}
+    } @else {
+        @content;
+    }
+}
+
+// above and equal
+@mixin above($format) {
+    @if $format == mobile {
+        @media only screen and (min-width : $mq-mobile + 1) {
+    		@content;
+    	}
+    } @else if  $format == tablet {
+        @media only screen and (min-width : $mq-tablet + 1) {
+    		@content;
+    	}
+    } @else {
+        @content;
+    }
+}
+
+// below and equal
+@mixin below($format) {
+    @if  $format == tablet {
+        @media only screen and (max-width : $mq-tablet) {
+    		@content;
+    	}
+    } @else if  $format == desktop {
+        @media only screen and (max-width : $mq-desktop) {
+    		@content;
+    	}
+    } @else {
+        @content;
+    }
+}

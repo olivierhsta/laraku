@@ -1,0 +1,15 @@
+.button {
+    background: transparent;
+    border: rem(1) solid $orange;
+    border-radius: rem(5);
+    height: rem(35);
+    padding: 0 rem(20);
+
+    &:active {
+        outline: none;
+        background: $orange;
+    }
+
+    // remove dotted border on focus (firefox)
+    &::-moz-focus-inner { border: 0;}
+}

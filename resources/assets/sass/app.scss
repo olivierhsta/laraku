@@ -1,55 +1,13 @@
-
-// Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
-// Variables
-@import "variables";
+@import 'font';
+@import 'variables';
+@import 'helpers';
 
-.input.input-text {
-    line-height: 1rem;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    border: 1px solid $light-gray;
+@import "flex";
+@import "button";
+@import "input";
 
-    &:focus {
-        border-color: $orange;
-    }
-
-    // remove dotted border on focus (firefox)
-    &::-moz-focus-inner { border: 0; }
-}
-
-.button {
-    background: transparent;
-    border: 1px solid $orange;
-    border-radius: 5px;
-    height: 2rem;
-    padding: 0 1.5rem;
-
-    &:active {
-        outline: none;
-        background: $orange;
-    }
-
-    // remove dotted border on focus (firefox)
-    &::-moz-focus-inner { border: 0;}
-}
-
-.row {
-    display: flex;
-
-    .col {
-        &.col-1 {width:8.3333%;}
-        &.col-2 {width:16.6667%;}
-        &.col-3 {width:25%;}
-        &.col-4 {width:33.3333%;}
-        &.col-5 {width:41.6667%;}
-        &.col-6 {width:50%;}
-        &.col-7 {width:58.3333%;}
-        &.col-8 {width:66.6667%;}
-        &.col-9 {width:75%;}
-        &.col-10 {width:83.3333%;}
-        &.col-11{width:91.3333%;}
-        &.col-12 {width:100%;}
-    }
+html {
+    font-family: $font-family;
 }
