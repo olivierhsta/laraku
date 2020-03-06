@@ -19,7 +19,10 @@
 <body>
     <div>
         <div id="app">
-            @yield('content')
+            <navigation-bar></navigation-bar>
+            <div class="m-t-75">
+                @yield('content')
+            </div>
         </div>
     </div>
 </body>

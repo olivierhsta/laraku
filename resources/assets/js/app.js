@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('sudoku-grid', require('./components/SudokuGrid.vue').default);
+Vue.component('navigation-bar', require('./components/NavBar.vue').default);
 
 const app = new Vue({
     el: '#app'

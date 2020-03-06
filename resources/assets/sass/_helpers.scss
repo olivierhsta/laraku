@@ -1,20 +1,9 @@
+@import 'variables';
+
 @function rem($px) {
   $rem: $px/16;
   @return #{$rem}rem;
 }
-
-@each $space in $spaceamounts {
-    @each $side in $sides {
-        .m-#{str-slice($side, 0, 1)}-#{$space} {
-            margin-#{$side}: rem($space);
-        }
-
-        .p-#{str-slice($side, 0, 1)}-#{$space} {
-            padding-#{$side}: rem($space);
-        }
-    }
-}
-
 
 /*
  * Media mixins

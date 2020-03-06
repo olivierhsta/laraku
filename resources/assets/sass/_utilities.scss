@@ -1,0 +1,13 @@
+@each $space in $spaceamounts {
+    @each $side in $sides {
+        .m-#{str-slice($side, 0, 1)}-#{$space} {
+            margin-#{$side}: rem($space);
+        }
+
+        .p-#{str-slice($side, 0, 1)}-#{$space} {
+            padding-#{$side}: rem($space);
+        }
+    }
+}
+.p-0 {padding:0;}
+.m-0 {margin:0;}

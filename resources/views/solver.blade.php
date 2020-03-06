@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container">
+<div>
     <sudoku-grid></sudoku-grid>
 </div>
 @endsection

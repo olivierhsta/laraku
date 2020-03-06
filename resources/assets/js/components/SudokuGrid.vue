@@ -1,21 +1,23 @@
 <template>
     <div class="row">
-        <div class="col col-6">
+        <div class="col col-6 m-l-75">
             <form action="" method="" @submit.prevent="onSubmit">
                 <div class="row">
-                    <input class="input input-text col col-10" name="grid" type="text" placeholder="81-digit grid" v-model="encoding"/>
-                    <button class="button col col-2 m-l-25" type="submit">Solve</button>
+                    <input class="input input-text col col-6" name="grid" type="text" placeholder="81-digit grid" v-model="encoding"/>
+                    <button class="button col col-2 m-l-30" type="submit">Solve</button>
                 </div>
             </form>
-            <table :class="'sudoku-grid' + hiddenGridClass">
-                  <tr v-for="i in 9" :class="{'border-bottom-lg': isBorderedRow(i)}">
-                      <td class="sudoku-cell" :class="{'border-right-lg': isBorderedCell(j+1)}"
+            <table class="sudoku-grid m-t-20">
+                  <tr v-for="i in 9" :key="i">
+                      <td class="sudoku-cell"
+                          :class="{'sudoku-border-right-md': isBorderedCell(j+1),'sudoku-border-bottom-md': isBorderedRow(i)} "
                           @click="click(cell)"
-                           v-for="(cell, j) in grid.getCells(9*(i-1), 9*i)">
+                           v-for="(cell, j) in grid.getCells(9*(i-1), 9*i)"
+                           :key="j">
                           <table v-if="cell.hasPencilMarks()"
                                  class="sudoku-pencil-marks">
-                              <tr v-for="i in 3">
-                                  <td v-for="j in 3" class="padding-none">
+                              <tr v-for="i in 3" :key="i">
+                                  <td v-for="j in 3" class="p-0" :key="j">
                                       <small v-if="cell.hasPencilMark((i-1)*3+j)">
                                           {{ (i-1)*3+j }}
                                       </small>
@@ -35,8 +37,7 @@
         data() {
             return {
                 encoding : "",
-                grid: new Grid(),
-                hiddenGridClass: 'd-none'
+                grid: new Grid()
             }
         },
         methods: {
@@ -49,7 +50,6 @@
                 ).then(
                     response => {
                         this.grid = new Grid(response.data.data.solved_grid);
-                        this.hiddenGridClass = '';
                     }
                 );
             },
@@ -73,10 +73,10 @@
     }
 
     class Grid {
-        constructor(encoding = null) {
+        constructor(encoding = []) {
             this.cells = new Array();
             if (encoding) {
-                for (let i = 0; i < encoding.length; i++) {
+                for (let i = 0; i < 81; i++) {
                     this.cells[i] = new Cell(encoding[i]);
                 }
             }
@@ -123,43 +123,44 @@
         }
     }
 </script>
-<style media="screen">
+<style lang="scss">
+    @import './../../sass/_helpers.scss';
     .sudoku-grid {
-        height:36em;
-        width: 36em;
-        border: 2px solid black;
+        height:rem(560);
+        width: rem(560);
+        border: rem(2) solid black;
         text-align: center;
         border-collapse: collapse;
         font-weight: 300;
+
+        .sudoku-cell {
+            width: rem(60);
+            height: rem(60);
+            margin:0;
+            padding:0;
+            vertical-align: middle;
+            border: rem(1) solid black;
+
+            &.sudoku-border-right-md {
+                border-right: rem(2) solid black;
+            }
+
+            &.sudoku-border-bottom-md {
+                border-bottom: rem(2) solid black;
+            }
+
+            .sudoku-cell-value {
+                font-size: xx-large;
+            }
+
+            .sudoku-pencil-marks {
+                width: 100%;
+                line-height: 1.2;
+                margin:0;
+                padding:0;
+            }
+        }
     }
 
-    .sudoku-cell {
-        margin:0;;
-        padding:0;
-        vertical-align: middle;
-        border: 1px solid black;
-    }
 
-    .sudoku-pencil-marks {
-        width: 100%;
-        line-height: 1.2;
-        margin:0;
-        padding:0;
-    }
-
-    .sudoku-cell-value {
-        font-size: xx-large;
-    }
-
-    .padding-0 {
-        padding:0 !important;
-    }
-
-    .border-right-lg {
-        border-right: 2px solid black !important;
-    }
-
-    .border-bottom-lg {
-        border-bottom: 2px solid black !important;
-    }
 </style>
