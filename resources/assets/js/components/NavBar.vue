@@ -1,11 +1,11 @@
 <template>
     <div class="navbar">
-        <h1 class="logo m-l-30">Libre Sudoku</h1>
+        <h1 class="logo m-l-30">{{title}}</h1>
     </div>
 </template>
 <script>
     export default {
-        name: "",
+        props: ['title'],
         data: () => ({
 
         })

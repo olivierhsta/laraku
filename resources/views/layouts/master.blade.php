@@ -19,7 +19,7 @@
 <body>
     <div>
         <div id="app">
-            <navigation-bar></navigation-bar>
+            <navigation-bar title="{{config('app.name', 'Sudoku')}}"></navigation-bar>
             <div class="m-t-75">
                 @yield('content')
             </div>

@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+require('laravel-mix-svg-vue');
 
 /*
  |--------------------------------------------------------------------------
@@ -15,4 +16,5 @@ mix.disableSuccessNotifications();
 
 mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css')
-   .copyDirectory('resources/assets/fonts', 'public/fonts');
+   .copyDirectory('resources/assets/fonts', 'public/fonts')
+   .svgVue();

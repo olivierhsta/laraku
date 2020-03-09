@@ -1866,7 +1866,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "",
+  props: ['title'],
   data: function data() {
     return {};
   }
@@ -1889,6 +1889,20 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6520,7 +6534,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.sudoku-grid {\n  height: 35rem;\n  width: 35rem;\n  border: 0.125rem solid black;\n  text-align: center;\n  border-collapse: collapse;\n  font-weight: 300;\n}\n.sudoku-grid .sudoku-cell {\n  width: 3.75rem;\n  height: 3.75rem;\n  margin: 0;\n  padding: 0;\n  vertical-align: middle;\n  border: 0.0625rem solid black;\n}\n.sudoku-grid .sudoku-cell.sudoku-border-right-md {\n  border-right: 0.125rem solid black;\n}\n.sudoku-grid .sudoku-cell.sudoku-border-bottom-md {\n  border-bottom: 0.125rem solid black;\n}\n.sudoku-grid .sudoku-cell .sudoku-cell-value {\n  font-size: xx-large;\n}\n.sudoku-grid .sudoku-cell .sudoku-pencil-marks {\n  width: 100%;\n  line-height: 1.2;\n  margin: 0;\n  padding: 0;\n}", ""]);
+exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.sudoku-grid {\n  height: 35rem;\n  width: 35rem;\n  border: 0.125rem solid black;\n  text-align: center;\n  border-collapse: collapse;\n  font-weight: 300;\n}\n.sudoku-grid .sudoku-cell {\n  width: 3.75rem;\n  height: 3.75rem;\n  margin: 0;\n  padding: 0;\n  vertical-align: middle;\n  border: 0.0625rem solid black;\n}\n.sudoku-grid .sudoku-cell.sudoku-border-right-md {\n  border-right: 0.125rem solid black;\n}\n.sudoku-grid .sudoku-cell.sudoku-border-bottom-md {\n  border-bottom: 0.125rem solid black;\n}\n.sudoku-grid .sudoku-cell .sudoku-cell-value {\n  font-size: xx-large;\n}\n.sudoku-grid .sudoku-cell .sudoku-pencil-marks {\n  width: 100%;\n  line-height: 1.2;\n  margin: 0;\n  padding: 0;\n}\n.control-grid {\n  border-collapse: collapse;\n  height: 35rem;\n}\n.control-grid .control-cell {\n  width: 3.75rem;\n  margin: 0;\n  text-align: center;\n  font-weight: 700;\n  vertical-align: middle;\n  border: 0.0625rem solid #d0d0d0;\n}\n.control-grid .control-cell .control-icon {\n  width: 50%;\n  padding: 0.0625rem 0;\n}", ""]);
 
 // exports
 
@@ -37932,6 +37946,21 @@ module.exports = function (css) {
 
 /***/ }),
 
+/***/ "./node_modules/svg-vue/dist/svg-vue.esm.js":
+/*!**************************************************!*\
+  !*** ./node_modules/svg-vue/dist/svg-vue.esm.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {var e=function(e,t,n,i,o,s,r,a,l,d){"boolean"!=typeof r&&(l=a,a=r,r=!1);var c,u="function"==typeof n?n.options:n;if(e&&e.render&&(u.render=e.render,u.staticRenderFns=e.staticRenderFns,u._compiled=!0,o&&(u.functional=!0)),i&&(u._scopeId=i),s?(c=function(e){(e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),t&&t.call(this,l(e)),e&&e._registeredComponents&&e._registeredComponents.add(s)},u._ssrRegister=c):t&&(c=r?function(){t.call(this,d(this.$root.$options.shadowRoot))}:function(e){t.call(this,a(e))}),c)if(u.functional){var g=u.render;u.render=function(e,t){return c.call(t),g(e,t)}}else{var v=u.beforeCreate;u.beforeCreate=v?[].concat(v,c):[c]}return n}({render:function(){var e=this.$createElement;return(this._self._c||e)("svg",{attrs:{viewBox:this.svgViewBoxValues,xmlns:"http://www.w3.org/2000/svg"},domProps:{innerHTML:this._s(this.svgContent)}})},staticRenderFns:[]},void 0,{props:{icon:String},data:function(){return{svgString:__webpack_require__("./resources/svg sync recursive ^\\.\\/.*$")("./"+this.iconPath).default}},computed:{iconPath:{cache:!1,get:function(){return this.icon.replace(new RegExp(".".replace(/([.*+?^=!:${}()|\[\]\/\\])/g,"\\$1"),"g"),"/")+".svg"}},svgViewBoxValues:function(){return this.svgString?(/viewBox="([^"]+)"/.exec(this.svgString)||"")[1]:null},svgContent:function(){return this.svgString?this.svgString.replace(/^<svg[^>]*>|<\/svg>$/g,""):null}}},void 0,!1,void 0,void 0,void 0);function t(n){t.installed||(t.installed=!0,n.component("SvgVue",e))}var n={install:t},i=null;"undefined"!=typeof window?i=window.Vue:"undefined"!=typeof global&&(i=global.Vue),i&&i.use(n),e.install=t;/* harmony default export */ __webpack_exports__["default"] = (e);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
 /***/ "./node_modules/timers-browserify/main.js":
 /*!************************************************!*\
   !*** ./node_modules/timers-browserify/main.js ***!
@@ -38022,18 +38051,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "navbar" }, [
+    _c("h1", { staticClass: "logo m-l-30" }, [_vm._v(_vm._s(_vm.title))])
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "navbar" }, [
-      _c("h1", { staticClass: "logo m-l-30" }, [_vm._v("Libre Sudoku")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -38056,7 +38078,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col col-6 m-l-75" }, [
+    _c("div", { staticClass: "col col-5 m-l-75" }, [
       _c(
         "form",
         {
@@ -38079,7 +38101,7 @@ var render = function() {
                   expression: "encoding"
                 }
               ],
-              staticClass: "input input-text col col-6",
+              staticClass: "input input-text col col-8",
               attrs: {
                 name: "grid",
                 type: "text",
@@ -38099,7 +38121,7 @@ var render = function() {
             _c(
               "button",
               {
-                staticClass: "button col col-2 m-l-30",
+                staticClass: "button col col-2 m-l-10",
                 attrs: { type: "submit" }
               },
               [_vm._v("Solve")]
@@ -38174,6 +38196,74 @@ var render = function() {
         }),
         0
       )
+    ]),
+    _vm._v(" "),
+    _c("div", [
+      _c(
+        "table",
+        { staticClass: "control-grid m-t-55" },
+        _vm._l(9, function(i) {
+          return _c("tr", { key: i }, [
+            _c("td", { staticClass: "control-cell" }, [_vm._v(_vm._s(i))])
+          ])
+        }),
+        0
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", [
+      _c("table", { staticClass: "control-grid m-t-55" }, [
+        _c("tr", [
+          _c(
+            "td",
+            {
+              staticClass: "control-cell",
+              attrs: { alt: "Pencil Mark", title: "Pencil Mark" }
+            },
+            [
+              _c("svg-vue", {
+                staticClass: "control-icon",
+                attrs: { icon: "edit" }
+              })
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("tr", [
+          _c(
+            "td",
+            {
+              staticClass: "control-cell",
+              attrs: { alt: "Undo", title: "Undo" }
+            },
+            [
+              _c("svg-vue", {
+                staticClass: "control-icon",
+                attrs: { icon: "undo" }
+              })
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("tr", [
+          _c(
+            "td",
+            {
+              staticClass: "control-cell",
+              attrs: { alt: "Select", title: "Select" }
+            },
+            [
+              _c("svg-vue", {
+                staticClass: "control-icon",
+                attrs: { icon: "touch" }
+              })
+            ],
+            1
+          )
+        ])
+      ])
     ])
   ])
 }
@@ -50356,6 +50446,8 @@ module.exports = function(module) {
 __webpack_require__(/*! ./bootstrap */ "./resources/assets/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+window.SvgVue = __webpack_require__(/*! svg-vue */ "./node_modules/svg-vue/dist/svg-vue.esm.js");
+Vue.use(SvgVue);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -50610,6 +50702,80 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./resources/svg sync recursive ^\\.\\/.*$":
+/*!*************************************!*\
+  !*** ./resources/svg sync ^\.\/.*$ ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./edit.svg": "./resources/svg/edit.svg",
+	"./touch.svg": "./resources/svg/touch.svg",
+	"./undo.svg": "./resources/svg/undo.svg"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./resources/svg sync recursive ^\\.\\/.*$";
+
+/***/ }),
+
+/***/ "./resources/svg/edit.svg":
+/*!********************************!*\
+  !*** ./resources/svg/edit.svg ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<svg viewBox=\"0 -1 381.534 381\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M370.59 230.965c-5.524 0-10 4.476-10 10v88.793c-.02 16.558-13.438 29.98-30 30H50c-16.563-.02-29.98-13.442-30-30V69.168c.02-16.563 13.438-29.98 30-30h88.79c5.523 0 10-4.477 10-10s-4.477-10-10-10H50c-27.602.031-49.969 22.398-50 50v260.59c.031 27.601 22.398 49.969 50 50h280.59c27.601-.031 49.969-22.399 50-50v-88.79c0-5.523-4.477-10.003-10-10.003zm0 0\"/><path d=\"M156.367 178.344L302.38 32.328l47.09 47.09-146.012 146.016zm-23.824 70.914l52.039-14.414-37.625-37.625zM362.488 7.578c-9.77-9.746-25.586-9.746-35.355 0l-10.606 10.606 47.09 47.09 10.606-10.606c9.75-9.77 9.75-25.586 0-35.355zm0 0\"/></svg>");
+
+/***/ }),
+
+/***/ "./resources/svg/touch.svg":
+/*!*********************************!*\
+  !*** ./resources/svg/touch.svg ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<svg viewBox=\"-73 0 512 512\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M54.426 135.785c8.164-1.41 13.636-9.168 12.23-17.332C58.668 72.164 94.375 30 141.051 30c46.535 0 82.304 41.965 74.426 88.27-1.387 8.168 4.105 15.914 12.273 17.304 8.168 1.395 15.914-4.105 17.305-12.273C256.015 58.85 206.273 0 141.05 0 75.902 0 25.92 58.844 37.094 123.555c1.41 8.187 9.199 13.636 17.332 12.23zm0 0\"/><path d=\"M300.664 240.645c-11.242-22.067-38.02-30.875-60-20-10.219-20.06-33.59-29.536-54.832-22.16V106.62c0-24.484-19.676-44.941-43.867-45.605-25.348-.72-46.352 19.582-46.352 44.984v231.082l-17.62-18.453c-16.915-17.707-45.235-18.953-63.138-2.77-18.89 17.075-19.832 46.149-2.437 64.422L113.691 488.3c14.121 15.059 34.067 23.7 54.715 23.7h122.145c41.355 0 75-33.645 75-75V281c0-33.23-35.051-55.117-64.887-40.355zM335.551 437c0 24.813-20.188 45-45 45H168.406c-12.39 0-24.355-5.184-32.828-14.223-.363-.382-101.05-107.777-101.414-108.16-5.8-6.078-5.523-15.777.805-21.504 5.965-5.386 15.531-4.832 21.324 1.235l43.469 45.52c9.32 9.765 25.847 3.14 25.847-10.356V106c0-8.43 6.993-15.234 15.54-14.996 8.097.223 14.683 7.226 14.683 15.617 0 165.055-.281 90.238-.281 179.379 0 8.309 6.765 15.078 15.14 14.992 8.364.086 15.141-6.68 15.141-14.992v-47.852c1.336-6.914 7.422-12.148 14.719-12.148 8.27 0 15 6.73 15 15v45c0 8.285 6.715 15 15 15s15-6.715 15-15v-25c0-8.27 6.73-15 15-15s15 6.73 15 15v25c0 8.285 6.715 15 15 15s15-6.715 15-15v-5c0-8.27 6.73-15 15-15s15 6.73 15 15zm0 0\"/></svg>");
+
+/***/ }),
+
+/***/ "./resources/svg/undo.svg":
+/*!********************************!*\
+  !*** ./resources/svg/undo.svg ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<svg viewBox=\"0 0 64 64\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 36h8.485a2 2 0 000-4h-3.657l16.444-16.444c4.733-4.733 12.435-4.733 17.172.003 4.733 4.733 4.733 12.436 0 17.169L28.586 52.586a2 2 0 102.828 2.828l19.858-19.858c6.293-6.293 6.293-16.532-.003-22.828-6.293-6.293-16.532-6.293-22.825 0L12 29.172v-3.657a2 2 0 00-4 0V34a2 2 0 002 2z\"/></svg>");
 
 /***/ }),
 

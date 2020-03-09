@@ -1,10 +1,10 @@
 <template>
     <div class="row">
-        <div class="col col-6 m-l-75">
+        <div class="col col-5 m-l-75">
             <form action="" method="" @submit.prevent="onSubmit">
                 <div class="row">
-                    <input class="input input-text col col-6" name="grid" type="text" placeholder="81-digit grid" v-model="encoding"/>
-                    <button class="button col col-2 m-l-30" type="submit">Solve</button>
+                    <input class="input input-text col col-8" name="grid" type="text" placeholder="81-digit grid" v-model="encoding"/>
+                    <button class="button col col-2 m-l-10" type="submit">Solve</button>
                 </div>
             </form>
             <table class="sudoku-grid m-t-20">
@@ -27,6 +27,20 @@
                           <span v-if="cell.hasValue()" class="sudoku-cell-value" v-text="cell.value"></span>
                       </td>
                   </tr>
+            </table>
+        </div>
+        <div>
+            <table class="control-grid m-t-55">
+                <tr class="" v-for="i in 9" :key="i">
+                    <td class="control-cell">{{i}}</td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table class="control-grid m-t-55">
+                <tr><td class="control-cell" alt="Pencil Mark" title="Pencil Mark"><svg-vue icon="edit" class="control-icon"></svg-vue></td></tr>
+                <tr><td class="control-cell" alt="Undo" title="Undo"><svg-vue icon="undo" class="control-icon"></svg-vue></td></tr>
+                <tr><td class="control-cell" alt="Select" title="Select"><svg-vue icon="touch" class="control-icon"></svg-vue></td></tr>
             </table>
         </div>
     </div>
@@ -162,5 +176,22 @@
         }
     }
 
+    .control-grid {
+        border-collapse:collapse;
+        height: rem(560);
 
+        .control-cell {
+            width: rem(60);
+            margin:0;
+            text-align: center;
+            font-weight: 700;
+            vertical-align: middle;
+            border: rem(1) solid $light-gray;
+
+            .control-icon {
+                width: 50%;
+                padding: rem(1) 0;
+            }
+        }
+    }
 </style>
