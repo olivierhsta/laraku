@@ -1878,6 +1878,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1928,14 +1933,17 @@ __webpack_require__.r(__webpack_exports__);
       num.isSelected = num.isSelected ? false : true;
       this.$root.$emit('number-selected', this.getSelectedNumbers());
     },
+    pencilMarkClicked: function pencilMarkClicked() {
+      this.pencilMarkMode = this.pencilMarkMode ? false : true;
+      this.$root.$emit('pencilmarks-mode-toggle', this.pencilMarkMode);
+    },
+    undoClicked: function undoClicked() {
+      this.$root.$emit('undo');
+    },
     selectionClicked: function selectionClicked() {
       this.unselectAllNumbers();
       this.selectionMode = this.selectionMode ? false : true;
       this.$root.$emit('selection-mode-toggle', this.selectionMode);
-    },
-    pencilMarkClicked: function pencilMarkClicked() {
-      this.pencilMarkMode = this.pencilMarkMode ? false : true;
-      this.$root.$emit('pencilmarks-mode-toggle', this.pencilMarkMode);
     },
     getSelectedNumbers: function getSelectedNumbers() {
       var selectedNums = [];
@@ -6601,7 +6609,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n@media only screen and (min-width: 1025px) {\n.control-grid {\n    height: 33.75rem;\n}\n}\n@media only screen and (max-width: 1024px) {\n.control-grid {\n    width: 33.75rem;\n}\n}\n.control-grid.num-pad .control-cell {\n  font-size: 1.875rem;\n  height: 3.75rem;\n  line-height: 3.75rem;\n  width: 3.75rem;\n}\n.control-grid.action-pad .control-cell {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  margin: auto;\n}\n@media only screen and (min-width: 1025px) {\n.control-grid.action-pad .control-cell {\n    height: 11.5rem;\n    line-height: 11.5rem;\n    width: 3.75rem;\n}\n}\n@media only screen and (max-width: 1024px) {\n.control-grid.action-pad .control-cell {\n    height: 3.75rem;\n    line-height: 3.75rem;\n    width: 11.25rem;\n}\n}\n.control-grid .control-cell {\n  margin: 0;\n  text-align: center;\n  font-weight: 700;\n  vertical-align: middle;\n  border: 0.0625rem solid #d0d0d0;\n}\n.control-grid .control-cell.cell-selected {\n  background: #ffa56e;\n}\n.control-grid .control-cell .control-icon {\n  width: 1.875rem;\n  padding: 0.0625rem 0;\n}", ""]);
+exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n@media only screen and (min-width: 1025px) {\n.control-grid {\n    height: 33.75rem;\n}\n}\n@media only screen and (max-width: 1024px) {\n.control-grid {\n    width: 33.75rem;\n}\n}\n.control-grid.num-pad .control-cell {\n  font-size: 1.875rem;\n  height: 3.75rem;\n  line-height: 3.75rem;\n  width: 3.75rem;\n}\n.control-grid.action-pad .control-cell {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  margin: auto;\n}\n@media only screen and (min-width: 1025px) {\n.control-grid.action-pad .control-cell {\n    height: 11.4375rem;\n    line-height: 11.4375rem;\n    width: 3.75rem;\n}\n}\n@media only screen and (max-width: 1024px) {\n.control-grid.action-pad .control-cell {\n    height: 3.75rem;\n    line-height: 3.75rem;\n    width: 11.25rem;\n}\n}\n.control-grid .control-cell {\n  margin: 0;\n  text-align: center;\n  font-weight: 700;\n  vertical-align: middle;\n  border: 0.0625rem solid #d0d0d0;\n}\n.control-grid .control-cell.cell-selected {\n  background: #ffa56e;\n}\n.control-grid .control-cell .control-icon {\n  width: 1.875rem;\n  padding: 0.0625rem 0;\n}", ""]);
 
 // exports
 
@@ -38233,7 +38241,15 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "control-cell", attrs: { alt: "Undo", title: "Undo" } },
+        {
+          staticClass: "control-cell",
+          attrs: { alt: "Undo", title: "Undo" },
+          on: {
+            click: function($event) {
+              return _vm.undoClicked()
+            }
+          }
+        },
         [
           _c("svg-vue", {
             staticClass: "control-icon",
@@ -51043,8 +51059,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\OlivierHassaoui\AppData\Local\xampp\htdocs\laraku\resources\assets\js\app.js */"./resources/assets/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\OlivierHassaoui\AppData\Local\xampp\htdocs\laraku\resources\assets\sass\app.scss */"./resources/assets/sass/app.scss");
+__webpack_require__(/*! C:\Users\olivi\xampp\htdocs\sudoku\resources\assets\js\app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\olivi\xampp\htdocs\sudoku\resources\assets\sass\app.scss */"./resources/assets/sass/app.scss");
 
 
 /***/ })

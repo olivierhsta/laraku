@@ -8,10 +8,15 @@
         <div class="control-grid action-pad row no-desktop">
             <div class="control-cell" :class="{'cell-selected':pencilMarkMode}" alt="Pencil Mark" title="Pencil Mark" @click="pencilMarkClicked()">
                 <svg-vue icon="edit" class="control-icon"></svg-vue>
+                <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
             </div>
-            <div class="control-cell" alt="Undo" title="Undo"><svg-vue icon="undo" class="control-icon"></svg-vue></div>
+            <div class="control-cell" alt="Undo" title="Undo" @click="undoClicked()">
+                <svg-vue icon="undo" class="control-icon"></svg-vue>
+                <!-- Icons made by <a href="https://www.flaticon.com/authors/bqlqn" title="bqlqn">bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> -->
+            </div>
             <div class="control-cell" :class="{'cell-selected':selectionMode}" alt="Select" title="Select" @click="selectionClicked()">
                 <svg-vue icon="touch" class="control-icon"></svg-vue>
+                <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
             </div>
         </div>
     </div>
@@ -34,7 +39,7 @@
             pencilMarkMode:false
         }),
         computed: {
-            
+
         },
         methods: {
             unselectAllNumbers() {
@@ -49,14 +54,17 @@
                 num.isSelected = num.isSelected ? false : true;
                 this.$root.$emit('number-selected', this.getSelectedNumbers());
             },
+            pencilMarkClicked() {
+                this.pencilMarkMode = this.pencilMarkMode ? false : true;
+                this.$root.$emit('pencilmarks-mode-toggle', this.pencilMarkMode);
+            },
+            undoClicked() {
+                this.$root.$emit('undo');
+            },
             selectionClicked() {
                 this.unselectAllNumbers();
                 this.selectionMode = this.selectionMode ? false : true;
                 this.$root.$emit('selection-mode-toggle', this.selectionMode);
-            },
-            pencilMarkClicked() {
-                this.pencilMarkMode = this.pencilMarkMode ? false : true;
-                this.$root.$emit('pencilmarks-mode-toggle', this.pencilMarkMode);
             },
             getSelectedNumbers() {
                 let selectedNums = [];
@@ -91,8 +99,8 @@
 
         &.action-pad .control-cell {
             @include only(desktop) {
-                height:rem(184); // 184 is to account for borders
-                line-height:rem(184);
+                height:rem(183);
+                line-height:rem(183);
                 width:rem(60);
             }
             @include below(desktop) {
