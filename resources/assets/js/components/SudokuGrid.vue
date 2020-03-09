@@ -1,10 +1,10 @@
 <template>
-    <div class="row">
-        <div class="col col-5 m-l-75">
+    <div>
+        <div class="m-l-75">
             <form action="" method="" @submit.prevent="onSubmit">
                 <div class="row">
                     <input class="input input-text col col-8" name="grid" type="text" placeholder="81-digit grid" v-model="encoding"/>
-                    <button class="button col col-2 m-l-10" type="submit">Solve</button>
+                    <button class="button col col-2 m-l-30" type="submit">Solve</button>
                 </div>
             </form>
             <table class="sudoku-grid m-t-20">
@@ -27,20 +27,6 @@
                           <span v-if="cell.hasValue()" class="sudoku-cell-value" v-text="cell.value"></span>
                       </td>
                   </tr>
-            </table>
-        </div>
-        <div>
-            <table class="control-grid m-t-55">
-                <tr class="" v-for="i in 9" :key="i">
-                    <td class="control-cell">{{i}}</td>
-                </tr>
-            </table>
-        </div>
-        <div>
-            <table class="control-grid m-t-55">
-                <tr><td class="control-cell" alt="Pencil Mark" title="Pencil Mark"><svg-vue icon="edit" class="control-icon"></svg-vue></td></tr>
-                <tr><td class="control-cell" alt="Undo" title="Undo"><svg-vue icon="undo" class="control-icon"></svg-vue></td></tr>
-                <tr><td class="control-cell" alt="Select" title="Select"><svg-vue icon="touch" class="control-icon"></svg-vue></td></tr>
             </table>
         </div>
     </div>
@@ -140,8 +126,8 @@
 <style lang="scss">
     @import './../../sass/_helpers.scss';
     .sudoku-grid {
-        height:rem(560);
-        width: rem(560);
+        height:rem(540);
+        width: rem(540);
         border: rem(2) solid black;
         text-align: center;
         border-collapse: collapse;
@@ -164,33 +150,14 @@
             }
 
             .sudoku-cell-value {
-                font-size: xx-large;
+                font-size: rem(30);
             }
 
             .sudoku-pencil-marks {
                 width: 100%;
-                line-height: 1.2;
+                line-height: rem(16.5);
                 margin:0;
                 padding:0;
-            }
-        }
-    }
-
-    .control-grid {
-        border-collapse:collapse;
-        height: rem(560);
-
-        .control-cell {
-            width: rem(60);
-            margin:0;
-            text-align: center;
-            font-weight: 700;
-            vertical-align: middle;
-            border: rem(1) solid $light-gray;
-
-            .control-icon {
-                width: 50%;
-                padding: rem(1) 0;
             }
         }
     }

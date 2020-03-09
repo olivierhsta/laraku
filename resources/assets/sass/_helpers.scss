@@ -31,15 +31,15 @@
 
 @mixin only($format) {
     @if $format == mobile {
-        @media (max-width : $mq-mobile) {
+        @media (max-width : $ms-mobile) {
             @content;
         }
     } @else if  $format == tablet {
-        @media only screen and (min-width : $mq-mobile + 1) and (max-width : $mq-tablet) {
+        @media only screen and (min-width : $ms-mobile + 1) and (max-width : $ms-tablet) {
     		@content;
     	}
     } @else if $format == desktop {
-        @media only screen and (min-width : $mq-tablet + 1) and (max-width : $mq-desktop) {
+        @media only screen and (min-width : $ms-tablet + 1) {
     		@content;
     	}
     } @else {
@@ -47,14 +47,14 @@
     }
 }
 
-// above and equal
+// strickly above
 @mixin above($format) {
     @if $format == mobile {
-        @media only screen and (min-width : $mq-mobile + 1) {
+        @media only screen and (min-width : $ms-mobile + 1) {
     		@content;
     	}
     } @else if  $format == tablet {
-        @media only screen and (min-width : $mq-tablet + 1) {
+        @media only screen and (min-width : $ms-tablet + 1) {
     		@content;
     	}
     } @else {
@@ -62,14 +62,14 @@
     }
 }
 
-// below and equal
+// strickly below
 @mixin below($format) {
     @if  $format == tablet {
-        @media only screen and (max-width : $mq-tablet) {
+        @media only screen and (max-width : $ms-mobile) {
     		@content;
     	}
     } @else if  $format == desktop {
-        @media only screen and (max-width : $mq-desktop) {
+        @media only screen and (max-width : $ms-tablet) {
     		@content;
     	}
     } @else {

@@ -1,20 +1,20 @@
 @font-face {
-  font-family: 'Josefin Slab';
-  src: url("/../fonts/JosefinSlab-Regular.ttf") format("truetype");
+  font-family: 'Inter';
+  src: url("/../fonts/Inter-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Montserrat';
-  src: url("/../fonts/JosefinSlab-Bold.ttf") format("truetype");
+  font-family: 'Inter';
+  src: url("/../fonts/Inter-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Montserrat';
-  src: url("/../fonts/JosefinSlab-Light.ttf") format("truetype");
+  font-family: 'Inter';
+  src: url("/../fonts/Inter-Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
 }
@@ -536,10 +536,28 @@
   display: flex;
   /**
      * Will produce col-1, col-mobile-1, col-tablet-1, col-desktop-1, etc.
-     * We using the desktop or tablet class, it will affect ONLY that
+     * When using the desktop or tablet class, it will affect ONLY that
      * screen size (and not the ones below).
      * col-1, ... col-12, will affect all screen sizes
      */
+}
+
+@media (max-width: 480px) {
+  .row.no-mobile {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 1024px) {
+  .row.no-tablet {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .row.no-desktop {
+    display: block;
+  }
 }
 
 @media (max-width: 480px) {
@@ -554,7 +572,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-1 {
     width: 8.33333333%;
   }
@@ -576,7 +594,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-2 {
     width: 16.66666667%;
   }
@@ -598,7 +616,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-3 {
     width: 25%;
   }
@@ -620,7 +638,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-4 {
     width: 33.33333333%;
   }
@@ -642,7 +660,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-5 {
     width: 41.66666667%;
   }
@@ -664,7 +682,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-6 {
     width: 50%;
   }
@@ -686,7 +704,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-7 {
     width: 58.33333333%;
   }
@@ -708,7 +726,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-8 {
     width: 66.66666667%;
   }
@@ -730,7 +748,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-9 {
     width: 75%;
   }
@@ -752,7 +770,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-10 {
     width: 83.33333333%;
   }
@@ -774,7 +792,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-11 {
     width: 91.66666667%;
   }
@@ -796,7 +814,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1382px) {
+@media only screen and (min-width: 1025px) {
   .row .col-desktop-12 {
     width: 100%;
   }
@@ -839,6 +857,6 @@
 }
 
 html {
-  font-family: "Josefin Slab", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 

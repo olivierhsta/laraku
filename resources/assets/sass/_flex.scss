@@ -1,9 +1,27 @@
 .row {
     display: flex;
 
+    @include only(mobile) {
+        &.no-mobile {
+            display:block;
+        }
+    }
+
+    @include only(tablet) {
+        &.no-tablet {
+            display:block;
+        }
+    }
+
+    @include only(desktop) {
+        &.no-desktop {
+            display:block;
+        }
+    }
+
     /**
      * Will produce col-1, col-mobile-1, col-tablet-1, col-desktop-1, etc.
-     * We using the desktop or tablet class, it will affect ONLY that
+     * When using the desktop or tablet class, it will affect ONLY that
      * screen size (and not the ones below).
      * col-1, ... col-12, will affect all screen sizes
      */
