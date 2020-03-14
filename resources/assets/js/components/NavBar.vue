@@ -23,5 +23,9 @@
         height: rem(50);
         background-color: $orange;
         color: white;
+
+        .logo {
+            font-weight: 300;
+        }
     }
 </style>

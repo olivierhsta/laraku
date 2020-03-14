@@ -21,10 +21,13 @@
                                       <small v-if="cell.hasPencilMark((i-1)*3+j)">
                                           {{ (i-1)*3+j }}
                                       </small>
+                                      <small style="visibility:hidden;" v-else>
+                                          0
+                                      </small>
                                   </td>
                               </tr>
                           </table>
-                          <span v-if="cell.hasValue()" class="sudoku-cell-value" v-text="cell.value"></span>
+                          <span v-else-if="cell.hasValue()" class="sudoku-cell-value" v-text="cell.value"></span>
                       </td>
                   </tr>
             </table>
@@ -37,7 +40,9 @@
         data() {
             return {
                 encoding : "",
-                grid: new Grid()
+                grid: new Grid(),
+                numberSelected: [],
+                pencilMarksMode:false,
             }
         },
         methods: {
@@ -57,11 +62,11 @@
                 return cell.isSelected;
             },
             click(cell) {
-                for (let i = 0; i < this.grid.getCells().length; i++) {
-                    let otherCell = this.grid.getCells()[i];
-                    otherCell.unselect();
+                if (this.pencilMarksMode) {
+                    cell.setPencilMarks(this.numberSelected);
+                } else {
+                    cell.setValue(this.numberSelected[0]);
                 }
-                cell.select();
             },
             isBorderedRow(i) {
                 return i%3==0;
@@ -69,7 +74,11 @@
             isBorderedCell(i) {
                 return i%3==0;
             }
-        }
+        },
+        created: function() {
+            this.$root.$on('number-selected', (ns) => this.numberSelected = ns);
+            this.$root.$on('pencilmarks-mode-toggle', (pmm) => this.pencilMarksMode = pmm);
+        },
     }
 
     class Grid {
@@ -100,6 +109,16 @@
                 this.pencilMarks = [];
                 this.value = content;
             }
+        }
+
+        setValue(value) {
+            this.pencilMarks = [];
+            this.value = value;
+        }
+
+        setPencilMarks(pm) {
+            this.pencilMarks = pm;
+            this.value = null;
         }
 
         hasPencilMarks() {

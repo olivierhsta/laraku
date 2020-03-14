@@ -2031,11 +2031,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       encoding: "",
-      grid: new Grid()
+      grid: new Grid(),
+      numberSelected: [],
+      pencilMarksMode: false
     };
   },
   methods: {
@@ -2053,12 +2058,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       return cell.isSelected;
     },
     click: function click(cell) {
-      for (var i = 0; i < this.grid.getCells().length; i++) {
-        var otherCell = this.grid.getCells()[i];
-        otherCell.unselect();
+      if (this.pencilMarksMode) {
+        cell.setPencilMarks(this.numberSelected);
+      } else {
+        cell.setValue(this.numberSelected[0]);
       }
-
-      cell.select();
     },
     isBorderedRow: function isBorderedRow(i) {
       return i % 3 == 0;
@@ -2066,6 +2070,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     isBorderedCell: function isBorderedCell(i) {
       return i % 3 == 0;
     }
+  },
+  created: function created() {
+    var _this2 = this;
+
+    this.$root.$on('number-selected', function (ns) {
+      return _this2.numberSelected = ns;
+    });
+    this.$root.$on('pencilmarks-mode-toggle', function (pmm) {
+      return _this2.pencilMarksMode = pmm;
+    });
   }
 });
 
@@ -2121,6 +2135,18 @@ function () {
   }
 
   _createClass(Cell, [{
+    key: "setValue",
+    value: function setValue(value) {
+      this.pencilMarks = [];
+      this.value = value;
+    }
+  }, {
+    key: "setPencilMarks",
+    value: function setPencilMarks(pm) {
+      this.pencilMarks = pm;
+      this.value = null;
+    }
+  }, {
     key: "hasPencilMarks",
     value: function hasPencilMarks() {
       return this.pencilMarks.length !== 0;
@@ -6628,7 +6654,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.navbar {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-align: center;\n          align-items: center;\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 100%;\n  height: 3.125rem;\n  background-color: #ffa56e;\n  color: white;\n}", ""]);
+exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.navbar {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-align: center;\n          align-items: center;\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 100%;\n  height: 3.125rem;\n  background-color: #ffa56e;\n  color: white;\n}\n.navbar .logo {\n  font-weight: 300;\n}", ""]);
 
 // exports
 
@@ -38194,10 +38220,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row no-mobile no-tablet m-t-55 m-l-75" }, [
+  return _c("div", { staticClass: "row row-desktop m-t-55 m-l-75" }, [
     _c(
       "div",
-      { staticClass: "control-grid num-pad row no-desktop" },
+      { staticClass: "control-grid num-pad row row-mobile row-tablet" },
       _vm._l(_vm.controlNums, function(num) {
         return _c(
           "div",
@@ -38217,69 +38243,73 @@ var render = function() {
       0
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "control-grid action-pad row no-desktop" }, [
-      _c(
-        "div",
-        {
-          staticClass: "control-cell",
-          class: { "cell-selected": _vm.pencilMarkMode },
-          attrs: { alt: "Pencil Mark", title: "Pencil Mark" },
-          on: {
-            click: function($event) {
-              return _vm.pencilMarkClicked()
+    _c(
+      "div",
+      { staticClass: "control-grid action-pad row row-mobile row-tablet" },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "control-cell",
+            class: { "cell-selected": _vm.pencilMarkMode },
+            attrs: { alt: "Pencil Mark", title: "Pencil Mark" },
+            on: {
+              click: function($event) {
+                return _vm.pencilMarkClicked()
+              }
             }
-          }
-        },
-        [
-          _c("svg-vue", {
-            staticClass: "control-icon",
-            attrs: { icon: "edit" }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "control-cell",
-          attrs: { alt: "Undo", title: "Undo" },
-          on: {
-            click: function($event) {
-              return _vm.undoClicked()
+          },
+          [
+            _c("svg-vue", {
+              staticClass: "control-icon",
+              attrs: { icon: "edit" }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "control-cell",
+            attrs: { alt: "Undo", title: "Undo" },
+            on: {
+              click: function($event) {
+                return _vm.undoClicked()
+              }
             }
-          }
-        },
-        [
-          _c("svg-vue", {
-            staticClass: "control-icon",
-            attrs: { icon: "undo" }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "control-cell",
-          class: { "cell-selected": _vm.selectionMode },
-          attrs: { alt: "Select", title: "Select" },
-          on: {
-            click: function($event) {
-              return _vm.selectionClicked()
+          },
+          [
+            _c("svg-vue", {
+              staticClass: "control-icon",
+              attrs: { icon: "undo" }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "control-cell",
+            class: { "cell-selected": _vm.selectionMode },
+            attrs: { alt: "Select", title: "Select" },
+            on: {
+              click: function($event) {
+                return _vm.selectionClicked()
+              }
             }
-          }
-        },
-        [
-          _c("svg-vue", {
-            staticClass: "control-icon",
-            attrs: { icon: "touch" }
-          })
-        ],
-        1
-      )
-    ])
+          },
+          [
+            _c("svg-vue", {
+              staticClass: "control-icon",
+              attrs: { icon: "touch" }
+            })
+          ],
+          1
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -38425,7 +38455,15 @@ var render = function() {
                                           "\n                                  "
                                       )
                                     ])
-                                  : _vm._e()
+                                  : _c(
+                                      "small",
+                                      { staticStyle: { visibility: "hidden" } },
+                                      [
+                                        _vm._v(
+                                          "\n                                      0\n                                  "
+                                        )
+                                      ]
+                                    )
                               ])
                             }),
                             0
@@ -38433,9 +38471,7 @@ var render = function() {
                         }),
                         0
                       )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  cell.hasValue()
+                    : cell.hasValue()
                     ? _c("span", {
                         staticClass: "sudoku-cell-value",
                         domProps: { textContent: _vm._s(cell.value) }

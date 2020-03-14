@@ -1,11 +1,11 @@
 <template>
-    <div class="row no-mobile no-tablet m-t-55 m-l-75">
-        <div class="control-grid num-pad row no-desktop">
+    <div class="row row-desktop m-t-55 m-l-75">
+        <div class="control-grid num-pad row row-mobile row-tablet">
             <div class="control-cell" :class="{'cell-selected':num.isSelected}" v-for="num in controlNums" :key="num.value" @click="numberClicked(num)">
                 {{num.value}}
             </div>
         </div>
-        <div class="control-grid action-pad row no-desktop">
+        <div class="control-grid action-pad row row-mobile row-tablet">
             <div class="control-cell" :class="{'cell-selected':pencilMarkMode}" alt="Pencil Mark" title="Pencil Mark" @click="pencilMarkClicked()">
                 <svg-vue icon="edit" class="control-icon"></svg-vue>
                 <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
