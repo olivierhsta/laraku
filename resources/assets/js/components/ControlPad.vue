@@ -82,45 +82,32 @@
     @import './../../sass/_helpers.scss';
 
     .control-grid {
+        display: flex;
 
         @include only(desktop) {
             height: rem(540);
+            flex-direction: column;
+
         }
         @include below(desktop) {
             width: rem(540);
         }
 
-        &.num-pad .control-cell {
-            font-size: rem(30);
-            height:rem(60);
-            line-height:rem(60);
-            width:rem(60);
-        }
-
-        &.action-pad .control-cell {
-            @include only(desktop) {
-                height:rem(183);
-                line-height:rem(183);
-                width:rem(60);
-            }
-            @include below(desktop) {
-                height:rem(60);
-                line-height:rem(60);
-                width:rem(180);
-            }
-
+        .control-cell {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: auto;
-        }
-
-        .control-cell {
-            margin:0;
-            text-align: center;
+            font-size: rem(30);
             font-weight: 700;
-            vertical-align: middle;
             border: rem(1) solid $light-gray;
+            width:rem(60);
+            height: 100%;
+
+            @include below(desktop) {
+                height:rem(60);
+                line-height:rem(60);
+                width:100%;
+            }
 
             &.cell-selected {
                 background: $orange;

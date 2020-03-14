@@ -155,9 +155,10 @@
         .sudoku-cell {
             width: rem(60);
             height: rem(60);
-            margin:0;
-            padding:0;
-            vertical-align: middle;
+            max-width: rem(60);
+            max-height: rem(60);
+            min-width: rem(60);
+            min-height: rem(60);
             border: rem(1) solid black;
 
             &.sudoku-border-right-md {
