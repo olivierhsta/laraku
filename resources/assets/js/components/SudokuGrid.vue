@@ -1,23 +1,15 @@
 <template>
     <div>
-        <div class="m-l-75">
-            <form action="" method="" @submit.prevent="onSubmit">
-                <div class="row">
-                    <input class="input input-text col col-8" name="grid" type="text" placeholder="81-digit grid" v-model="encoding"/>
-                    <button class="button col col-2 m-l-30" type="submit">Solve</button>
-                </div>
-            </form>
-            <table class="sudoku-grid m-t-20">
-                  <tr v-for="row in 9" :key="row">
-                      <sudoku-cell
-                           v-for="(cell, col) in getCells(9*(row-1), 9*row)"
-                           :key="row+''+col"
-                           :content="cell" :col="col" :row="row"
-                           @moveMade="setLastMove">
-                       </sudoku-cell>
-                  </tr>
-            </table>
-        </div>
+        <table class="sudoku-grid">
+              <tr v-for="row in 9" :key="row">
+                  <sudoku-cell
+                       v-for="(cell, col) in getCells(9*(row-1), 9*row)"
+                       :key="row+''+col"
+                       :content="cell" :col="col" :row="row"
+                       @moveMade="addLastMove">
+                   </sudoku-cell>
+              </tr>
+        </table>
     </div>
 </template>
 
@@ -25,30 +17,15 @@
     export default {
         data() {
             return {
-                encoding : "",
                 cells:[],
-                lastMove:{}
+                lastMoves:[]
             }
         },
         methods: {
-            onSubmit() {
-                axios.post(
-                    '/api/solver',
-                    { grid: this.encoding,
-                      returnFormat: 'row'
-                    }
-                ).then(
-                    response => {
-                        let encoding = response.data.data.solved_grid;
-                        for (let i = 0; i < 81; i++) {
-                            this.$set(this.cells, i, encoding[i]);
-                        }
-                    }
-                );
-            },
             undo() {
-                if (Object.keys(this.lastMove).length !== 0) {
-                    this.$set(this.cells, (this.lastMove['row']-1)*9+this.lastMove['col'], this.lastMove['old']);
+                if (Object.keys(this.lastMoves).length !== 0) {
+                    let lastMove = this.lastMoves.pop();
+                    this.$set(this.cells, (lastMove['row']-1)*9+lastMove['col'], lastMove['old']);
                 }
             },
             getCells(begin=0,end=81) {
@@ -57,23 +34,31 @@
             getCell(row,col) {
                 return this.cells[row*9+col]
             },
-            setLastMove(lm) {
-                this.lastMove = lm;
+            addLastMove(lm) {
+                this.lastMoves.push(lm);
+            },
+            writeValues(encoding = []) {
+                for (let i = 0; i < 81; i++) {
+                    if (i in encoding) {
+                        this.$set(this.cells, i, encoding[i]);
+                    } else {
+                        this.$set(this.cells, i, null);
+                    }
+                }
             }
         },
         created: function() {
-            for (let i = 0; i < 81; i++) {
-                this.cells[i] = null;
-            }
+            this.writeValues(); // so and empty grid is shown on load
             this.$root.$on('undo', () => this.undo());
+            this.$root.$on('write-grid', (e) => this.writeValues(e));
         },
     }
 </script>
 <style lang="scss">
     @import './../../sass/_helpers.scss';
     .sudoku-grid {
-        height:rem(540);
-        width: rem(540);
+        height:rem(570);
+        width: rem(570);
         border: rem(2) solid black;
         text-align: center;
         border-collapse: collapse;

@@ -1991,14 +1991,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
 //
 //
 //
@@ -2059,8 +2051,25 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.value = value;
     },
     setPencilMarks: function setPencilMarks(pm) {
-      this.pencilMarks = [].concat(_toConsumableArray(this.pencilMarks), _toConsumableArray(pm));
-      ;
+      var _this = this;
+
+      var toAdd = [];
+      var toRemove = [];
+      pm.forEach(function (pencilMark, i) {
+        if (_this.pencilMarks.indexOf(pencilMark) > -1) {
+          toRemove.push(i);
+        } else {
+          toAdd.push(pencilMark);
+        }
+      }); // loop from the end so the indexing stays the same for the futur iterations
+
+      for (var i = toRemove.length - 1; i >= 0; i--) {
+        this.pencilMarks.splice(i, 1);
+      }
+
+      toAdd.forEach(function (pm, i) {
+        _this.pencilMarks.push(pm);
+      });
       this.value = null;
     },
     getValue: function getValue() {
@@ -2088,10 +2097,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var oldCell = null;
       var newCell = null;
 
-      if (this.value !== null) {
+      if (this.hasValue()) {
         oldCell = this.value;
-      } else if (this.pencilMarks !== []) {
-        oldCell = this.pencilMarks;
+      } else if (this.hasPencilMarks()) {
+        oldCell = this.pencilMarks.slice();
       }
 
       if (this.pencilMarksMode) {
@@ -2102,23 +2111,28 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         newCell = this.value;
       }
 
-      this.$emit('moveMade', {
-        'row': this.row,
-        'col': this.col,
-        'new': newCell,
-        'old': oldCell
-      });
+      console.log(oldCell);
+      console.log(newCell);
+
+      if (newCell !== oldCell) {
+        this.$emit('moveMade', {
+          'row': this.row,
+          'col': this.col,
+          'new': newCell,
+          'old': oldCell
+        });
+      }
     }
   },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     this.construct();
     this.$root.$on('number-selected', function (ns) {
-      return _this.numbersSelected = ns;
+      return _this2.numbersSelected = ns;
     });
     this.$root.$on('pencilmarks-mode-toggle', function (pmm) {
-      return _this.pencilMarksMode = pmm;
+      return _this2.pencilMarksMode = pmm;
     });
   },
   watch: {
@@ -2157,6 +2171,68 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      cells: [],
+      lastMoves: []
+    };
+  },
+  methods: {
+    undo: function undo() {
+      if (Object.keys(this.lastMoves).length !== 0) {
+        var lastMove = this.lastMoves.pop();
+        this.$set(this.cells, (lastMove['row'] - 1) * 9 + lastMove['col'], lastMove['old']);
+      }
+    },
+    getCells: function getCells() {
+      var begin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 81;
+      return this.cells.slice(begin, end);
+    },
+    getCell: function getCell(row, col) {
+      return this.cells[row * 9 + col];
+    },
+    addLastMove: function addLastMove(lm) {
+      this.lastMoves.push(lm);
+    },
+    writeValues: function writeValues() {
+      var encoding = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+      for (var i = 0; i < 81; i++) {
+        if (i in encoding) {
+          this.$set(this.cells, i, encoding[i]);
+        } else {
+          this.$set(this.cells, i, null);
+        }
+      }
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    this.writeValues(); // so and empty grid is shown on load
+
+    this.$root.$on('undo', function () {
+      return _this.undo();
+    });
+    this.$root.$on('write-grid', function (e) {
+      return _this.writeValues(e);
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuInput.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuInput.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 //
 //
 //
@@ -2166,11 +2242,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  name: "",
   data: function data() {
     return {
-      encoding: "",
-      cells: [],
-      lastMove: {}
+      encoding: ""
     };
   },
   methods: {
@@ -2183,38 +2258,9 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         var encoding = response.data.data.solved_grid;
 
-        for (var i = 0; i < 81; i++) {
-          _this.$set(_this.cells, i, encoding[i]);
-        }
+        _this.$root.$emit('write-grid', encoding);
       });
-    },
-    undo: function undo() {
-      if (Object.keys(this.lastMove).length !== 0) {
-        this.$set(this.cells, (this.lastMove['row'] - 1) * 9 + this.lastMove['col'], this.lastMove['old']);
-      }
-    },
-    getCells: function getCells() {
-      var begin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 81;
-      return this.cells.slice(begin, end);
-    },
-    getCell: function getCell(row, col) {
-      return this.cells[row * 9 + col];
-    },
-    setLastMove: function setLastMove(lm) {
-      this.lastMove = lm;
     }
-  },
-  created: function created() {
-    var _this2 = this;
-
-    for (var i = 0; i < 81; i++) {
-      this.cells[i] = null;
-    }
-
-    this.$root.$on('undo', function () {
-      return _this2.undo();
-    });
   }
 });
 
@@ -6677,7 +6723,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.control-grid {\n  display: -webkit-box;\n  display: flex;\n}\n@media only screen and (min-width: 1351px) {\n.control-grid {\n    height: 33.75rem;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n            flex-direction: column;\n}\n}\n@media only screen and (max-width: 1350px) {\n.control-grid {\n    width: 33.75rem;\n}\n}\n.control-grid .control-cell {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  font-size: 1.875rem;\n  font-weight: 700;\n  border: 0.0625rem solid #d0d0d0;\n  width: 3.75rem;\n  height: 100%;\n}\n@media only screen and (max-width: 1350px) {\n.control-grid .control-cell {\n    height: 3.75rem;\n    line-height: 3.75rem;\n    width: 100%;\n}\n}\n.control-grid .control-cell.cell-selected {\n  background: #ffa56e;\n}\n.control-grid .control-cell .control-icon {\n  width: 1.875rem;\n  padding: 0.0625rem 0;\n}", ""]);
+exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.control-grid {\n  display: -webkit-box;\n  display: flex;\n}\n@media only screen and (min-width: 1351px) {\n.control-grid {\n    height: 35.625rem;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n            flex-direction: column;\n}\n}\n@media only screen and (max-width: 1350px) {\n.control-grid {\n    width: 35.625rem;\n}\n}\n.control-grid .control-cell {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  font-size: 1.875rem;\n  font-weight: 700;\n  border: 0.0625rem solid #d0d0d0;\n  width: 3.75rem;\n  height: 100%;\n}\n@media only screen and (max-width: 1350px) {\n.control-grid .control-cell {\n    height: 3.75rem;\n    line-height: 3.75rem;\n    width: 100%;\n}\n}\n.control-grid .control-cell.cell-selected {\n  background: #ffa56e;\n}\n.control-grid .control-cell .control-icon {\n  width: 1.875rem;\n  padding: 0.0625rem 0;\n}", ""]);
 
 // exports
 
@@ -6734,7 +6780,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.sudoku-grid {\n  height: 33.75rem;\n  width: 33.75rem;\n  border: 0.125rem solid black;\n  text-align: center;\n  border-collapse: collapse;\n  font-weight: 300;\n}", ""]);
+exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.sudoku-grid {\n  height: 35.625rem;\n  width: 35.625rem;\n  border: 0.125rem solid black;\n  text-align: center;\n  border-collapse: collapse;\n  font-weight: 300;\n}", ""]);
 
 // exports
 
@@ -38311,7 +38357,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row row-desktop m-t-55 m-l-75" }, [
+  return _c("div", { staticClass: "row row-desktop" }, [
     _c(
       "div",
       { staticClass: "control-grid num-pad row row-mobile row-tablet" },
@@ -38526,79 +38572,92 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "m-l-75" }, [
-      _c(
-        "form",
-        {
-          attrs: { action: "", method: "" },
+    _c(
+      "table",
+      { staticClass: "sudoku-grid" },
+      _vm._l(9, function(row) {
+        return _c(
+          "tr",
+          { key: row },
+          _vm._l(_vm.getCells(9 * (row - 1), 9 * row), function(cell, col) {
+            return _c("sudoku-cell", {
+              key: row + "" + col,
+              attrs: { content: cell, col: col, row: row },
+              on: { moveMade: _vm.addLastMove }
+            })
+          }),
+          1
+        )
+      }),
+      0
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuInput.vue?vue&type=template&id=63fe7f8c&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuInput.vue?vue&type=template&id=63fe7f8c& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      attrs: { action: "", method: "" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.onSubmit($event)
+        }
+      }
+    },
+    [
+      _c("div", { staticClass: "row" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.encoding,
+              expression: "encoding"
+            }
+          ],
+          staticClass: "input input-text col col-8",
+          attrs: { name: "grid", type: "text", placeholder: "81-digit grid" },
+          domProps: { value: _vm.encoding },
           on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.onSubmit($event)
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.encoding = $event.target.value
             }
           }
-        },
-        [
-          _c("div", { staticClass: "row" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.encoding,
-                  expression: "encoding"
-                }
-              ],
-              staticClass: "input input-text col col-8",
-              attrs: {
-                name: "grid",
-                type: "text",
-                placeholder: "81-digit grid"
-              },
-              domProps: { value: _vm.encoding },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.encoding = $event.target.value
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "button col col-2 m-l-30",
-                attrs: { type: "submit" }
-              },
-              [_vm._v("Solve")]
-            )
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "table",
-        { staticClass: "sudoku-grid m-t-20" },
-        _vm._l(9, function(row) {
-          return _c(
-            "tr",
-            { key: row },
-            _vm._l(_vm.getCells(9 * (row - 1), 9 * row), function(cell, col) {
-              return _c("sudoku-cell", {
-                key: row + "" + col,
-                attrs: { content: cell, col: col, row: row },
-                on: { moveMade: _vm.setLastMove }
-              })
-            }),
-            1
-          )
         }),
-        0
-      )
-    ])
-  ])
+        _vm._v(" "),
+        _c(
+          "button",
+          { staticClass: "button col col-2 m-l-30", attrs: { type: "submit" } },
+          [_vm._v("Solve")]
+        )
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -50789,6 +50848,7 @@ Vue.use(SvgVue);
 
 Vue.component('sudoku-cell', __webpack_require__(/*! ./components/SudokuCell.vue */ "./resources/assets/js/components/SudokuCell.vue")["default"]);
 Vue.component('sudoku-grid', __webpack_require__(/*! ./components/SudokuGrid.vue */ "./resources/assets/js/components/SudokuGrid.vue")["default"]);
+Vue.component('sudoku-input', __webpack_require__(/*! ./components/SudokuInput.vue */ "./resources/assets/js/components/SudokuInput.vue")["default"]);
 Vue.component('control-pad', __webpack_require__(/*! ./components/ControlPad.vue */ "./resources/assets/js/components/ControlPad.vue")["default"]);
 Vue.component('navigation-bar', __webpack_require__(/*! ./components/NavBar.vue */ "./resources/assets/js/components/NavBar.vue")["default"]);
 var app = new Vue({
@@ -51198,6 +51258,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuGrid_vue_vue_type_template_id_4df05918___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuGrid_vue_vue_type_template_id_4df05918___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SudokuInput.vue":
+/*!********************************************************!*\
+  !*** ./resources/assets/js/components/SudokuInput.vue ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SudokuInput_vue_vue_type_template_id_63fe7f8c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SudokuInput.vue?vue&type=template&id=63fe7f8c& */ "./resources/assets/js/components/SudokuInput.vue?vue&type=template&id=63fe7f8c&");
+/* harmony import */ var _SudokuInput_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SudokuInput.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/SudokuInput.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SudokuInput_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SudokuInput_vue_vue_type_template_id_63fe7f8c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SudokuInput_vue_vue_type_template_id_63fe7f8c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/SudokuInput.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SudokuInput.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/assets/js/components/SudokuInput.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuInput_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./SudokuInput.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuInput.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuInput_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SudokuInput.vue?vue&type=template&id=63fe7f8c&":
+/*!***************************************************************************************!*\
+  !*** ./resources/assets/js/components/SudokuInput.vue?vue&type=template&id=63fe7f8c& ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuInput_vue_vue_type_template_id_63fe7f8c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./SudokuInput.vue?vue&type=template&id=63fe7f8c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuInput.vue?vue&type=template&id=63fe7f8c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuInput_vue_vue_type_template_id_63fe7f8c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuInput_vue_vue_type_template_id_63fe7f8c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -54,7 +54,23 @@ export default {
             this.value = value;
         },
         setPencilMarks(pm) {
-            this.pencilMarks = [...this.pencilMarks, ...pm];;
+            let toAdd = []; let toRemove = [];
+            pm.forEach((pencilMark, i) => {
+                if (this.pencilMarks.indexOf(pencilMark) > -1) {
+                    toRemove.push(i);
+                } else {
+                    toAdd.push(pencilMark);
+                }
+            });
+            // loop from the end so the indexing stays the same for the futur iterations
+            for (var i = toRemove.length-1; i >= 0 ; i--) {
+                this.pencilMarks.splice(i,1);
+            }
+            toAdd.forEach((pm, i) => {
+                this.pencilMarks.push(pm);
+            });
+
+
             this.value = null;
         },
         getValue() {
@@ -81,10 +97,10 @@ export default {
         click() {
             let oldCell = null;
             let newCell = null;
-            if (this.value !== null) {
+            if (this.hasValue()) {
                 oldCell = this.value;
-            } else if (this.pencilMarks !== []) {
-                oldCell = this.pencilMarks;
+            } else if (this.hasPencilMarks()) {
+                oldCell = this.pencilMarks.slice();
             }
             if (this.pencilMarksMode) {
                 this.setPencilMarks(this.numbersSelected);
@@ -93,12 +109,16 @@ export default {
                 this.setValue(this.numbersSelected[0]);
                 newCell = this.value;
             }
-            this.$emit('moveMade', {
-                'row':this.row,
-                'col':this.col,
-                'new':newCell,
-                'old':oldCell
-            });
+            console.log(oldCell);
+            console.log(newCell);
+            if (newCell !== oldCell) {
+                this.$emit('moveMade', {
+                    'row':this.row,
+                    'col':this.col,
+                    'new':newCell,
+                    'old':oldCell
+                });
+            }
         },
     },
     created: function() {

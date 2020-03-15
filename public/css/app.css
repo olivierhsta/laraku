@@ -531,6 +531,12 @@
   margin: 0;
 }
 
+.container {
+  width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .row {
   /**
      * Will produce col-1, col-mobile-1, col-tablet-1, col-desktop-1, etc.
@@ -831,6 +837,7 @@
 }
 
 .button {
+  font-family: Inter;
   background: transparent;
   border: 0.0625rem solid #ffa56e;
   border-radius: 0.3125rem;
@@ -848,6 +855,7 @@
 }
 
 .input.input-text {
+  font-family: Inter;
   line-height: 0.625rem;
   padding: 0.625rem;
   border-radius: 0.3125rem;

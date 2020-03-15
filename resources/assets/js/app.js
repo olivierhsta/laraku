@@ -18,6 +18,7 @@ Vue.use(SvgVue);
 
 Vue.component('sudoku-cell', require('./components/SudokuCell.vue').default);
 Vue.component('sudoku-grid', require('./components/SudokuGrid.vue').default);
+Vue.component('sudoku-input', require('./components/SudokuInput.vue').default);
 Vue.component('control-pad', require('./components/ControlPad.vue').default);
 Vue.component('navigation-bar', require('./components/NavBar.vue').default);
 

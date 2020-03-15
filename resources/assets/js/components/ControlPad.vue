@@ -1,5 +1,5 @@
 <template>
-    <div class="row row-desktop m-t-55 m-l-75">
+    <div class="row row-desktop">
         <div class="control-grid num-pad row row-mobile row-tablet">
             <div class="control-cell" :class="{'cell-selected':num.isSelected}" v-for="num in controlNums" :key="num.value" @click="numberClicked(num)">
                 {{num.value}}
@@ -85,12 +85,12 @@
         display: flex;
 
         @include only(desktop) {
-            height: rem(540);
+            height: rem(570);
             flex-direction: column;
 
         }
         @include below(desktop) {
-            width: rem(540);
+            width: rem(570);
         }
 
         .control-cell {
