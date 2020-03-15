@@ -1982,6 +1982,157 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuCell.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuCell.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['row', 'col', 'content'],
+  name: "",
+  data: function data() {
+    return {
+      pencilMarks: [],
+      value: null,
+      isSelected: false,
+      numbersSelected: [],
+      pencilMarksMode: false
+    };
+  },
+  methods: {
+    construct: function construct() {
+      this.isSelected = false;
+
+      if (Array.isArray(this.content)) {
+        this.pencilMarks = [];
+
+        for (var pm in this.content) {
+          this.pencilMarks.push(this.content[pm]);
+        }
+
+        this.value = null;
+      } else {
+        this.pencilMarks = [];
+        this.value = this.content;
+      }
+    },
+    isBorderedBottom: function isBorderedBottom(row) {
+      return row % 3 == 0;
+    },
+    isBorderedRight: function isBorderedRight(col) {
+      return (col + 1) % 3 == 0;
+    },
+    setValue: function setValue(value) {
+      this.pencilMarks = [];
+      this.value = value;
+    },
+    setPencilMarks: function setPencilMarks(pm) {
+      this.pencilMarks = [].concat(_toConsumableArray(this.pencilMarks), _toConsumableArray(pm));
+      ;
+      this.value = null;
+    },
+    getValue: function getValue() {
+      return this.value;
+    },
+    getPencilMarks: function getPencilMarks() {
+      return this.pencilMarks;
+    },
+    hasPencilMarks: function hasPencilMarks() {
+      return this.pencilMarks.length !== 0;
+    },
+    hasPencilMark: function hasPencilMark(pm) {
+      return this.pencilMarks.indexOf(pm) != -1;
+    },
+    hasValue: function hasValue() {
+      return !!this.value;
+    },
+    select: function select() {
+      this.isSelected = true;
+    },
+    unselect: function unselect() {
+      this.isSelected = false;
+    },
+    click: function click() {
+      var oldCell = null;
+      var newCell = null;
+
+      if (this.value !== null) {
+        oldCell = this.value;
+      } else if (this.pencilMarks !== []) {
+        oldCell = this.pencilMarks;
+      }
+
+      if (this.pencilMarksMode) {
+        this.setPencilMarks(this.numbersSelected);
+        newCell = this.pencilMarks;
+      } else {
+        this.setValue(this.numbersSelected[0]);
+        newCell = this.value;
+      }
+
+      this.$emit('moveMade', {
+        'row': this.row,
+        'col': this.col,
+        'new': newCell,
+        'old': oldCell
+      });
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    this.construct();
+    this.$root.$on('number-selected', function (ns) {
+      return _this.numbersSelected = ns;
+    });
+    this.$root.$on('pencilmarks-mode-toggle', function (pmm) {
+      return _this.pencilMarksMode = pmm;
+    });
+  },
+  watch: {
+    content: {
+      handler: function handler(newValue, oldValue) {
+        this.content = newValue;
+        this.construct();
+      }
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuGrid.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuGrid.vue?vue&type=script&lang=js& ***!
@@ -1991,26 +2142,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2038,9 +2169,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   data: function data() {
     return {
       encoding: "",
-      grid: new Grid(),
-      numberSelected: [],
-      pencilMarksMode: false
+      cells: [],
+      lastMove: {}
     };
   },
   methods: {
@@ -2051,130 +2181,42 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         grid: this.encoding,
         returnFormat: 'row'
       }).then(function (response) {
-        _this.grid = new Grid(response.data.data.solved_grid);
+        var encoding = response.data.data.solved_grid;
+
+        for (var i = 0; i < 81; i++) {
+          _this.$set(_this.cells, i, encoding[i]);
+        }
       });
     },
-    cellClicked: function cellClicked(cell) {
-      return cell.isSelected;
-    },
-    click: function click(cell) {
-      if (this.pencilMarksMode) {
-        cell.setPencilMarks(this.numberSelected);
-      } else {
-        cell.setValue(this.numberSelected[0]);
+    undo: function undo() {
+      if (Object.keys(this.lastMove).length !== 0) {
+        this.$set(this.cells, (this.lastMove['row'] - 1) * 9 + this.lastMove['col'], this.lastMove['old']);
       }
     },
-    isBorderedRow: function isBorderedRow(i) {
-      return i % 3 == 0;
+    getCells: function getCells() {
+      var begin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 81;
+      return this.cells.slice(begin, end);
     },
-    isBorderedCell: function isBorderedCell(i) {
-      return i % 3 == 0;
+    getCell: function getCell(row, col) {
+      return this.cells[row * 9 + col];
+    },
+    setLastMove: function setLastMove(lm) {
+      this.lastMove = lm;
     }
   },
   created: function created() {
     var _this2 = this;
 
-    this.$root.$on('number-selected', function (ns) {
-      return _this2.numberSelected = ns;
-    });
-    this.$root.$on('pencilmarks-mode-toggle', function (pmm) {
-      return _this2.pencilMarksMode = pmm;
+    for (var i = 0; i < 81; i++) {
+      this.cells[i] = null;
+    }
+
+    this.$root.$on('undo', function () {
+      return _this2.undo();
     });
   }
 });
-
-var Grid =
-/*#__PURE__*/
-function () {
-  function Grid() {
-    var encoding = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-    _classCallCheck(this, Grid);
-
-    this.cells = new Array();
-
-    if (encoding) {
-      for (var i = 0; i < 81; i++) {
-        this.cells[i] = new Cell(encoding[i]);
-      }
-    }
-  }
-
-  _createClass(Grid, [{
-    key: "getCells",
-    value: function getCells() {
-      var begin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 81;
-      return this.cells.slice(begin, end);
-    }
-  }]);
-
-  return Grid;
-}();
-
-var Cell =
-/*#__PURE__*/
-function () {
-  function Cell(content) {
-    _classCallCheck(this, Cell);
-
-    this.isSelected = false;
-
-    if (Array.isArray(content)) {
-      this.pencilMarks = [];
-
-      for (var pm in content) {
-        this.pencilMarks.push(content[pm]);
-      }
-
-      this.value = null;
-    } else {
-      this.pencilMarks = [];
-      this.value = content;
-    }
-  }
-
-  _createClass(Cell, [{
-    key: "setValue",
-    value: function setValue(value) {
-      this.pencilMarks = [];
-      this.value = value;
-    }
-  }, {
-    key: "setPencilMarks",
-    value: function setPencilMarks(pm) {
-      this.pencilMarks = pm;
-      this.value = null;
-    }
-  }, {
-    key: "hasPencilMarks",
-    value: function hasPencilMarks() {
-      return this.pencilMarks.length !== 0;
-    }
-  }, {
-    key: "hasPencilMark",
-    value: function hasPencilMark(pm) {
-      return this.pencilMarks.indexOf(pm) != -1;
-    }
-  }, {
-    key: "hasValue",
-    value: function hasValue() {
-      return !!this.value;
-    }
-  }, {
-    key: "select",
-    value: function select() {
-      this.isSelected = true;
-    }
-  }, {
-    key: "unselect",
-    value: function unselect() {
-      this.isSelected = false;
-    }
-  }]);
-
-  return Cell;
-}();
 
 /***/ }),
 
@@ -6661,6 +6703,25 @@ exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n       
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.sudoku-cell {\n  width: 3.75rem;\n  height: 3.75rem;\n  max-width: 3.75rem;\n  max-height: 3.75rem;\n  min-width: 3.75rem;\n  min-height: 3.75rem;\n  border: 0.0625rem solid black;\n}\n.sudoku-cell.sudoku-border-right-md {\n  border-right: 0.125rem solid black;\n}\n.sudoku-cell.sudoku-border-bottom-md {\n  border-bottom: 0.125rem solid black;\n}\n.sudoku-cell .sudoku-cell-value {\n  font-size: 1.875rem;\n}\n.sudoku-cell .sudoku-pencil-marks {\n  width: 100%;\n  line-height: 1.03125rem;\n  margin: 0;\n  padding: 0;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuGrid.vue?vue&type=style&index=0&lang=scss&":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuGrid.vue?vue&type=style&index=0&lang=scss& ***!
@@ -6673,7 +6734,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.sudoku-grid {\n  height: 33.75rem;\n  width: 33.75rem;\n  border: 0.125rem solid black;\n  text-align: center;\n  border-collapse: collapse;\n  font-weight: 300;\n}\n.sudoku-grid .sudoku-cell {\n  width: 3.75rem;\n  height: 3.75rem;\n  max-width: 3.75rem;\n  max-height: 3.75rem;\n  min-width: 3.75rem;\n  min-height: 3.75rem;\n  border: 0.0625rem solid black;\n}\n.sudoku-grid .sudoku-cell.sudoku-border-right-md {\n  border-right: 0.125rem solid black;\n}\n.sudoku-grid .sudoku-cell.sudoku-border-bottom-md {\n  border-bottom: 0.125rem solid black;\n}\n.sudoku-grid .sudoku-cell .sudoku-cell-value {\n  font-size: 1.875rem;\n}\n.sudoku-grid .sudoku-cell .sudoku-pencil-marks {\n  width: 100%;\n  line-height: 1.03125rem;\n  margin: 0;\n  padding: 0;\n}", ""]);
+exports.push([module.i, "/*\n * Media mixins\n * Usage :\n    .module {\n        @include only(mobile) {\n            width:auto;\n            font-size:12px;\n        }\n        @include below(tablet) {\n            width:600px;\n            font-size:14px;\n            .sidebar {\n                display:none;\n            }\n        }\n        @include only(desktop) {\n            width:400px;\n            .sidebar {\n                width:200px;\n            }\n        }\n    }\n */\n.sudoku-grid {\n  height: 33.75rem;\n  width: 33.75rem;\n  border: 0.125rem solid black;\n  text-align: center;\n  border-collapse: collapse;\n  font-weight: 300;\n}", ""]);
 
 // exports
 
@@ -37576,6 +37637,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--7-2!../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./SudokuCell.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuGrid.vue?vue&type=style&index=0&lang=scss&":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuGrid.vue?vue&type=style&index=0&lang=scss& ***!
@@ -38345,6 +38436,80 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuCell.vue?vue&type=template&id=e13d38e0&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuCell.vue?vue&type=template&id=e13d38e0& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "td",
+    {
+      staticClass: "sudoku-cell",
+      class: {
+        "sudoku-border-right-md": _vm.isBorderedRight(_vm.col),
+        "sudoku-border-bottom-md": _vm.isBorderedBottom(_vm.row)
+      },
+      on: {
+        click: function($event) {
+          return _vm.click()
+        }
+      }
+    },
+    [
+      _vm.hasPencilMarks()
+        ? _c(
+            "table",
+            { staticClass: "sudoku-pencil-marks" },
+            _vm._l(3, function(i) {
+              return _c(
+                "tr",
+                { key: i },
+                _vm._l(3, function(j) {
+                  return _c("td", { key: j, staticClass: "p-0" }, [
+                    _vm.hasPencilMark((i - 1) * 3 + j)
+                      ? _c("small", [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s((i - 1) * 3 + j) +
+                              "\n                "
+                          )
+                        ])
+                      : _c("small", { staticStyle: { visibility: "hidden" } }, [
+                          _vm._v("\n                    0\n                ")
+                        ])
+                  ])
+                }),
+                0
+              )
+            }),
+            0
+          )
+        : _vm.hasValue()
+        ? _c("span", {
+            staticClass: "sudoku-cell-value",
+            domProps: { textContent: _vm._s(_vm.value) }
+          })
+        : _vm._e()
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuGrid.vue?vue&type=template&id=4df05918&":
 /*!********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/SudokuGrid.vue?vue&type=template&id=4df05918& ***!
@@ -38416,71 +38581,18 @@ var render = function() {
       _c(
         "table",
         { staticClass: "sudoku-grid m-t-20" },
-        _vm._l(9, function(i) {
+        _vm._l(9, function(row) {
           return _c(
             "tr",
-            { key: i },
-            _vm._l(_vm.grid.getCells(9 * (i - 1), 9 * i), function(cell, j) {
-              return _c(
-                "td",
-                {
-                  key: j,
-                  staticClass: "sudoku-cell",
-                  class: {
-                    "sudoku-border-right-md": _vm.isBorderedCell(j + 1),
-                    "sudoku-border-bottom-md": _vm.isBorderedRow(i)
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.click(cell)
-                    }
-                  }
-                },
-                [
-                  cell.hasPencilMarks()
-                    ? _c(
-                        "table",
-                        { staticClass: "sudoku-pencil-marks" },
-                        _vm._l(3, function(i) {
-                          return _c(
-                            "tr",
-                            { key: i },
-                            _vm._l(3, function(j) {
-                              return _c("td", { key: j, staticClass: "p-0" }, [
-                                cell.hasPencilMark((i - 1) * 3 + j)
-                                  ? _c("small", [
-                                      _vm._v(
-                                        "\n                                      " +
-                                          _vm._s((i - 1) * 3 + j) +
-                                          "\n                                  "
-                                      )
-                                    ])
-                                  : _c(
-                                      "small",
-                                      { staticStyle: { visibility: "hidden" } },
-                                      [
-                                        _vm._v(
-                                          "\n                                      0\n                                  "
-                                        )
-                                      ]
-                                    )
-                              ])
-                            }),
-                            0
-                          )
-                        }),
-                        0
-                      )
-                    : cell.hasValue()
-                    ? _c("span", {
-                        staticClass: "sudoku-cell-value",
-                        domProps: { textContent: _vm._s(cell.value) }
-                      })
-                    : _vm._e()
-                ]
-              )
+            { key: row },
+            _vm._l(_vm.getCells(9 * (row - 1), 9 * row), function(cell, col) {
+              return _c("sudoku-cell", {
+                key: row + "" + col,
+                attrs: { content: cell, col: col, row: row },
+                on: { moveMade: _vm.setLastMove }
+              })
             }),
-            0
+            1
           )
         }),
         0
@@ -50675,6 +50787,7 @@ Vue.use(SvgVue);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('sudoku-cell', __webpack_require__(/*! ./components/SudokuCell.vue */ "./resources/assets/js/components/SudokuCell.vue")["default"]);
 Vue.component('sudoku-grid', __webpack_require__(/*! ./components/SudokuGrid.vue */ "./resources/assets/js/components/SudokuGrid.vue")["default"]);
 Vue.component('control-pad', __webpack_require__(/*! ./components/ControlPad.vue */ "./resources/assets/js/components/ControlPad.vue")["default"]);
 Vue.component('navigation-bar', __webpack_require__(/*! ./components/NavBar.vue */ "./resources/assets/js/components/NavBar.vue")["default"]);
@@ -50911,6 +51024,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavBar_vue_vue_type_template_id_046a7e32___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavBar_vue_vue_type_template_id_046a7e32___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SudokuCell.vue":
+/*!*******************************************************!*\
+  !*** ./resources/assets/js/components/SudokuCell.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SudokuCell_vue_vue_type_template_id_e13d38e0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SudokuCell.vue?vue&type=template&id=e13d38e0& */ "./resources/assets/js/components/SudokuCell.vue?vue&type=template&id=e13d38e0&");
+/* harmony import */ var _SudokuCell_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SudokuCell.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/SudokuCell.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _SudokuCell_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SudokuCell.vue?vue&type=style&index=0&lang=scss& */ "./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _SudokuCell_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SudokuCell_vue_vue_type_template_id_e13d38e0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SudokuCell_vue_vue_type_template_id_e13d38e0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/SudokuCell.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SudokuCell.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/assets/js/components/SudokuCell.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./SudokuCell.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuCell.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss& ***!
+  \*****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--7-2!../../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./SudokuCell.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuCell.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SudokuCell.vue?vue&type=template&id=e13d38e0&":
+/*!**************************************************************************************!*\
+  !*** ./resources/assets/js/components/SudokuCell.vue?vue&type=template&id=e13d38e0& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_template_id_e13d38e0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./SudokuCell.vue?vue&type=template&id=e13d38e0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/SudokuCell.vue?vue&type=template&id=e13d38e0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_template_id_e13d38e0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SudokuCell_vue_vue_type_template_id_e13d38e0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
