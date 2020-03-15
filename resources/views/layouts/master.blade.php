@@ -20,7 +20,7 @@
     <div>
         <div id="app">
             <navigation-bar title="{{config('app.name', 'Sudoku')}}"></navigation-bar>
-            <div class="m-t-75">
+            <div class="m-t-75 container">
                 @yield('content')
             </div>
         </div>
