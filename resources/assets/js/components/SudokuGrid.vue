@@ -6,7 +6,7 @@
                        v-for="(cell, col) in getCells(9*(row-1), 9*row)"
                        :key="row+''+col"
                        :content="cell" :col="col" :row="row"
-                       @moveMade="addLastMove">
+                       @selectCell="emitSelection">
                    </sudoku-cell>
               </tr>
         </table>
@@ -18,13 +18,13 @@
         data() {
             return {
                 cells:[],
-                lastMoves:[]
+                lastMoves:[],
             }
         },
         methods: {
             undo() {
-                if (Object.keys(this.lastMoves).length !== 0) {
-                    let lastMove = this.lastMoves.pop();
+                if (Object.keys(this.$parent.lastMoves).length !== 0) {
+                    let lastMove = this.$parent.lastMoves.pop();
                     this.$set(this.cells, (lastMove['row']-1)*9+lastMove['col'], lastMove['old']);
                 }
             },
@@ -34,8 +34,15 @@
             getCell(row,col) {
                 return this.cells[row*9+col]
             },
-            addLastMove(lm) {
-                this.lastMoves.push(lm);
+            /**
+             * This should be called when a 'select' emit is received from the
+             * cell.  What we do is intercept the emit and reemit-it to $root
+             * but only if we are not in select-mode.
+             */
+            emitSelection() {
+                if (!this.$parent.selectionMode) {
+                    this.$root.$emit('selectCell');
+                }
             },
             writeValues(encoding = []) {
                 for (let i = 0; i < 81; i++) {

@@ -1,23 +1,31 @@
-
-// Body
-$body-bg: #f5f8fa;
-
 // Typography
 $font-family: "Inter", sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+
+// Colors
+$bg-color:white;
 
 $blue: #3490dc;
 $indigo: #6574cd;
 $purple: #9561e2;
 $pink: #f66D9b;
 $red: #e3342f;
-$orange: #ffa56e;
+$orange: #fb9455;
 $yellow: #ffed4a;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
 $light-gray:#d0d0d0;
+
+$light:#ffffff;
+$dark:#000000;
+
+$alpha:$orange;
+$beta:$yellow;
+$gamma:$green;
+$delta:$cyan;
+$epsilon:$purple;
+$zeta:$pink;
+$eta:$red;
 
 // Flex
 $nbrCols : 12;

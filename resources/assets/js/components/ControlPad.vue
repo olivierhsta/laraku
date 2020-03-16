@@ -1,20 +1,22 @@
 <template>
     <div class="row row-desktop">
         <div class="control-grid num-pad row row-mobile row-tablet">
-            <div class="control-cell" :class="{'cell-selected':num.isSelected}" v-for="num in controlNums" :key="num.value" @click="numberClicked(num)">
+            <div class="control-cell button dark simple" :class="{'cell-selected':num.isSelected}"
+                 v-for="num in controlNums" :key="num.value"
+                 @click="numberClicked(num)">
                 {{num.value}}
             </div>
         </div>
         <div class="control-grid action-pad row row-mobile row-tablet">
-            <div class="control-cell" :class="{'cell-selected':pencilMarkMode}" alt="Pencil Mark" title="Pencil Mark" @click="pencilMarkClicked()">
+            <div class="control-cell button dark simple" :class="{'cell-selected':pencilMarkMode}" alt="Pencil Mark" title="Pencil Mark" @click="pencilMarkClicked()">
                 <svg-vue icon="edit" class="control-icon"></svg-vue>
                 <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
             </div>
-            <div class="control-cell" alt="Undo" title="Undo" @click="undoClicked()">
+            <div class="control-cell button dark simple" alt="Undo" title="Undo" @click="undoClicked()">
                 <svg-vue icon="undo" class="control-icon"></svg-vue>
                 <!-- Icons made by <a href="https://www.flaticon.com/authors/bqlqn" title="bqlqn">bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> -->
             </div>
-            <div class="control-cell" :class="{'cell-selected':selectionMode}" alt="Select" title="Select" @click="selectionClicked()">
+            <div class="control-cell button dark simple" :class="{'cell-selected':selectionMode}" alt="Select" title="Select" @click="selectionClicked()">
                 <svg-vue icon="touch" class="control-icon"></svg-vue>
                 <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
             </div>
@@ -52,11 +54,11 @@
                     this.unselectAllNumbers();
                 }
                 num.isSelected = num.isSelected ? false : true;
-                this.$root.$emit('number-selected', this.getSelectedNumbers());
+                this.$emit('numberSelected', this.getSelectedNumbers());
             },
             pencilMarkClicked() {
                 this.pencilMarkMode = this.pencilMarkMode ? false : true;
-                this.$root.$emit('pencilmarks-mode-toggle', this.pencilMarkMode);
+                this.$emit('pencilmarksModeToggle', this.pencilMarkMode);
             },
             undoClicked() {
                 this.$root.$emit('undo');
@@ -64,7 +66,7 @@
             selectionClicked() {
                 this.unselectAllNumbers();
                 this.selectionMode = this.selectionMode ? false : true;
-                this.$root.$emit('selection-mode-toggle', this.selectionMode);
+                this.$emit('selectionModeToggle', this.selectionMode);
             },
             getSelectedNumbers() {
                 let selectedNums = [];
@@ -99,7 +101,7 @@
             align-items: center;
             font-size: rem(30);
             font-weight: 700;
-            border: rem(1) solid $light-gray;
+            margin:rem(1);
             width:rem(60);
             height: 100%;
 
@@ -110,7 +112,7 @@
             }
 
             &.cell-selected {
-                background: $orange;
+                background: $alpha !important;
             }
 
             .control-icon {

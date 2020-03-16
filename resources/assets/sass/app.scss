@@ -6,6 +6,9 @@
 @import "flex";
 @import "form";
 
+@import '~toastr/build/toastr.css';
+
 html {
     font-family: $font-family;
+    background: white;
 }

@@ -1,23 +1,128 @@
 .button {
     font-family: Inter;
-    background: transparent;
+    background: $orange;
+    font-size: rem(18);
     border: rem(1) solid $orange;
     border-radius: rem(5);
-    height: rem(35);
-    padding: 0 rem(20);
+    height: rem(40);
+    padding: rem(10);
+
+    &:hover {
+        opacity: 0.8;
+    }
 
     &:active {
         outline: none;
-        background: $orange;
+        opacity: 0.5;
     }
 
     // remove dotted border on focus (firefox)
     &::-moz-focus-inner { border: 0;}
+
+    &.alpha {
+        background: $alpha;
+        border-color:$alpha;
+        color: $light;
+        svg {fill:$dark;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            color:$alpha;
+            svg {fill:$alpha;}
+        }
+    }
+    &.beta {
+        background:$beta;
+        border-color:$beta;
+        color: $light;
+        svg {fill:$light;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            color:$beta;
+            svg {fill:$beta;}
+        }
+    }
+    &.gamma {
+        background:$gamma;
+        border-color:$gamma;
+        color: $light;
+        svg {fill:$light;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            color:$gamma;
+            svg {fill:$gamma;}
+        }
+    }
+    &.delta {
+        background:$delta;
+        border-color:$delta;
+        color: $light;
+        svg {fill:$light;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            color:$delta;
+            svg {fill:$delta;}
+        }
+    }
+    &.epsilon {
+        background:$epsilon;
+        border-color:$epsilon;
+        color: $light;
+        svg {fill:$light;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            color:$epsilon;
+            svg {fill:$epsilon;}
+        }
+    }
+    &.zeta {
+        background: $zeta;
+        border-color:$zeta;
+        color: $light;
+        svg {fill:$light;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            color:$zeta;
+            svg {fill:$zeta;}
+        }
+    }
+    &.eta {
+        background:$eta;
+        border-color:$eta;
+        color: $light;
+        svg {fill:$light;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            color:$eta;
+            svg {fill:$eta;}
+        }
+    }
+    &.dark {
+        background:$dark;
+        border-color:$dark;
+        color:$light;
+        svg {fill:$light;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            color:$dark;
+            border:rem(1) solid $dark;
+            svg {fill:$dark;}
+        }
+    }
+    &.light {
+        background:$light;
+        border-color:$light;
+        color:$dark;
+        svg {fill:$dark;}
+        &.simple:not(:hover):not(:active) {
+            background: $bg-color;
+            border:rem(1) solid $light;
+        }
+    }
 }
 
 .input.input-text {
     font-family: Inter;
-    line-height: rem(10);
+    line-height: rem(20);
     padding: rem(10);
     border-radius: rem(5);
     border: rem(1) solid $light-gray;

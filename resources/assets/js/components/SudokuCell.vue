@@ -1,6 +1,6 @@
 <template>
     <td class="sudoku-cell"
-        :class="{'sudoku-border-right-md': isBorderedRight(col),'sudoku-border-bottom-md': isBorderedBottom(row)} "
+        :class="{'selected':isSelected,'sudoku-border-right-md': isBorderedRight(col),'sudoku-border-bottom-md': isBorderedBottom(row)} "
         @click="click()">
         <table v-if="hasPencilMarks()"
                class="sudoku-pencil-marks">
@@ -9,7 +9,7 @@
                     <small v-if="hasPencilMark((i-1)*3+j)">
                         {{ (i-1)*3+j }}
                     </small>
-                    <small style="visibility:hidden;" v-else>
+                    <small v-else class="hidden">
                         0
                     </small>
                 </td>
@@ -26,8 +26,6 @@ export default {
         pencilMarks:[],
         value:null,
         isSelected:false,
-        numbersSelected: [],
-        pencilMarksMode:false,
     }),
     methods: {
         construct() {
@@ -57,14 +55,14 @@ export default {
             let toAdd = []; let toRemove = [];
             pm.forEach((pencilMark, i) => {
                 if (this.pencilMarks.indexOf(pencilMark) > -1) {
-                    toRemove.push(i);
+                    toRemove.push(this.pencilMarks.indexOf(pencilMark));
                 } else {
                     toAdd.push(pencilMark);
                 }
             });
-            // loop from the end so the indexing stays the same for the futur iterations
+            // loop from the end so the indexing stays the same for future iterations
             for (var i = toRemove.length-1; i >= 0 ; i--) {
-                this.pencilMarks.splice(i,1);
+                this.pencilMarks.splice(toRemove[i],1);
             }
             toAdd.forEach((pm, i) => {
                 this.pencilMarks.push(pm);
@@ -88,13 +86,12 @@ export default {
         hasValue() {
             return !!this.value;
         },
-        select() {
-            this.isSelected = true;
-        },
-        unselect() {
-            this.isSelected = false;
+        toggle() {
+            this.$emit('selectCell');
+            this.isSelected = this.isSelected ? false : true;
         },
         click() {
+            this.toggle();
             let oldCell = null;
             let newCell = null;
             if (this.hasValue()) {
@@ -102,17 +99,15 @@ export default {
             } else if (this.hasPencilMarks()) {
                 oldCell = this.pencilMarks.slice();
             }
-            if (this.pencilMarksMode) {
-                this.setPencilMarks(this.numbersSelected);
+            if (this.$parent.$parent.pencilMarksMode) {
+                this.setPencilMarks(this.$parent.$parent.numbersSelected);
                 newCell = this.pencilMarks;
             } else {
-                this.setValue(this.numbersSelected[0]);
+                this.setValue(this.$parent.$parent.numbersSelected[0]);
                 newCell = this.value;
             }
-            console.log(oldCell);
-            console.log(newCell);
             if (newCell !== oldCell) {
-                this.$emit('moveMade', {
+                this.$parent.$emit('moveMade', {
                     'row':this.row,
                     'col':this.col,
                     'new':newCell,
@@ -123,8 +118,7 @@ export default {
     },
     created: function() {
         this.construct();
-        this.$root.$on('number-selected', (ns) => this.numbersSelected = ns);
-        this.$root.$on('pencilmarks-mode-toggle', (pmm) => this.pencilMarksMode = pmm);
+        this.$root.$on('selectCell', (isSelected) => this.isSelected = false);
     },
     watch: {
         content: {
@@ -147,12 +141,12 @@ export default {
         min-height: rem(60);
         border: rem(1) solid black;
 
-        &.sudoku-border-right-md {
-            border-right: rem(2) solid black;
+        &:hover {
+            background:rgba($alpha, 0.1);
         }
 
-        &.sudoku-border-bottom-md {
-            border-bottom: rem(2) solid black;
+        &.selected {
+            background:rgba($alpha, 0.3);
         }
 
         .sudoku-cell-value {
@@ -164,6 +158,14 @@ export default {
             line-height: rem(16.5);
             margin:0;
             padding:0;
+        }
+
+        &.sudoku-border-right-md {
+            border-right: rem(2) solid black;
+        }
+
+        &.sudoku-border-bottom-md {
+            border-bottom: rem(2) solid black;
         }
     }
 </style>

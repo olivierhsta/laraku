@@ -6,8 +6,10 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-window.SvgVue = require('svg-vue');
 
+export const EventBus = new Vue();
+
+window.SvgVue = require('svg-vue');
 Vue.use(SvgVue);
 
 /**
@@ -16,9 +18,10 @@ Vue.use(SvgVue);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('sudoku-cell', require('./components/SudokuCell.vue').default);
-Vue.component('sudoku-grid', require('./components/SudokuGrid.vue').default);
+Vue.component('sudoku-game', require('./components/SudokuGame.vue').default);
 Vue.component('sudoku-input', require('./components/SudokuInput.vue').default);
+Vue.component('sudoku-grid', require('./components/SudokuGrid.vue').default);
+Vue.component('sudoku-cell', require('./components/SudokuCell.vue').default);
 Vue.component('control-pad', require('./components/ControlPad.vue').default);
 Vue.component('navigation-bar', require('./components/NavBar.vue').default);
 
